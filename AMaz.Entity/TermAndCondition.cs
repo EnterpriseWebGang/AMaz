@@ -1,16 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AMaz.Web.Models
+namespace AMaz.Entity
 {
     [Table("TermAndCondition")]
     public class TermAndCondition
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string TermAndConditionId { get; set; }
+        public Guid TermAndConditionId { get; set; }
 
-        [Required]
         public string Content { get; set;}
 
         [Required]
@@ -19,5 +18,12 @@ namespace AMaz.Web.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime CreatedDate { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime UpdatedDate { get; set;}
+
+        [ForeignKey("ContributionId")]
+        public virtual ICollection<Contribution> Contributions { get; set; }
     }
 }

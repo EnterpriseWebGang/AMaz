@@ -1,6 +1,24 @@
+using AMaz.DB;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<AMazDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AMazContext"));
+});
+
+//AutoMapper
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    //Add Mapping profile here
+});
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

@@ -1,14 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AMaz.Web.Models
+namespace AMaz.Entity
 {
     [Table("Magazine")]
+    [Index(nameof(Name))]
     public class Magazine
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string MagazineId { get; set; }
+        public Guid MagazineId { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -17,9 +19,11 @@ namespace AMaz.Web.Models
         [DataType (DataType.Date)]
         public DateTime FirstClosureDate { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
-        public DateTime FinalClosureDate { get; set;}
+        public DateTime? FinalClosureDate { get; set;}
+
+        [ForeignKey("ContributionId")]
+        public virtual ICollection<Contribution> Contributions { get; set; }
 
         [ForeignKey("AcademicYearId")]
         public virtual AcademicYear? AcademicYear { get; set; }
