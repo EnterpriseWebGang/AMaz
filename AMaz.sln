@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMaz.Web", "AMaz\AMaz.Web.csproj", "{8FE13685-0153-4058-8679-3D77931E9297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMaz.Web", "AMaz\AMaz.Web.csproj", "{8FE13685-0153-4058-8679-3D77931E9297}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMaz.Service", "AMaz.Service\AMaz.Service.csproj", "{70C2B7EA-A632-48BC-A9AF-4A7467436127}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMaz.Service", "AMaz.Service\AMaz.Service.csproj", "{70C2B7EA-A632-48BC-A9AF-4A7467436127}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMaz.Entity", "AMaz.Entity\AMaz.Entity.csproj", "{1BA58A27-5E14-46C0-BB7F-E2B8C62AD673}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMaz.Entity", "AMaz.Entity\AMaz.Entity.csproj", "{1BA58A27-5E14-46C0-BB7F-E2B8C62AD673}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMaz.DB", "AMaz.DB\AMaz.DB.csproj", "{533AE243-93EA-4235-B798-6E559341060D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMaz.DB", "AMaz.DB\AMaz.DB.csproj", "{533AE243-93EA-4235-B798-6E559341060D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMaz.Repo", "AMaz.Repo\AMaz.Repo.csproj", "{BA792B10-BC87-4897-A124-8A063795FCA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{533AE243-93EA-4235-B798-6E559341060D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{533AE243-93EA-4235-B798-6E559341060D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{533AE243-93EA-4235-B798-6E559341060D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA792B10-BC87-4897-A124-8A063795FCA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA792B10-BC87-4897-A124-8A063795FCA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA792B10-BC87-4897-A124-8A063795FCA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA792B10-BC87-4897-A124-8A063795FCA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
