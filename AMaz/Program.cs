@@ -25,6 +25,9 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 
+builder.Services.AddHttpContextAccessor();
+
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

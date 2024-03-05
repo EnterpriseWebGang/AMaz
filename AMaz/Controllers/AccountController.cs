@@ -34,17 +34,17 @@ namespace AMaz.Web.Controllers
 
             if (isLogin)
             {
-                var claims = new List<Claim>
+                bool signInResult = await _loginService.SignInUserAsync(email);
+
+                if (signInResult)
                 {
-                     new Claim(ClaimTypes.Name, email),
-                };
-
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-                return RedirectToAction("Index", "Home"); // Redirect to home page after successful login
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ViewBag.Error = "Error during sign-in process";
+                    return View();
+                }
             }
 
             ViewBag.Error = "Invalid email or password";

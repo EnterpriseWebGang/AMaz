@@ -10,5 +10,7 @@ namespace AMaz.Service
     public interface ILoginService
     {
         Task<bool> AuthenticateUserAsync(string email, string password);
+
+        Task<bool> SignInUserAsync(string email);
     }
 }
