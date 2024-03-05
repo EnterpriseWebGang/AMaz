@@ -29,7 +29,7 @@ namespace AMaz.Web.Controllers
 
             if (isLogin)
             {
-                return RedirectToAction("Index", "Home"); // Redirect to home page after successful login
+                return RedirectToAction("ViewTest", "Home"); // Redirect to home page after successful login
             }
 
             ViewBag.Error = "Invalid email or password";
