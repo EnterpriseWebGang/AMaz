@@ -14,4 +14,8 @@
     <ProjectReference Include="..\AMaz.DB\AMaz.DB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+	<ProjectReference Include="..\AMaz.Repo\AMaz.Repo.csproj" />
+  </ItemGroup>
+
 </Project>

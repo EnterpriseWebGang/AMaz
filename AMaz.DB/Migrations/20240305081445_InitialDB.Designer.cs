@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AMaz.DB.Migrations
 {
     [DbContext(typeof(AMazDbContext))]
-    [Migration("20240303151111_FirstInitializeAMazDb")]
-    partial class FirstInitializeAMazDb
+    [Migration("20240305081445_InitialDB")]
+    partial class InitialDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
