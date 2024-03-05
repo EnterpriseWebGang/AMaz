@@ -1,5 +1,8 @@
 ﻿using AMaz.Service;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AMaz.Web.Controllers
 {
@@ -19,8 +22,10 @@ namespace AMaz.Web.Controllers
 
         public IActionResult Logout()
         {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home"); // Redirect to home page after logout
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
@@ -29,11 +34,22 @@ namespace AMaz.Web.Controllers
 
             if (isLogin)
             {
-                return RedirectToAction("ViewTest", "Home"); // Redirect to home page after successful login
+                var claims = new List<Claim>
+                {
+                     new Claim(ClaimTypes.Name, email),
+                };
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                return RedirectToAction("Index", "Home"); // Redirect to home page after successful login
             }
 
             ViewBag.Error = "Invalid email or password";
             return View();
         }
+
     }
 }
