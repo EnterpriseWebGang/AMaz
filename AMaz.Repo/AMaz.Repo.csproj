@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AMaz.DB\AMaz.DB.csproj" />
+    <ProjectReference Include="..\AMaz.Entity\AMaz.Entity.csproj" />
+  </ItemGroup>
+
 </Project>

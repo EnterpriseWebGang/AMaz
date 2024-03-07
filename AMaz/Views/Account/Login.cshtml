@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<!-- Section: Design Block -->
+<section class="text-center text-lg-start">
+
+  <!-- Jumbotron -->
+  <div class="container py-4">
+    <div class="row g-0 align-items-center">
+      <div class="col-lg-6 mb-5 mb-lg-0">
+        <div class="card cascading-right" style="
+            background: hsla(0, 0%, 100%, 0.55);
+            backdrop-filter: blur(30px);
+            ">
+          <div class="card-body p-5 shadow-5 text-center">
+            <h2 class="fw-bold mb-5">Sign In</h2>
+            <form asp-controller="Account" asp-action="Login" method="post">
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input type="text" id="email" name="email" class="form-control" required />
+                <label class="form-label" for="email">Email address</label>
+              </div>
+
+              <!-- Password input -->
+              <div class="form-outline mb-4">
+                <input type="password" id="password" name="password" class="form-control" required />
+                <label class="form-label" for="password">Password</label>
+              </div>
+
+                @if (!string.IsNullOrEmpty(ViewBag.Error))
+                {
+                    <!-- Display validation errors in a div with red text -->
+                    <div class="validation-summary-errors" asp-validation-summary="All">@ViewBag.Error</div>
+                                <style>
+                                    .validation-summary-errors {
+                                        color: white; /* Text color */
+                                        background-color: #dc3545; /* Background color */
+                                        padding: 10px; /* Padding around the text */
+                                        border: 1px solid #dc3545; /* Border color and width */
+                                        margin-bottom: 10px; /* Margin at the bottom */
+                                        border-radius: 5px; /* Rounded corners */
+                                    }
+                                </style>
+
+                }
+
+              <!-- Checkbox -->
+              <div class="form-check d-flex justify-content-center mb-4">
+                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
+                <label class="form-check-label" for="form2Example33">
+                  Remember me
+                </label>
+              </div>
+
+              <!-- Submit button -->
+                <div>
+                    <input type="submit" class="btn btn-primary btn-block mb-4" value="Sign In" />
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-5 mb-lg-0">
+        <img src="https://mdbootstrap.com/img/new/ecommerce/vertical/004.jpg" class="w-100 rounded-4 shadow-4"
+          alt="" />
+      </div>
+    </div>
+  </div>
+  <!-- Jumbotron -->
+</section>
+<!-- Section: Design Block -->

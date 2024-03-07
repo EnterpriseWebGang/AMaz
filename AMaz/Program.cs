@@ -1,5 +1,8 @@
 using AMaz.DB;
+using AMaz.Repo;
+using AMaz.Service;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +19,22 @@ var mapperConfig = new MapperConfiguration(mc =>
     //Add Mapping profile here
 });
 IMapper mapper = mapperConfig.CreateMapper();
+
 builder.Services.AddSingleton(mapper);
+
+builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+
+builder.Services.AddHttpContextAccessor();
+
+
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+    });
 
 
 builder.Services.AddControllersWithViews();
@@ -37,6 +55,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",
