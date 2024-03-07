@@ -3,8 +3,11 @@ using AMaz.Repo;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AMaz.Service
@@ -14,10 +17,12 @@ namespace AMaz.Service
         private readonly ILoginRepository _loginRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-      
-        public LoginService(ILoginRepository userRepository, IHttpContextAccessor httpContextAccessor)
+        private static string key { get; set; } = "A!9HHhi%XjjYY4YP2@Nob009X";
+
+
+        public LoginService(ILoginRepository loginRepository, IHttpContextAccessor httpContextAccessor)
         {
-            _loginRepository = userRepository;
+            _loginRepository = loginRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -28,7 +33,7 @@ namespace AMaz.Service
             User user = await _loginRepository.GetUserByEmailAsync(email);
 
             // Check if the user exists and the provided password is correct
-            if (user != null && user.Password == password)
+            if (user != null && Encrypt(password) == user.Password)
             {
                 return true; // Return true if authentication is successful
             }
@@ -62,6 +67,22 @@ namespace AMaz.Service
             }
 
             return false; // Return false if the user is not found
+        }
+
+        private static string Encrypt(string text)
+        {
+            using var md5 = new MD5CryptoServiceProvider();
+            using var tdes = new TripleDESCryptoServiceProvider();
+            tdes.Key = md5.ComputeHash(Encoding.UTF8.GetBytes(key));
+            tdes.Mode = CipherMode.ECB;
+            tdes.Padding = PaddingMode.PKCS7;
+
+            using (var transform = tdes.CreateEncryptor())
+            {
+                byte[] textBytes = Encoding.UTF8.GetBytes(text);
+                byte[] bytes = transform.TransformFinalBlock(textBytes, 0, textBytes.Length);
+                return Convert.ToBase64String(bytes, 0, bytes.Length);
+            }
         }
     }
 }
