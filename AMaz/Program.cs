@@ -1,4 +1,5 @@
 using AMaz.DB;
+using AMaz.Entity;
 using AMaz.Repo;
 using AMaz.Service;
 using AutoMapper;
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<AMazDbContext>(options =>
 //AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
 {
+    mc.CreateMap<User, AuthenticateResponse>();
+    mc.CreateMap<CreateRequest, User>();
     //Add Mapping profile here
 });
 IMapper mapper = mapperConfig.CreateMapper();
