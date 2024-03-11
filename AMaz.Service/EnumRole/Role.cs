@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AMaz.Entity
+namespace AMaz.Service
 {
     public enum Role
     {

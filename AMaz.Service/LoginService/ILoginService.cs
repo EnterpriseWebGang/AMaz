@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AMaz.Entity;
 
 namespace AMaz.Service
 {
     public interface ILoginService
     {
-        Task<bool> AuthenticateUserAsync(string email, string password);
+        Task<AuthenticateResponse> AuthenticateUserAsync(AuthenticateRequest model);
 
-        Task<bool> SignInUserAsync(string email);
+        Task SignInUserAsync(string  email);
     }
 }

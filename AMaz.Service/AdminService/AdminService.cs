@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMaz.Service
 {
-    public class AdminService : IAdminService
+    public partial class AdminService : IAdminService
     {
      //   private readonly AMazDbContext _db;
         private readonly IAdminResponsitory _adminRepo;
@@ -26,6 +26,9 @@ namespace AMaz.Service
             _adminRepo = adminRepo; 
             _mapper = mapper;
         }
+
+       
+
         public bool AdminCheck()
         {
             return  _adminRepo.IsUserExistsAsync("admin@gmail.com");
@@ -54,5 +57,30 @@ namespace AMaz.Service
 
             return _mapper.Map<AuthenticateResponse>(account);
         }
+        public AuthenticateResponse CreateAccount(CreateRequest model)
+        {
+            if (_adminRepo.IsUserExistsAsync(model.Email))
+                throw new AppException($"Email '{model.Email}' is already registered");
+
+            var account = new User();
+            account.FirstName = model.FirstName;
+            account.LastName = model.LastName;
+            account.Email = model.Email;
+            account.Role = (int)model.Role;
+            account.Password = BCrypt.Net.BCrypt.HashPassword(model.Password);
+            _adminRepo.AddUser(account);
+            _adminRepo.SaveChanges();
+            return _mapper.Map<AuthenticateResponse>(account);
+
+        }
+        public void DeleteAcount(Guid id)
+        {
+            var account = _adminRepo.GetById(id);
+            _adminRepo.DeleteUser(account);
+            _adminRepo.SaveChanges();
+            
+
+        }
     }
+
 }
