@@ -10,7 +10,10 @@ namespace AMaz.Repo
     public interface IAdminResponsitory
     {
         bool IsUserExistsAsync(string email);
-         void AddUser(User user);
+        void AddUser(User user);
         void SaveChanges();
+
+        void DeleteUser(User user);
+        User GetById(Guid id);
     }
 }

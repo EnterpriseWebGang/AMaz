@@ -43,7 +43,7 @@ namespace AMaz.Service
                     LastName = "Nguyen1",
                     Role = Role.Admin,
                     Email = "Admin@gmail.com",
-                    Password = "Admin123@",
+                    Password = "admin123@",
                     
                 };
                 userService.Create(user);

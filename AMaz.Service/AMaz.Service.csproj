@@ -8,12 +8,17 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.16" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AMaz.DB\AMaz.DB.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+	<ProjectReference Include="..\AMaz.Repo\AMaz.Repo.csproj" />
   </ItemGroup>
 
   <ItemGroup>

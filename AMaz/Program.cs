@@ -13,11 +13,13 @@ builder.Services.AddDbContext<AMazDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AMazContext"));
 });
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IAdminResponsitory,AdminReponsitory>();
 
 //AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
 {
-    mc.CreateMap<User, AuthenticateResponse>();
+    mc.CreateMap<User, AuthenticateResponse>().ReverseMap();
     mc.CreateMap<CreateRequest, User>();
     //Add Mapping profile here
 });
@@ -25,8 +27,8 @@ IMapper mapper = mapperConfig.CreateMapper();
 
 builder.Services.AddSingleton(mapper);
 
-builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddTransient<ILoginRepository, LoginRepository>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -58,6 +60,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+DbInitializer.Initialize(app);
 
 app.UseAuthentication();
 

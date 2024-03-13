@@ -11,6 +11,8 @@ namespace AMaz.Service
     {
         bool AdminCheck();
         AuthenticateResponse Create(CreateRequest model);
-        
+        AuthenticateResponse CreateAccount(CreateRequest model);
+        void DeleteAcount(Guid id);
+
     }
 }

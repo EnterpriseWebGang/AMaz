@@ -5,23 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AMaz.Entity
+namespace AMaz.Service
 {
-    public class CreateRequest
+   public class AuthenticateRequest
     {
-        [Required]
-        public string FirstName { get; set; }
-
-        [Required]
-        public string LastName { get; set; }
-        [Required]
-        [EnumDataType(typeof(Role))]
-        public Role Role { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+
         [Required]
-        [MinLength(6)]
         public string Password { get; set; }
     }
 }

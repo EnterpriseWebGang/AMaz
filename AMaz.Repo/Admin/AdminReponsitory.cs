@@ -31,6 +31,17 @@ namespace AMaz.Repo
         {
              _db.SaveChanges();
         }
+         public void DeleteUser(User user)
+        {
+           _db.Users.Remove(user);
+        }
+
+       public User GetById (Guid id)
+        {
+            var account = _db.Users.Find(id);
+            if (account == null) throw new KeyNotFoundException("Account not found");
+            return account;
+        }
 
         
     }

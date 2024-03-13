@@ -23,32 +23,25 @@ namespace AMaz.Web.Controllers
 
         // POST: /Account/Login
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login(AuthenticateRequest model)
         {
-            // Authenticate user credentials
-            bool isLogin = await _loginService.AuthenticateUserAsync(email, password);
-
-            if (isLogin)
+            try
             {
+                // Authenticate user credentials
+                var response = await _loginService.AuthenticateUserAsync(model);
+
                 // Sign in the user after successful authentication
-                bool signInResult = await _loginService.SignInUserAsync(email);
+                await _loginService.SignInUserAsync(response.Email);
 
-                if (signInResult)
-                {
-                    // Redirect to home page after successful sign-in
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    // Display an error message if there's an issue during the sign-in process
-                    ViewBag.Error = "Error during sign-in process";
-                    return View();
-                }
+                // Redirect to home page after successful sign-in
+                return RedirectToAction("Index", "Home");
             }
-
-            // Display error message for invalid email or password
-            ViewBag.Error = "Invalid email or password";
-            return View();
+            catch (AppException ex)
+            {
+                // Display an error message for invalid email or password
+                ViewBag.Error = ex.Message;
+                return View();
+            }
         }
 
         // GET: /Account/Logout
