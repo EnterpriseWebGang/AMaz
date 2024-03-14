@@ -111,6 +111,61 @@ nav .navigation ul li a:hover {
     background: rgb(21, 21, 100);
 }
 
+/* User Profile Dropdown */
+.user-profile {
+    position: relative;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    display: none;
+    padding: 10px 0;
+    width: 200px;
+}
+
+.user-profile.active .dropdown-menu {
+    display: block;
+}
+
+
+nav .navigation .user-profile .dropdown-menu a {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: #181717;
+    font-weight: 300;
+}
+
+
+.dropdown-menu a i {
+    margin-right: 25px;
+    margin-left: 15px;
+}
+
+nav .navigation .user-profile .dropdown-menu a:hover {
+    background-color: #F3F3F3;
+    font-weight: 300;
+    transition: 0.3s ease;
+    border-radius: 5px;
+}
+
 /* End Navigation */
 
 
