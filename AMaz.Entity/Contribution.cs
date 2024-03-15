@@ -16,8 +16,6 @@ namespace AMaz.Entity
 
         public string? Content { get; set;}
 
-        public string? FileLinks { get; set;}
-
         [Required]
         public int Status { get; set;}
 
@@ -45,5 +43,8 @@ namespace AMaz.Entity
 
         [ForeignKey("UserId")]
         public virtual User? User { get; set; }
+
+        [ForeignKey("FileId")]
+        public virtual ICollection<File>? Files { get; set; }
     }
 }

@@ -11,7 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMaz.Entity", "AMaz.Entity\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMaz.DB", "AMaz.DB\AMaz.DB.csproj", "{533AE243-93EA-4235-B798-6E559341060D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMaz.Repo", "AMaz.Repo\AMaz.Repo.csproj", "{BA792B10-BC87-4897-A124-8A063795FCA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMaz.Repo", "AMaz.Repo\AMaz.Repo.csproj", "{BA792B10-BC87-4897-A124-8A063795FCA3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMaz.Util", "AMaz.Util\AMaz.Util.csproj", "{C26F8682-F4F9-476D-A01F-F7BE70131E20}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AMaz.Common", "AMaz.Common\AMaz.Common.csproj", "{36BC9AF4-206B-400C-9482-4D10914044B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{BA792B10-BC87-4897-A124-8A063795FCA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA792B10-BC87-4897-A124-8A063795FCA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA792B10-BC87-4897-A124-8A063795FCA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C26F8682-F4F9-476D-A01F-F7BE70131E20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C26F8682-F4F9-476D-A01F-F7BE70131E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C26F8682-F4F9-476D-A01F-F7BE70131E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C26F8682-F4F9-476D-A01F-F7BE70131E20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36BC9AF4-206B-400C-9482-4D10914044B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36BC9AF4-206B-400C-9482-4D10914044B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36BC9AF4-206B-400C-9482-4D10914044B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36BC9AF4-206B-400C-9482-4D10914044B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

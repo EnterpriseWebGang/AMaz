@@ -2,6 +2,7 @@ using AMaz.DB;
 using AMaz.Entity;
 using AMaz.Repo;
 using AMaz.Service;
+using AMaz.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -22,13 +23,18 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.CreateMap<User, AuthenticateResponse>().ReverseMap();
     mc.CreateMap<CreateRequest, User>();
     //Add Mapping profile here
+    mc.AddProfile<FileProfile>();
 });
 IMapper mapper = mapperConfig.CreateMapper();
-
 builder.Services.AddSingleton(mapper);
+builder.Services.Configure<LocalFileStorageConfiguration>(builder.Configuration.GetSection("LocalFileStorageConfiguration"));
 
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddTransient<ILoginRepository, LoginRepository>();
+
+builder.Services.AddTransient<IFileRepository, FileRepository>();
+builder.Services.AddTransient<FileService>();
+
 
 builder.Services.AddHttpContextAccessor();
 
