@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AMaz.Common\AMaz.Common.csproj" />
     <ProjectReference Include="..\AMaz.DB\AMaz.DB.csproj" />
+    <ProjectReference Include="..\AMaz.Entity\AMaz.Entity.csproj" />
   </ItemGroup>
   <ItemGroup>
 	<ProjectReference Include="..\AMaz.Repo\AMaz.Repo.csproj" />
@@ -23,6 +25,7 @@
 
   <ItemGroup>
 	<ProjectReference Include="..\AMaz.Repo\AMaz.Repo.csproj" />
+	<ProjectReference Include="..\AMaz.Util\AMaz.Util.csproj" />
   </ItemGroup>
 
 </Project>

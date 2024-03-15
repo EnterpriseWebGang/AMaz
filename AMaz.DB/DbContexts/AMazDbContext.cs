@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AMaz.Entity;
+using File = AMaz.Entity.File;
 
 namespace AMaz.DB
 {
@@ -11,6 +12,7 @@ namespace AMaz.DB
         public DbSet<TermAndCondition> TermAndConditions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Contribution> Contributions { get; set;}
+        public DbSet<File> Files { get; set; }
 
         public AMazDbContext(DbContextOptions<AMazDbContext> options) : base(options)
         {
@@ -51,6 +53,11 @@ namespace AMaz.DB
                 Property(u => u.IsActive).
                 HasDefaultValue(true);
 
+            modelBuilder.
+                Entity<Contribution>().
+                HasMany(c => c.Files).
+                WithOne(f => f.Contribution).
+                OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
 
