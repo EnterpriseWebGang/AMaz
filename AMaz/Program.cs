@@ -46,6 +46,8 @@ builder.Services.AddTransient<ILoginService, LoginService>();
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
 builder.Services.AddTransient<FileService>();
+
+builder.Services.AddTransient<UserService>();
 #endregion
 
 builder.Services.AddControllersWithViews();

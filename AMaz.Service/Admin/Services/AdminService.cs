@@ -1,38 +1,14 @@
-﻿using AMaz.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AMaz.DB;
-using AutoMapper;
-using System.Security.Cryptography;
-using AutoMapper.Execution;
-using AMaz.Repo;
-using Microsoft.EntityFrameworkCore;
+﻿using AMaz.Common;
+using AMaz.Entity;
 using Microsoft.AspNetCore.Identity;
 
 namespace AMaz.Service
 {
-    public partial class AdminService
+    public partial class UserService
     {
-        private RoleManager<IdentityRole> _roleManager;
-        private UserManager<User> _userManager;
-        private readonly IMapper _mapper;
-        public AdminService(
-            IMapper mapper,
-            RoleManager<IdentityRole> roleManager,
-            UserManager<User> userManager)
-        {
-            _mapper = mapper;
-            _roleManager = roleManager;
-            _userManager = userManager;
-        }
-
         public async Task<IdentityResult> CreateAccount(CreateAccountRequest request)
         {
-            var roleName = GetUserRole(request.Role);
-            var role = await _roleManager.FindByNameAsync(roleName);
+            var role = await _roleManager.FindByNameAsync(request.Role);
 
             if (role == null)
             {
@@ -53,21 +29,24 @@ namespace AMaz.Service
                     Email = request.Email,
                 };
 
-                string userPWD = request.Password;
-                var createUserResult = await _userManager.CreateAsync(forDbCreate, userPWD);
-                var addToRoleResult = await _userManager.AddToRoleAsync(forDbCreate, roleName);
+                var createUserResult = await _userManager.CreateAsync(forDbCreate, request.Password);
+                var addUserToRoleResult = IdentityResult.Failed();
+                if (true)
+                {
+                   addUserToRoleResult = await _userManager.AddToRoleAsync(forDbCreate, request.Role);
+                }
 
                 if (createUserResult.Succeeded)
                 {
-                    if (addToRoleResult.Succeeded)
+                    if (addUserToRoleResult.Succeeded)
                     {
-                        return addToRoleResult;
+                        return addUserToRoleResult;
                     }
 
-                    return IdentityResult.Failed(createUserResult.Errors.Concat(addToRoleResult.Errors).ToArray());
+                    return IdentityResult.Failed(createUserResult.Errors.Concat(addUserToRoleResult.Errors).ToArray());
                 }
 
-                return IdentityResult.Failed(createUserResult.Errors.Concat(addToRoleResult.Errors).ToArray());
+                return IdentityResult.Failed(createUserResult.Errors.Concat(addUserToRoleResult.Errors).ToArray());
             }
             else
             {
@@ -78,34 +57,21 @@ namespace AMaz.Service
             }
         }
 
-        private string GetUserRole(int role)
+        public async Task<IdentityResult> ResetPassword(ResetPasswordRequest request)
         {
-            return role switch
+            var user = await _userManager.FindByIdAsync(request.UserId);
+            if (user == null)
             {
-                (int)Role.Admin => "Admin",
-                (int)Role.Student => "Student",
-                (int)Role.Coordinator => "Coordinator",
-                (int)Role.Manager => "Manager",
-                _ => ""
-            };
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "User do not exist"
+                });
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            return await _userManager.ResetPasswordAsync(user, token, request.Password);
         }
 
-
-        //public bool AdminCheck()
-        //{
-
-        //}
-
-        //public AuthenticateResponse Create(CreateRequest model)
-        //{
-
-        //}
-
-
-        //public void DeleteAcount(Guid id)
-        //{
-
-        //}
     }
 
 }
