@@ -1,4 +1,5 @@
 ﻿using AMaz.Entity;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,7 @@ namespace AMaz.Service
     public interface IAdminService
     {
         bool AdminCheck();
-        AuthenticateResponse Create(CreateRequest model);
-        AuthenticateResponse CreateAccount(CreateRequest model);
+        Task<IdentityResult> CreateAccount(CreateAccountRequest model);
         void DeleteAcount(Guid id);
 
     }

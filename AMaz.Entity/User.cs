@@ -1,40 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AMaz.Entity
 {
-    [Table("Users")]
     [Index(nameof(Email))]
-    public class User
+    public class User : IdentityUser
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid UserId { get; set; }
-
-        [Required]
+        [PersonalData]
         [StringLength(255)]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
-        [Required]
+        [PersonalData]
         [StringLength(255)]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
-        [Required]
-        [StringLength(255)]
-        public string Email { get; set; }
-
-        [Required]
-        public int Role { get; set; }
-
-        [Required]
-        public string Password { get; set; }
-
-        [Required]
+        [PersonalData]
         public bool IsActive {  get; set; }
 
+        [PersonalData]
         public DateTime? LastDeactivatedDate { get; set; }
 
+        [PersonalData]
         [ForeignKey("FacultyId")]
         public virtual Faculty? Faculty { get; set; }
 
