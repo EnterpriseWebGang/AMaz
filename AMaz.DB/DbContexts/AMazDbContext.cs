@@ -1,16 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AMaz.Entity;
 using File = AMaz.Entity.File;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace AMaz.DB
 {
-    public class AMazDbContext : DbContext
+    public class AMazDbContext : IdentityDbContext<User>
     {
         public DbSet<AcademicYear> AcademicYears { get; set; }
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<Magazine> Magazines { get; set; }
         public DbSet<TermAndCondition> TermAndConditions { get; set; }
-        public DbSet<User> Users { get; set; }
+        public override DbSet<User> Users { get; set; }
         public DbSet<Contribution> Contributions { get; set;}
         public DbSet<File> Files { get; set; }
 
@@ -26,6 +28,44 @@ namespace AMaz.DB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            #region Identity
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable(name: "User");
+            });
+            modelBuilder.Entity<IdentityRole>(entity =>
+            {
+                entity.ToTable(name: "Role");
+            });
+            modelBuilder.Entity<IdentityUserRole<string>>(entity =>
+            {
+                entity.ToTable("UserRoles");
+            });
+
+            modelBuilder.Entity<IdentityUserClaim<string>>(entity =>
+            {
+                entity.ToTable("UserClaims");
+            });
+
+            modelBuilder.Entity<IdentityUserLogin<string>>(entity =>
+            {
+                entity.ToTable("UserLogins");
+            });
+
+            modelBuilder.Entity<IdentityRoleClaim<string>>(entity =>
+            {
+                entity.ToTable("RoleClaims");
+            });
+
+            modelBuilder.Entity<IdentityUserToken<string>>(entity =>
+            {
+                entity.ToTable("UserTokens");
+            });
+            #endregion
+
+            #region Table relationships
             // If Delete Mangazine ==> Cascade all the contribution
             modelBuilder.
                 Entity<Magazine>().
@@ -58,8 +98,7 @@ namespace AMaz.DB
                 HasMany(c => c.Files).
                 WithOne(f => f.Contribution).
                 OnDelete(DeleteBehavior.Cascade);
-
-            base.OnModelCreating(modelBuilder);
+            #endregion
 
         }
     }

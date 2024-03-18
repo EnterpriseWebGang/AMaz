@@ -8,7 +8,9 @@ namespace AMaz.Service
 {
     public enum Role
     {
-        Admin,
-        
+        Admin = 0,
+        Student = 1,
+        Coordinator = 2,
+        Manager = 4   
     }
 }

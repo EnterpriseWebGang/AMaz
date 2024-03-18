@@ -4,8 +4,9 @@ using AMaz.Repo;
 using AMaz.Service;
 using AMaz.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using AMaz.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,39 +15,38 @@ builder.Services.AddDbContext<AMazDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("AMazContext"));
 });
-builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<IAdminResponsitory,AdminReponsitory>();
+
+builder.Services.AddDefaultIdentity<User>(option =>
+{
+    option.User.RequireUniqueEmail = true;
+    option.SignIn.RequireConfirmedAccount = false;
+    option.SignIn.RequireConfirmedEmail = false;
+
+}).AddRoles<IdentityRole>().AddEntityFrameworkStores<AMazDbContext>();
+
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//    .AddEntityFrameworkStores<AMazDbContext>();
 
 //AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
 {
-    mc.CreateMap<User, AuthenticateResponse>().ReverseMap();
-    mc.CreateMap<CreateRequest, User>();
     //Add Mapping profile here
     mc.AddProfile<FileProfile>();
+    mc.AddProfile<AdminProfile>();
+    mc.AddProfile<LoginProfile>();
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.Configure<LocalFileStorageConfiguration>(builder.Configuration.GetSection("LocalFileStorageConfiguration"));
+builder.Services.Configure<PowerUserConfiguration>(builder.Configuration.GetSection("PowerUserConfiguration"));
+#region Biz Services
+//builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Services.AddTransient<ILoginService, LoginService>();
-builder.Services.AddTransient<ILoginRepository, LoginRepository>();
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
 builder.Services.AddTransient<FileService>();
-
-
-builder.Services.AddHttpContextAccessor();
-
-
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Account/Login";
-        options.AccessDeniedPath = "/Account/AccessDenied";
-    });
-
+#endregion
 
 builder.Services.AddControllersWithViews();
 
@@ -65,10 +65,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
-DbInitializer.Initialize(app);
-
 app.UseAuthentication();
+app.UseAuthorization();
+
+DbInitializer.InitializeAsync(app);
+
 
 app.MapControllerRoute(
     name: "default",
