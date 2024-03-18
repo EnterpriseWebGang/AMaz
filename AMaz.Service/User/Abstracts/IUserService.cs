@@ -8,6 +8,6 @@ namespace AMaz.Service
 {
     //public interface IUserService
     //{
-    //    public 
+    //    public
     //}
 }

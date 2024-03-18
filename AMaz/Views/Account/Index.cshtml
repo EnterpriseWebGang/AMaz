@@ -1,0 +1,46 @@
+﻿@using AMaz.Common
+@model List<UserViewModel>
+@{
+    ViewData["Title"] = "Member List";
+}
+<h2>@ViewData["Title"]</h2>
+<table class="table">
+    <tr>
+        <th>FullName</th>
+        <th>Email</th>
+        <th>Roles</th>
+        <th>Action</th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.FirstName @user.LastName</td>
+
+            <td>
+                @if (string.IsNullOrEmpty(user.Role))
+                {
+                    <a class="text-dark" asp-action="AddRole" asp-route-id="@user.Id">+ Add to Role</a>
+                }
+                else
+                {
+                    <a asp-action="AddRole" asp-route-id="@user.Id">@user.Role</a>
+                }
+            </td>
+            <td>
+                @if (user.IsActive == "true")
+                {
+                    <a class="btn btn-danger btn-sm" asp-action="Deactivate" asp-route-id="@user.Id">Deactivate</a>
+                }
+                else
+                {
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                }
+                <a class="btn btn-success btn-sm" asp-action= "ResetPassword" asp-route-id="@user.Id">Set Password</a>
+            </td>
+        </tr>
+    }
+
+    <tr>
+        <td> <a class="btn btn-primary btn-sm" asp-action="Create">+</a> </td>
+    </tr>
+</table>

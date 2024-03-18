@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -10,9 +10,4 @@
     <ProjectReference Include="..\AMaz.DB\AMaz.DB.csproj" />
     <ProjectReference Include="..\AMaz.Entity\AMaz.Entity.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Admin\" />
-  </ItemGroup>
-
 </Project>

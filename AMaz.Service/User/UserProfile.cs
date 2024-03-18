@@ -1,14 +1,14 @@
 ﻿using AMaz.Common;
+using AMaz.Entity;
 using AutoMapper;
 
 namespace AMaz.Service
 {
-    public class AdminProfile : Profile
+    public class UserProfile : Profile
     {
-        public AdminProfile()
+        public UserProfile()
         {
-            CreateMap<CreateAccountViewModel, CreateAccountRequest>().
-                ForMember(r => r.Role, option => option.MapFrom(m => GetUserRole(m.Role)));
+            CreateMap<User, UserViewModel>();
         }
 
         private string GetUserRole(int role)
