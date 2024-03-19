@@ -27,21 +27,6 @@ namespace AMaz.Service
             _roleManager = roleManager;
         }
 
-        public async Task<List<UserViewModel>> GetAllUsersAsync()
-        {
-            var currentUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-            var users = await _userManager.Users.Where(u => u.Id != currentUser.Id)
-                .Select(c => new UserViewModel
-                {
-                    Id = c.Id,
-                    Email = c.Email,
-                    IsActive = GetIsActiveStatus(c.IsActive),
-                    Role = string.Join(",", _userManager.GetRolesAsync(c).Result.ToArray())
-                }).ToListAsync();
-
-            return users;
-        }
-
         public async Task<UserViewModel> GetUserDetailByIdAsync(string id)
         {
             var currentUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
@@ -52,11 +37,6 @@ namespace AMaz.Service
             }
 
             return _mapper.Map<UserViewModel>(entity);
-        }
-
-        private string GetIsActiveStatus(bool isActive)
-        {
-            return isActive ? "Yes" : "No";
         }
     }
 }

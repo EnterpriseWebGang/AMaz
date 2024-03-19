@@ -5,9 +5,9 @@ namespace AMaz.Service
 {
     public interface ILoginService
     {
-       // Task<AuthenticateResponse> AuthenticateUserAsync(AuthenticateRequest model);
+        // Task<AuthenticateResponse> AuthenticateUserAsync(AuthenticateRequest model);
 
-        Task<SignInResult> SignInUserAsync(LoginRequest  email);
+        Task<(SignInResult result, string error)> SignInUserAsync(LoginRequest  email);
 
         Task LogOut();
     }

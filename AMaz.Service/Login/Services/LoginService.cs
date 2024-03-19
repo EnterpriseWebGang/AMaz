@@ -23,22 +23,24 @@ namespace AMaz.Service
             _userManager = userManager;
         }
 
-        public async Task<SignInResult> SignInUserAsync(LoginRequest request)
+        public async Task<(SignInResult result, string error)> SignInUserAsync(LoginRequest request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null)
             {
-                return SignInResult.Failed;
+                return (SignInResult.Failed, "User does not exist!");
             }
 
             if (!user.IsActive)
             {
-                return SignInResult.Failed;
+                return (SignInResult.Failed, "User is not active, please contact with Admin.");
             }
 
             var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, request.RememberMe, lockoutOnFailure: false);
-            return result;
+            var errorMessage = result.Succeeded ? "" : "Wrong Email or Password";
+
+            return (result, errorMessage);
         }
 
         public async Task LogOut()

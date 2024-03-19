@@ -24,6 +24,14 @@ builder.Services.AddDefaultIdentity<User>(option =>
 
 }).AddRoles<IdentityRole>().AddEntityFrameworkStores<AMazDbContext>();
 
+builder.Services.ConfigureApplicationCookie(option =>
+{
+    option.AccessDeniedPath = "/AccessDenied";
+    option.LoginPath = "/Login";
+    option.LogoutPath = "/Logout";
+
+});
+
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 //    .AddEntityFrameworkStores<AMazDbContext>();
 
@@ -34,6 +42,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile<FileProfile>();
     mc.AddProfile<AdminProfile>();
     mc.AddProfile<LoginProfile>();
+    mc.AddProfile<UserProfile>();
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);

@@ -9,6 +9,7 @@ namespace AMaz.Service
         {
             CreateMap<CreateAccountViewModel, CreateAccountRequest>().
                 ForMember(r => r.Role, option => option.MapFrom(m => GetUserRole(m.Role)));
+            CreateMap<ResetPasswordViewModel, ResetPasswordRequest>();
         }
 
         private string GetUserRole(int role)

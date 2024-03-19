@@ -1,6 +1,4 @@
 ﻿using AMaz.Service;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using AMaz.Common;
 using AutoMapper;
@@ -19,20 +17,22 @@ namespace AMaz.Web.Controllers
         }
 
         // GET: /Account/Login
-        public IActionResult Login()
+        public IActionResult Index(string returnUrl = null)
         {
-            return View();
+            ViewData["ReturnUrl"] = returnUrl;
+            return View("Login");
         }
 
-        // POST: /Account/Login
+        // POST: /Login
         [HttpPost]
+        [Route("Login")]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
             if (ModelState.IsValid)
             {
                 var request = _mapper.Map<LoginRequest>(model);
                 var response = await _loginService.SignInUserAsync(request);
-                if (response.Succeeded)
+                if (response.result.Succeeded)
                 {
                     if (Url.IsLocalUrl(returnUrl))
                     {
@@ -41,7 +41,7 @@ namespace AMaz.Web.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                ViewBag.Error = "Cannot login!";
+                ViewBag.Error = response.error;
                 return View();
             }
 
@@ -49,7 +49,8 @@ namespace AMaz.Web.Controllers
             return View();
         }
 
-        // GET: /Account/Logout
+        // GET: /Logout
+        [Route("Logout")]
         public IActionResult Logout()
         {
             // Sign out the user and redirect to home page

@@ -2,6 +2,8 @@
 using AMaz.Service;
 using AMaz.Common;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AMaz.Web.Controllers.Account
 {
@@ -17,9 +19,11 @@ namespace AMaz.Web.Controllers.Account
         }
 
         // GET: AccountController
-        public ActionResult Index()
+        [Authorize()]
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var models = await _userService.GetAllUsersAsync();
+            return View(models);
         }
 
         //// GET: AccountController/Details/5
@@ -29,6 +33,7 @@ namespace AMaz.Web.Controllers.Account
         //}
 
         // GET: AccountController/Create
+        [Authorize()]
         public ActionResult Create()
         {
             return View();
@@ -36,6 +41,7 @@ namespace AMaz.Web.Controllers.Account
 
         // POST: AccountController/Create
         [HttpPost]
+        [Authorize()]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CreateAccountViewModel model)
         {
@@ -50,53 +56,79 @@ namespace AMaz.Web.Controllers.Account
                 }
 
                 ViewBag.Error = result.ToString();
-                return View();
+                return View(model);
             }
 
             ViewBag.Error = "Invalid Input!";
+            return View(model);
+        }
+
+        public async Task<ActionResult> Deactivate(string userId)
+        {
+            var result = await _userService.DeactivateUser(userId);
+            if (result.result)
+            {
+                return RedirectToAction("Index");
+            }
+
+            TempData["ErrorMessage"] = result.errorMessage;
+            return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Activate(string userId)
+        {
+            var result = await _userService.ActivateUser(userId);
+            if (result.result)
+            {
+                return RedirectToAction("Index");
+            }
+
+            TempData["ErrorMessage"] = result.errorMessage;
+            return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Delete(string userId)
+        {
+            var result = await _userService.DeleteUser(userId);
+            if (result.result)
+            {
+                return RedirectToAction("Index");
+            }
+
+            TempData["ErrorMessage"] = result.errorMessage;
+            return RedirectToAction("Index");
+        }
+
+        // GET: /Account/ResetPassword/{userId}
+        [HttpGet]
+        public IActionResult ResetPassword(string userId)
+        {
+            ViewBag.UserId = userId;
+            ViewBag.Error = TempData["ErrorMessage"];
             return View();
         }
 
-        //// GET: AccountController/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    return View();
-        //}
+        // POST: /Account/ResetPassword/{userId}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(string userId, ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Wrong Input!";
+                return RedirectToAction("ResetPassword", new {userId = userId});
+            }
 
-        //// POST: AccountController/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+            var request = _mapper.Map<ResetPasswordRequest>(model);
+            request.UserId = userId;
+            var result = await _userService.ResetPassword(request);
+            if (!result.Succeeded)
+            {
+                TempData["ErrorMessage"] = string.Join("\n", result.Errors.Select(e => e.Description));
+                return RedirectToAction("ResetPassword", new { userId = userId }); ;
+            }
 
-        //// GET: AccountController/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: AccountController/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+            return RedirectToAction("Index");
+        }
     }
 }
