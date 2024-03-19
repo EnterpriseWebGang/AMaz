@@ -8,7 +8,7 @@ namespace AMaz.Service
     {
         public UserProfile()
         {
-            CreateMap<User, UserViewModel>();
+            CreateMap<User, UserViewModel>().ForMember(u => u.IsActive, opt => opt.MapFrom(src => GetIsActiveStatus(src.IsActive)));
         }
 
         private string GetUserRole(int role)
@@ -21,6 +21,11 @@ namespace AMaz.Service
                 (int)Role.Manager => "Manager",
                 _ => ""
             };
+        }
+
+        private string GetIsActiveStatus(bool isActive)
+        {
+            return isActive ? "Yes" : "No";
         }
     }
 }

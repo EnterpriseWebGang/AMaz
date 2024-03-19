@@ -11,35 +11,40 @@
         <th>Roles</th>
         <th>Action</th>
     </tr>
-    @foreach (var user in Model)
+    @if(Model != null)
     {
-        <tr>
-            <td>@user.FirstName @user.LastName</td>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.FirstName @user.LastName</td>
 
-            <td>
-                @if (string.IsNullOrEmpty(user.Role))
-                {
-                    <a class="text-dark" asp-action="AddRole" asp-route-id="@user.Id">+ Add to Role</a>
-                }
-                else
-                {
-                    <a asp-action="AddRole" asp-route-id="@user.Id">@user.Role</a>
-                }
-            </td>
-            <td>
-                @if (user.IsActive == "true")
-                {
-                    <a class="btn btn-danger btn-sm" asp-action="Deactivate" asp-route-id="@user.Id">Deactivate</a>
-                }
-                else
-                {
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
-                }
-                <a class="btn btn-success btn-sm" asp-action= "ResetPassword" asp-route-id="@user.Id">Set Password</a>
-            </td>
-        </tr>
+                <td>@user.Email</td>
+
+                <td>
+                    @if (string.IsNullOrEmpty(user.Role))
+                    {
+                        <a class="text-dark" asp-action="AddRole" asp-route-id="@user.Id">+ Add to Role</a>
+                    }
+                    else
+                    {
+                        @user.Role
+                    }
+                </td>
+                <td>
+                    @if (user.IsActive.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        <a class="btn btn-danger btn-sm" asp-action="Deactivate" asp-route-userId="@user.Id">Deactivate</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-success btn-sm" asp-action="Activate" asp-route-userId="@user.Id">Activate</a>
+                        <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-userId="@user.Id">Delete</a>
+                    }
+                    <a class="btn btn-success btn-sm" asp-action="ResetPassword" asp-route-userId="@user.Id">Set Password</a>
+                </td>
+            </tr>
+        }
     }
-
     <tr>
         <td> <a class="btn btn-primary btn-sm" asp-action="Create">+</a> </td>
     </tr>
