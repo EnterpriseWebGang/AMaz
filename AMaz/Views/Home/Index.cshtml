@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "_AdminLayout";
 }
 
 @* <div class="text-center">
@@ -24,6 +25,7 @@
         Explore the vibrant stories and talents within our university community! Contribute your unique perspective
         by submitting articles and captivating images for the annual magazine.
     </p>
+   <a asp-action="Create" asp-controller="Account">Create</a>
 </section>
 
 <!-- End Home -->

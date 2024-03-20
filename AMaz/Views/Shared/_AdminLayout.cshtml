@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿﻿@using AMaz.Entity
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -139,7 +144,7 @@
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                             <img alt="image" src="~/images/avatar/avatar-1.png" class="rounded-circle mr-1">
-                            <div class="d-sm-none d-lg-inline-block">Hi, Minh Huy</div>
+                            <div class="d-sm-none d-lg-inline-block">Hello, @User.Identity.Name!</div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="#" class="dropdown-item has-icon">
@@ -151,8 +156,8 @@
                             <a href="#" class="dropdown-item has-icon">
                                 <i class="fas fa-cog"></i> Settings
                             </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item has-icon text-danger">
+                            <div class="dropdown-divider" ></div>
+                            <a  asp-action="Logout" asp-controller="Login" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
                         </div>
@@ -180,8 +185,9 @@
                         <li class="dropdown">
                             <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Auth</span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Reset Password</a></li>
-                                <li><a href="#">Create Account</a></li>
+                                <li><a asp-action="ResetPassword" asp-controller="Account">Reset Password</a></li>
+                                <li><a asp-action="Create" asp-controller="Account">Create</a></li>
+                                
                             </ul>
                         </li>
 
