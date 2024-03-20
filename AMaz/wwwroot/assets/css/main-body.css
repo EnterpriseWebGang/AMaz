@@ -1,0 +1,278 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+}
+
+/* Global Tags */
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: rgb(35, 35, 85);
+}
+
+span {
+    font-size: 0.9rem;
+    color: #757373;
+}
+
+h6 {
+    font-size: 1.1rem;
+    color: rgb(24, 24, 49);
+}
+
+/* Home */
+
+#home {
+    background-image: linear-gradient(rgba(9, 5, 54, 0.3), rgba(5, 4, 46, 0.7)), url('../../images/back.jpg');
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 40px;
+}
+
+    #home h2 {
+        color: #fff;
+        font-size: 2.2rem;
+        letter-spacing: 1px;
+    }
+
+    #home p {
+        width: 50%;
+        color: #fff;
+        font-size: 0.9rem;
+        line-height: 25px;
+    }
+
+    #home .btn {
+        margin-top: 30px;
+    }
+
+    #home a {
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 13px 35px;
+        background-color: #fff;
+        font-weight: 600;
+        border-radius: 5px;
+    }
+
+        #home a.blue {
+            color: #fff;
+            background: rgb(21, 21, 100);
+            transition: 0.3s ease;
+        }
+
+            #home a.blue:hover {
+                color: rgb(21, 21, 100);
+                background: #fff;
+            }
+
+        #home a.yellow {
+            color: #fff;
+            background: #FDC93B;
+            transition: 0.3s ease;
+        }
+
+            #home a.yellow:hover {
+                color: rgb(21, 21, 100);
+                background: #fff;
+            }
+
+/* End Home */
+
+
+/* Course */
+#course {
+    padding: 8vw 8vw 8vw 8vw;
+    text-align: center;
+}
+
+    #course .course-box {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-gap: 1rem;
+    }
+
+    #course .courses {
+        text-align: start;
+        background: #F9F9FF;
+        height: 100%;
+    }
+
+        #course .courses img {
+            width: 100%;
+            height: 60%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        #course .courses .details {
+            padding: 15px 15px 0 15px;
+        }
+
+            #course .courses .details i {
+                color: #FDC93B;
+                font-size: .9rem;
+            }
+
+
+/* End Course */
+
+
+/* ration */
+#registration {
+    padding: 6vw 8vw 8vw 8vw;
+    background-image: linear-gradient(rgba(99, 112, 168, 0.5), rgba(81, 91, 233, 0.5)), url('../../images/signup.jpg');
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+}
+
+    #registration .reminder {
+        color: #fff;
+    }
+
+        #registration .reminder h1 {
+            color: #fff;
+        }
+
+        #registration .reminder .time {
+            display: flex;
+            margin-top: 40px;
+        }
+
+            #registration .reminder .time .date {
+                text-align: center;
+                padding: 13px 33px;
+                background: rgba(255, 255, 255, 0.18);
+                backdrop-filter: blur(4px);
+                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+                border-radius: 10px;
+                margin: 0 5px 10px 5px;
+                border: 1px solid rgba(255, 255, 255, 0.18);
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+
+    #registration .form .btn {
+        margin-top: 20px;
+    }
+
+    #registration .form {
+        background: #fff;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+
+        #registration .form input::placeholder {
+            color: #413c3c;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        #registration .form input {
+            margin: 15px 0;
+            padding: 15px 10px;
+            border: 1px solid rgb(84, 40, 241);
+            outline: none;
+        }
+
+    #registration a.yellow {
+        text-decoration: none;
+        font-size: 0.9rem;
+        padding: 13px 35px;
+        background-color: #fff;
+        font-weight: 600;
+        border-radius: 5px;
+        color: #fff;
+        background: #FDC93B;
+        transition: 0.3s ease;
+    }
+
+        #registration a.yellow:hover {
+            color: rgb(21, 21, 100);
+            background: #fff;
+        }
+
+/* End Registration */
+
+
+/* Responsive */
+
+@media (max-width: 769px) {
+
+    #home {
+        padding-top: 0px;
+    }
+
+        #home p {
+            width: 90%;
+        }
+
+    #course {
+        padding: 8vw 4vw 0 4vw;
+    }
+
+    #registration {
+        margin-top: 8vw;
+        padding: 6vw 4vw 6vw 4vw;
+    }
+
+        #registration .reminder .time {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+}
+
+@media (max-width: 475px) {
+    #registration {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+        #registration .reminder .time {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+}
+
+/* End responsive */
+
+@media (max-width: 376px) {
+    footer input {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}

@@ -6,13 +6,24 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-action="Logout" asp-controller="Login">Logout</a>
+    <li class="user-profile">
+        <div class="user-info">
+            <span class="user-greeting"> Hello, @User.Identity.Name</span>
+            <img class="user-avatar" src="~/images/avatar/avatar-1.png" alt="User Avatar">
+        </div>
+        <div class="dropdown-menu">
+            <a href="#"><i class="fas fa-user"></i>Profile</a>
+
+            <hr>
+            <a style="color: red;" asp-action="Logout" asp-controller="Login"><i class="fas fa-sign-out-alt" style="color: red;"></i>Logout</a>
+        </div>
     </li>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Login">Login</a>
+    <li>
+        <section id="sign-in">
+            <a class="login-btn" asp-area="" asp-controller="Login" asp-action="Login">Sign In</a>
+        </section>
     </li>
 }
