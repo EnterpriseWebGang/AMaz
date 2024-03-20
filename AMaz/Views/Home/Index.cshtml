@@ -2,18 +2,172 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+@* <div class="text-center">
     @if (User.Identity.IsAuthenticated)
     {
         <h1 class="display-4">Welcome, @User.Identity.Name!</h1>
         <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-
     }
     else
     {
         <h1 class="display-4">Welcome</h1>
         <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-        <a asp-action="Create" asp-controller="File">GetFile</a>
     }
+</div> *@
 
-</div>
+
+<!-- Home -->
+
+<section id="home">
+    <h2>Enhance Your Future</h2>
+    <p>
+        Explore the vibrant stories and talents within our university community! Contribute your unique perspective
+        by submitting articles and captivating images for the annual magazine.
+    </p>
+</section>
+
+<!-- End Home -->
+<!-- Courses -->
+
+<section id="course">
+    <h1>Our Popular Courses</h1>
+    <p>Replenish man have thing gathering lights yielding shall you</p>
+    <div class="course-box">
+
+        <div class="courses">
+            <img src="./images/c1.jpg" alt="">
+            <div class="details">
+                <span>Updated 09/03/24</span>
+                <h6>Javascript Beginner Course</h6>
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span>(239)</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="courses">
+            <img src="images/c2.jpg" alt="">
+            <div class="details">
+                <span>Updated 09/03/24</span>
+                <h6>Javascript Beginner Course</h6>
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span>(239)</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="courses">
+            <img src="images/c3.jpg" alt="">
+            <div class="details">
+                <span>Updated 09/03/24</span>
+                <h6>Javascript Beginner Course</h6>
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span>(239)</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="courses">
+            <img src="images/c4.jpg" alt="">
+            <div class="details">
+                <span>Updated 09/03/24</span>
+                <h6>Javascript Beginner Course</h6>
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span>(239)</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="courses">
+            <img src="images/c5.jpg" alt="">
+            <div class="details">
+                <span>Updated 09/03/24</span>
+                <h6>Javascript Beginner Course</h6>
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span>(239)</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="courses">
+            <img src="images/c6.jpg" alt="">
+            <div class="details">
+                <span>Updated 09/03/24</span>
+                <h6>Javascript Beginner Course</h6>
+                <div class="star">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span>(239)</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- End Courses -->
+<!-- Registration -->
+<section id="registration">
+    <div class="reminder">
+        <p>Wisdom is not a product from school</p>
+        <h1>But a lifelong learning process</h1>
+        <div class="time">
+            <div class="date">
+                18 <br> Days
+            </div>
+            <div class="date">
+                23 <br> Hours
+            </div>
+            <div class="date">
+                06 <br> Mins
+            </div>
+            <div class="date">
+                58 <br> Secs
+            </div>
+        </div>
+    </div>
+
+    <div class="form">
+        <h3>Search Courses</h3>
+        <input type="text" placeholder="Course Name" name="" id="">
+        <input type="text" placeholder="Topic" name="" id="">
+        <input type="text" placeholder="Instructor" name="" id="">
+        <div class="btn">
+            <a href="#" class="yellow">Search</a>
+        </div>
+    </div>
+</section>
+<!-- End Registration -->
+
+@section CSS {
+    <link href="~/assets/css/main-body.css" rel="stylesheet" />
+}
