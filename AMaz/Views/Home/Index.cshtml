@@ -1,6 +1,5 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    Layout = "_AdminLayout";
 }
 
 @* <div class="text-center">
@@ -25,7 +24,29 @@
         Explore the vibrant stories and talents within our university community! Contribute your unique perspective
         by submitting articles and captivating images for the annual magazine.
     </p>
-   <a asp-action="Create" asp-controller="Account">Create</a>
+
+    
+
+
+    <!-- TEMPORARY FUNCTION-->
+    <a id="createButton" asp-action="Create" asp-controller="Account">Admin Page</a>
+    <script>
+        document.getElementById("createButton").addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent default action of clicking anchor tag
+
+            var confirmationMessage = "Cái này sẽ dẫn đến trang của Admin khi login as Admin! Function này chỉ là tạm thời để dẫn đến trang Admin khi chưa phân quyền! Có muốn đến trang Admin không 1 CÓ 2 KHÔNG";
+            if (confirm(confirmationMessage)) {
+                var redirectUrl = "/Account/Create"; // Manually construct the URL
+                window.location.href = redirectUrl;
+            }
+        });
+    </script>
+    <!-- END TEMPORARY FUNCTION-->
+
+
+
+
+
 </section>
 
 <!-- End Home -->
