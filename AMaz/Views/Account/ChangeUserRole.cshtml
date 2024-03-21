@@ -1,0 +1,53 @@
+﻿@using AMaz.Common
+@model ChangeUserRoleViewModel
+
+@{
+    ViewData["Title"] = "Change User Role";
+    Layout = "_AdminLayout";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Create Account</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Functions</a></div>
+                <div class="breadcrumb-item"><a href="#">Auth</a></div>
+                <div class="breadcrumb-item">Create Account</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Create New Operators</h4>
+                    </div>
+                    <div class="card-body">
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @ViewBag.Error
+                            </div>
+                        }
+                        <form asp-action="ChangeUserRole" asp-route-userId="@ViewBag.UserId" method="post">
+                            <div class="form-group">
+                                <label asp-for="Role">Select Role:</label>
+                                <select asp-for="Role" class="form-control">
+                                    <option value="@((int)Role.Manager)" selected=@(Model.Role == (int)Role.Manager)>Manager</option>
+                                    <option value="@((int)Role.Coordinator)" selected=@(Model.Role == (int)Role.Coordinator)>Coordinator</option>
+                                    <option value="@((int)Role.Student)" selected=@(Model.Role == (int)Role.Student)>Student</option>
+                                </select>
+                                <span asp-validation-for="Role" class="text-danger"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

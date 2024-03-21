@@ -150,6 +150,51 @@ namespace AMaz.Service
             return (true, "");
         }
 
+        public async Task<(bool result, string error)> ChangeUserRole(ChangeUserRoleRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId);
+            if (user == null)
+            {
+                return (false, "user does not exist");
+            }
+
+            var role = await _roleManager.FindByNameAsync(request.Role);
+            if (role == null)
+            {
+                return (false, "role does not exist");
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles.Contains(request.Role))
+            {
+                return (false, "user already in this role");
+            }
+
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
+            await _userManager.AddToRoleAsync(user, request.Role);
+            return (true, "");
+        }
+
+        public async Task<ChangeUserRoleViewModel> GetUserRoleViewModelAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return new ChangeUserRoleViewModel();
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            return new ChangeUserRoleViewModel
+            {
+                Role = GetRoleCode(userRoles.First())
+            };
+
+        }
+
+        private int GetRoleCode(string roleName)
+        {
+            return (int)Enum.Parse(typeof(Role), roleName, true);
+        }
     }
 
 }

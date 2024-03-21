@@ -130,5 +130,41 @@ namespace AMaz.Web.Controllers.Account
 
             return RedirectToAction("Index");
         }
+
+        // GET: ChangeUserRole
+        [HttpGet]
+        public async Task<IActionResult> ChangeUserRole(string userId)
+        {
+            var model = await _userService.GetUserRoleViewModelAsync(userId);
+            ViewBag.UserId = userId;
+            ViewBag.Error = TempData["ErrorMessage"];
+            return View(model);
+        }
+
+        // POST: ChangeUserRole
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeUserRole(string userId, ChangeUserRoleViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var request = _mapper.Map<ChangeUserRoleRequest>(model);
+                request.UserId = userId;
+
+                var result = await _userService.ChangeUserRole(request);
+                if (result.result)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                else
+                {
+                    TempData["ErrorMessage"] = result.error;
+                    return RedirectToAction("ChangeUserRole", new { userId = userId }); ;
+                }
+            }
+            ViewBag.UserId = userId; 
+            return RedirectToAction("ChangeUserRole", new {userId = userId});
+        }
     }
 }
