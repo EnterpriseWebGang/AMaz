@@ -5,51 +5,6 @@ $("#swal-2").click(function() {
   $(".need-validation").submit();
 });
 
-$("#swal-2").click(function () {
-    // Check if any radio button is selected
-    if ($('input[name="value"]:checked').length === 0) {
-        // If no radio button is selected, show the validation message
-        $('#roleValidationMessage').show();
-    } else {
-        // If a radio button is selected, check if the form is valid
-        if ($('.wizard-content')[0].checkValidity()) {
-            // Check password validity
-            var password = $('input[name="password"]').val();
-            if (!isValidPassword(password)) {
-                // Password does not meet requirements, show validation message
-                $('#passwordValidationMessage').show();
-                return;
-            } else {
-                // Hide password validation message if password is valid
-                $('#passwordValidationMessage').hide();
-            }
-
-            // Display sweet alert if the form is valid
-            $('#roleValidationMessage').hide();
-            swal('Account Created', 'Your account has been created successfully!', 'success')
-                .then((value) => {
-                    if (value) {
-                        // If the user clicks OK on the alert, redirect to admin.html
-                        var redirectUrl = "/Account"
-                        window.location.href = redirectUrl;
-                    }
-                });
-        } else {
-            // If the form is not valid, trigger form validation
-            $('.wizard-content').addClass('was-validated');
-        }
-    }
-});
-
-// Function to validate password format
-// Function to validate the password format
-function isValidPassword(password) {
-    // Regular expression for password validation
-    // Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one non-alphanumeric character
-    var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{6,}$/;
-    return passwordPattern.test(password);
-}
-
 $(".need-validation").submit(function (event) {
     event.preventDefault();
     event.stopPropagation();
@@ -120,6 +75,51 @@ $(".need-validation").submit(function (event) {
     }
 });
 
+$("#swal-2").click(function () {
+    // Check if any radio button is selected
+    if ($('input[name="value"]:checked').length === 0) {
+        // If no radio button is selected, show the validation message
+        $('#roleValidationMessage').show();
+    } else {
+        // If a radio button is selected, check if the form is valid
+        if ($('.wizard-content')[0].checkValidity()) {
+            // Check password validity
+            var password = $('input[name="password"]').val();
+            if (!isValidPassword(password)) {
+                // Password does not meet requirements, show validation message
+                $('#passwordValidationMessage').show();
+                return;
+            } else {
+                // Hide password validation message if password is valid
+                $('#passwordValidationMessage').hide();
+            }
+
+            // Display sweet alert if the form is valid
+            $('#roleValidationMessage').hide();
+            swal('Account Created', 'Your account has been created successfully!', 'success')
+                .then((value) => {
+                    if (value) {
+                        // If the user clicks OK on the alert, redirect to admin.html
+                        var redirectUrl = "/Account"
+                        window.location.href = redirectUrl;
+                    }
+                });
+        } else {
+            // If the form is not valid, trigger form validation
+            $('.wizard-content').addClass('was-validated');
+        }
+    }
+});
+
+// Function to validate the password format
+function isValidPassword(password) {
+    // Regular expression for password validation
+    // Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one non-alphanumeric character
+    var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{6,}$/;
+    return passwordPattern.test(password);
+}
+
+
 // Function to check if the email exists
 function isEmailExist(email) {
     return new Promise((resolve, reject) => {
@@ -138,7 +138,40 @@ function isEmailExist(email) {
 }
 
 
+$("#swal-3").click(function () {
+    // Trigger the form submission when the button is clicked
+    $(".needs-validation").submit();
+});
 
+
+$(".needs-validation").submit(function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Validate the form
+    if (this.checkValidity() === false) {
+        // Add the was-validated class to trigger Bootstrap validation styles
+        $(this).addClass("was-validated");
+    } else {
+        // If the form is valid, show success message
+        swal({
+            title: 'Changes Saved',
+            text: 'Your profile information has been updated successfully!',
+            icon: 'success',
+        })
+            .then((value) => {
+                if (value) {
+                    // If the user clicks OK on the alert, redirect to admin.html
+                    window.location.href = '#';
+                }
+            });
+    }
+});
+
+$("#swal-4").click(function () {
+    // Trigger the form submission when the button is clicked
+    $(".needs-validation-profile").submit();
+});
 
 $(".needs-validation-profile").submit(function(event) {
   event.preventDefault();
@@ -163,42 +196,6 @@ $(".needs-validation-profile").submit(function(event) {
     });
   }
 });
-
-$("#swal-4").click(function() {
-  // Trigger the form submission when the button is clicked
-  $(".needs-validation-profile").submit();
-});
-
-
-$(".needs-validation").submit(function(event) {
-  event.preventDefault();
-  event.stopPropagation();
-
-  // Validate the form
-  if (this.checkValidity() === false) {
-    // Add the was-validated class to trigger Bootstrap validation styles
-    $(this).addClass("was-validated");
-  } else {
-    // If the form is valid, show success message
-    swal({
-      title: 'Changes Saved',
-      text: 'Your profile information has been updated successfully!',
-      icon: 'success',
-    })
-    .then((value) => {
-        if (value) {
-            // If the user clicks OK on the alert, redirect to admin.html
-            window.location.href = '#';
-        }
-    });
-  }
-});
-
-$("#swal-3").click(function() {
-  // Trigger the form submission when the button is clicked
-  $(".needs-validation").submit();
-});
-
 
 $("#swal-6").click(function (event) {
   // Prevent the default form submission
@@ -230,7 +227,8 @@ $("#swal-6").click(function (event) {
                 icon: 'success',
             }).then(() => {
                 // If the user clicks OK on the alert, redirect to admin.html
-                window.location.href = '#';
+                var redirectUrl = "/Account";
+                window.location.href = redirectUrl;
             });
         } else {
             swal('The password remains unchanged.');
@@ -241,6 +239,27 @@ $("#swal-6").click(function (event) {
       $('.wizard-content').addClass('was-validated');
   }
 });
+
+
+// Intercept form submission
+$("#swal-5").submit(function (event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    // Display SweetAlert confirmation dialog
+    swal({
+        title: "Are you sure?",
+        text: "Once changed, the user's role will be updated.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willChange) => {
+        if (willChange) {
+            // If user confirms, submit the form
+            $(this).off("submit").submit(); // Unbind submit event to prevent infinite loop
+        }
+    });
+});
+
 
 $(document).ready(function() {
   $("#homeworkForm").submit(function(event) {
