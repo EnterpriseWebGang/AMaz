@@ -36,6 +36,17 @@ namespace AMaz.Service
             }
 
             var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user != null)
+            {
+
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Email already exists"
+                });
+
+            }
+
             if (user == null)
             {
                 var forDbCreate = new User
@@ -74,6 +85,12 @@ namespace AMaz.Service
                     Description = "User Already Exist"
                 });
             }
+        }
+
+        public async Task<bool> IsEmailExistAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return user != null;
         }
 
         public async Task<IdentityResult> ResetPassword(ResetPasswordRequest request)
