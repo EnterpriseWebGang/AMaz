@@ -43,6 +43,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile<AdminProfile>();
     mc.AddProfile<LoginProfile>();
     mc.AddProfile<UserProfile>();
+    mc.AddProfile<ContributionProfile>();
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -54,9 +55,13 @@ builder.Services.Configure<PowerUserConfiguration>(builder.Configuration.GetSect
 builder.Services.AddTransient<ILoginService, LoginService>();
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
+builder.Services.AddTransient<IContributionRepository, ContributionRepository>();
+
 builder.Services.AddTransient<FileService>();
 
 builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<IContributionService, ContributionService>();
+
 #endregion
 
 builder.Services.AddControllersWithViews();
