@@ -1,0 +1,34 @@
+﻿@using AMaz.Common
+@model IEnumerable<AcademicYearViewModel>
+
+@{
+    ViewData["Title"] = "All Academic Years";
+    Layout = "_AdminLayout";
+}
+
+<h1>All Academic Years</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Date Start</th>
+            <th>Date End</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var academicYear in Model)
+        {
+            <tr>
+                <td>@academicYear.AcademicYearId</td>
+                <td>@academicYear.DateTimeFrom</td>
+                <td>@academicYear.DateTimeTo</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@academicYear.AcademicYearId">Details</a> |
+                    <a asp-action="Update" asp-route-id="@academicYear.AcademicYearId">Update</a> |
+                    <a asp-action="Delete" asp-route-id="@academicYear.AcademicYearId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
