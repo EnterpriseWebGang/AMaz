@@ -43,6 +43,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile<AdminProfile>();
     mc.AddProfile<LoginProfile>();
     mc.AddProfile<UserProfile>();
+    mc.AddProfile<AcademicYearProfile>();
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -55,6 +56,9 @@ builder.Services.AddTransient<ILoginService, LoginService>();
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
 builder.Services.AddTransient<FileService>();
+
+builder.Services.AddTransient<IAcademicYearReponsitory, AcademicYearReponsitory>();
+builder.Services.AddTransient<IAcademicYearService, AcademicYearService>();
 
 builder.Services.AddTransient<UserService>();
 #endregion
