@@ -88,6 +88,32 @@ namespace AMaz.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(UpdateContributionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var request = new UpdateContributionRequest
+                {
+                    Title = model.Title,
+                    Content = model.Content,
+                    Files = model.Files
+                };
+
+                var result = await _contributionService.UpdateContributionAsync(request);
+                if (result)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.Error = "Failed to update contribution.";
+                }
+            }
+            return View(model);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetContributionFile(string fileId, string contributionId)
         {

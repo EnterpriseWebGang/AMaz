@@ -104,5 +104,18 @@ namespace AMaz.Service
             }
             return await _contributionRepository.DeleteContributionAsync(id);
         }
+
+        public async Task<bool> UpdateContributionAsync(UpdateContributionRequest request)
+        {
+            try
+            {
+                var contribution = _mapper.Map<Contribution>(request);
+                return await _contributionRepository.UpdateContributionAsync(contribution);
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

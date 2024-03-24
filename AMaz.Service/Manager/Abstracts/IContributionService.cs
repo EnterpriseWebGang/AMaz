@@ -11,6 +11,7 @@ namespace AMaz.Service
         Task<ContributionViewModel> GetContributionByIdAsync(string id);
         Task<bool> CreateContributionAsync(CreateContributionRequest request);
         Task<bool> DeleteContributionAsync(string id);
-        
+        Task<bool> UpdateContributionAsync(UpdateContributionRequest request);
+
     }
 }

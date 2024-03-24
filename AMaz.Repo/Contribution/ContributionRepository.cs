@@ -52,7 +52,6 @@ namespace AMaz.Repo
             }
             catch
             {
-
                 return false;
             }
         }
@@ -67,7 +66,5 @@ namespace AMaz.Repo
             await _dbContext.SaveChangesAsync();
             return true;
         }
-
-
     }
 }
