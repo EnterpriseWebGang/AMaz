@@ -59,7 +59,7 @@ namespace AMaz.Repo
 
         public async Task<bool> DeleteContributionAsync(string id)
         {
-            var contribution = await _dbContext.Contributions.FindAsync(id);
+            var contribution = await _dbContext.Contributions.FindAsync(Guid.Parse(id));
             if (contribution == null)
                 return false;
 
