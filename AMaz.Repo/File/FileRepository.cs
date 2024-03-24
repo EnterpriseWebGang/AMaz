@@ -30,6 +30,12 @@ namespace AMaz.Repo
             return result;
         }
 
+        public async Task<List<File>> GetAllFileByIdAsync(List<string> ids)
+        {
+            var result = await _context.Files.Where(f => ids.Contains(f.FileId.ToString())).ToListAsync();
+            return result;
+        }
+
         public async Task<List<File>> GetAllFilesByContributionId(string contributionId)
         {
             var result = await _context.Files.Where(f => f.Contribution.ContributionId.ToString() == contributionId).ToListAsync();

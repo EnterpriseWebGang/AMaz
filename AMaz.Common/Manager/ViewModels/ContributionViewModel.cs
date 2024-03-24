@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AMaz.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace AMaz.Common
@@ -18,18 +19,17 @@ namespace AMaz.Common
         [DataType(DataType.Date)]
         public DateTime SubmissionDate { get; set; }
 
-        [Display(Name = "Seen By Coordinator")]
-        public bool IsSeenByOrdinator { get; set; }
-
-        [Display(Name = "Accepted Terms")]
-        public bool IsAcceptedTerms { get; set; }
-
         [Display(Name = "Accepted Date")]
         [DataType(DataType.Date)]
         public DateTime? AcceptedDate { get; set; }
 
         [Display(Name = "Author Name")]
         public string AuthorName { get; set; }
+
+        [Display(Name = "Is Accepted")]
+        public bool IsAccepted { get; set; }
+
+        public FileViewModel[]? Files { get; set; }
 
     }
 }

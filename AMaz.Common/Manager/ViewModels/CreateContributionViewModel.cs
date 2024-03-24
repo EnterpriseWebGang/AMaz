@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,13 +19,8 @@ namespace AMaz.Common
         public string Content { get; set; }
 
         [Required]
-        [Display(Name = "Status")]
-        public int Status { get; set; }
-
-        [Required]
-        [Display(Name = "Submission Date")]
-        [DataType(DataType.Date)]
-        public DateTime SubmissionDate { get; set; }
+        [Display(Name = "Upload Files")]
+        public List<IFormFile> Files { get; set; }
 
     }
 }

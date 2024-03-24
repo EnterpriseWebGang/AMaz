@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using File = AMaz.Entity.File;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 namespace AMaz.Service
 {
     public class FileService
@@ -39,11 +40,18 @@ namespace AMaz.Service
             return (stream, file.Name, result, file.MIMEType);
         }
 
-        public async Task<List<FileViewModel>> GetAllFilesAsync()
+        public async Task<List<FileViewModel>> GetAllFilesAsync(List<string> ids = null)
         {
-            var files = await _fileRepository.GetAllFilesAsync();
-            var result = _mapper.Map<List<FileViewModel>>(files);
-            return result;
+            if (ids.IsNullOrEmpty())
+            {
+                var files = await _fileRepository.GetAllFilesAsync();
+                var result = _mapper.Map<List<FileViewModel>>(files);
+                return result;
+            }
+            
+            var filesById = await _fileRepository.GetAllFileByIdAsync(ids);
+            var resultById = _mapper.Map<List<FileViewModel>>(filesById);
+            return resultById;
         }
 
         public async Task<List<FileViewModel>> GetAllFilesByContribution(string contributionId)
@@ -58,8 +66,9 @@ namespace AMaz.Service
             await FileUtility.SaveFileAsync(request.File, request.Path);
         }
 
-        public async Task SaveMultipleFilesAsync(CreateMultipleFileRequest uploadMultipleFile)
+        public async Task<IEnumerable<string>> SaveMultipleFilesAsync(CreateMultipleFileRequest uploadMultipleFile)
         {
+            var result = new List<string>();
             await ListProcessUtility<IFormFile>.ProcessListByBatchAsync(uploadMultipleFile.Files.ToList(), _batchSize, async files =>
                   {
                       var fileModels = _mapper.Map<List<CreateFileModel>>(files);
@@ -71,7 +80,7 @@ namespace AMaz.Service
 
                       var insertInDb = _mapper.Map<List<File>>(fileModels);
                       await _fileRepository.SaveMutipleFiles(insertInDb);
-
+                      result.AddRange(insertInDb.Select(f => f.FileId.ToString()));
 
                       var saveFileToDiskRequests = _mapper.Map<List<SaveFileRequest>>(fileModels);
                       var tasks = new List<Task>();
@@ -85,6 +94,8 @@ namespace AMaz.Service
 
                       await Task.WhenAll(tasks);
                   });
+
+            return result;
         }
 
         public async Task SaveOneFileAsync(CreateOneFileRequest request)
@@ -105,10 +116,10 @@ namespace AMaz.Service
             var fileType = fileModels.FileType;
             var path = fileType switch
             {
-                FileType.Image => Path.Combine(_environment.ContentRootPath, _fileStorageConfiguration.Value.ImageStorePath, fileModels.Name),
-                FileType.Docx => Path.Combine(_environment.ContentRootPath, _fileStorageConfiguration.Value.DocxStorePath, fileModels.Name),
-                FileType.Undefined => Path.Combine(_environment.ContentRootPath, _fileStorageConfiguration.Value.OtherFileTypeStorePath, fileModels.Name),
-                _ => Path.Combine(_environment.ContentRootPath, "Files", fileModels.Name)
+                FileType.Image => Path.Combine(_environment.WebRootPath, _fileStorageConfiguration.Value.ImageStorePath, fileModels.Name),
+                FileType.Docx => Path.Combine(_environment.WebRootPath, _fileStorageConfiguration.Value.DocxStorePath, fileModels.Name),
+                FileType.Undefined => Path.Combine(_environment.WebRootPath, _fileStorageConfiguration.Value.OtherFileTypeStorePath, fileModels.Name),
+                _ => Path.Combine(_environment.WebRootPath, "Files", fileModels.Name)
             };
 
             return path;

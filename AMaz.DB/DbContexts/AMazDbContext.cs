@@ -11,7 +11,6 @@ namespace AMaz.DB
         public DbSet<AcademicYear> AcademicYears { get; set; }
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<Magazine> Magazines { get; set; }
-        public DbSet<TermAndCondition> TermAndConditions { get; set; }
         public override DbSet<User> Users { get; set; }
         public DbSet<Contribution> Contributions { get; set;}
         public DbSet<File> Files { get; set; }
@@ -72,13 +71,6 @@ namespace AMaz.DB
                 HasMany( m => m.Contributions).
                 WithOne( c => c.Magazine).
                 OnDelete(DeleteBehavior.Cascade);
-
-            // If Delete Term ==> Just set the term in contribution to null
-            modelBuilder.
-                Entity<TermAndCondition>().
-                HasMany(m => m.Contributions).
-                WithOne(c => c.TermAndCondition).
-                OnDelete(DeleteBehavior.SetNull);
 
             // If Delete AcademicYear ==> Just set the AcademicYear in magazine to null
             modelBuilder.

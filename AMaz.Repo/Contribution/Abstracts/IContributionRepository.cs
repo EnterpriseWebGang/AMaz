@@ -8,8 +8,9 @@ namespace AMaz.Repo
     public interface IContributionRepository
     {
         Task<IEnumerable<Contribution>> GetAllContributionsAsync();
-        Task<Contribution> GetContributionByIdAsync(Guid id);
+        Task<Contribution> GetContributionByIdAsync(string id);
         Task<bool> CreateContributionAsync(Contribution contribution);
-        Task<bool> DeleteContributionAsync(Guid id);
+        Task<bool> DeleteContributionAsync(string id);
+        Task<bool> UpdateContributionAsync(Contribution contribution);
     }
 }

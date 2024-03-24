@@ -1,69 +1,64 @@
-﻿@{
-    ViewData["Title"] = "Member List";
-    Layout = "_AdminLayout";
+﻿@using AMaz.Common
+@model ContributionViewModel[]
+
+@{
+    ViewData["Title"] = "Contributions";
+    Layout = "_AdminLayout"; // Adjust layout as needed
 }
 
+<div class="main-sidebar sidebar-style-2">
+    <!-- Sidebar content -->
+</div>
 
 <div class="main-content">
-    <!-- Main content -->
     <section class="section">
         <div class="section-header">
-            <h1>View Operators</h1>
-            <!-- Header content -->
+            <h1>Contributions</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Functions</a></div>
+                <div class="breadcrumb-item"><a href="#">Auth</a></div>
+                <div class="breadcrumb-item">Contributions</div>
+            </div>
         </div>
 
-        <div class="section-body">
-            <h2 class="section-title">Member List</h2>
-
-            <div class="row">
-                <div class="col-12 col-md-6 col-lg-6">
-                    <div class="card">
-                        <!-- Card content -->
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Content</th>
+                                        <th>Status</th>
+                                        <th>Submission Date</th>
+                                        <th>Accepted Date</th>
+                                        <th>Author Name</th>
+                                        <th>Is Accepted</th>
+                                        <th>Files</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var contribution in Model)
+                                    {
                                         <tr>
-                                            <th>Title</th>
-                                            <th>Status</th>
-                                            <th>Submission Date</th>
-                                            <th>Author Name</th>
-                                            <th>Action</th>
+                                            <td>@contribution.Title</td>
+                                            <td>@contribution.Content</td>
+                                            <td>@contribution.Status</td>
+                                            <td>@contribution.SubmissionDate.ToShortDateString()</td>
+                                            <td>@(contribution.AcceptedDate.HasValue ? contribution.AcceptedDate.Value.ToShortDateString() : "N/A")</td>
+                                            <td>@contribution.AuthorName</td>
+                                            <td>@(contribution.IsAccepted ? "Yes" : "No")</td>
+                                           
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var contribution in Model)
-                                        {
-                                            <tr>
-                                                <td>@contribution.Title</td>
-                                                <td>@contribution.Status</td>
-                                                <td>@contribution.SubmissionDate.ToShortDateString()</td>
-                                                <td>@contribution.AuthorName</td>
-                                                <td>
-                                                    <a asp-action="Details" asp-route-id="@contribution.ContributionId">Details</a> |
-                                                    <a asp-action="Edit" asp-route-id="@contribution.ContributionId">Edit</a> |
-                                                    <form asp-action="Delete" method="post" style="display: inline;">
-                                                        <input type="hidden" name="id" value="@contribution.ContributionId" />
-                                                        <button type="submit" class="btn-link">Delete</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <a class="btn btn-primary btn-lg" asp-action="Create">Create</a>
                 </div>
             </div>
         </div>
     </section>
 </div>
-
-@section Scripts {
-    <!-- JS Libraies -->
-    <script src="~/assets/modules/jquery-ui/jquery-ui.min.js"></script>
-    <!-- Page Specific JS File -->
-    <script src="~/assets/js/page/components-table.js"></script>
-}

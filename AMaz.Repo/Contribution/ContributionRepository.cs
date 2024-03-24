@@ -22,7 +22,7 @@ namespace AMaz.Repo
             return await _dbContext.Contributions.ToListAsync();
         }
 
-        public async Task<Contribution> GetContributionByIdAsync(Guid id)
+        public async Task<Contribution> GetContributionByIdAsync(string id)
         {
             return await _dbContext.Contributions.FindAsync(id);
         }
@@ -31,6 +31,7 @@ namespace AMaz.Repo
         {
             try
             {
+                contribution.Magazine = _dbContext.Magazines.Find(Guid.Parse("7c266e6f-7830-4feb-bc87-35d609d06801"));
                 _dbContext.Contributions.Add(contribution);
                 await _dbContext.SaveChangesAsync();
                 return true;
@@ -41,7 +42,22 @@ namespace AMaz.Repo
             }
         }
 
-        public async Task<bool> DeleteContributionAsync(Guid id)
+        public async Task<bool> UpdateContributionAsync(Contribution contribution)
+        {
+            try
+            {
+                _dbContext.Contributions.Update(contribution);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteContributionAsync(string id)
         {
             var contribution = await _dbContext.Contributions.FindAsync(id);
             if (contribution == null)
@@ -51,5 +67,7 @@ namespace AMaz.Repo
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
+
     }
 }

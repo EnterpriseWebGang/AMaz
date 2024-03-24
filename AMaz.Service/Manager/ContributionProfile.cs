@@ -7,7 +7,7 @@ public class ContributionProfile : Profile
     public ContributionProfile()
     {
         CreateMap<CreateContributionViewModel, CreateContributionRequest>();
-        CreateMap<CreateContributionRequest, Contribution>();
+        CreateMap<CreateContributionRequest, Contribution>().ForMember(dest => dest.Files, opt => opt.Ignore());
 
     }
 }

@@ -8,8 +8,9 @@ namespace AMaz.Service
     public interface IContributionService
     {
         Task<IEnumerable<ContributionViewModel>> GetAllContributionsAsync();
-        Task<ContributionViewModel> GetContributionByIdAsync(Guid id);
+        Task<ContributionViewModel> GetContributionByIdAsync(string id);
         Task<bool> CreateContributionAsync(CreateContributionRequest request);
-        Task<bool> DeleteContributionAsync(Guid id);
+        Task<bool> DeleteContributionAsync(string id);
+        
     }
 }
