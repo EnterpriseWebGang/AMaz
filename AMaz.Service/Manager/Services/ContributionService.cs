@@ -91,6 +91,12 @@ namespace AMaz.Service
 
         public async Task<bool> DeleteContributionAsync(string id)
         {
+            var contribution = await _contributionRepository.GetContributionByIdAsync(id);
+            if (contribution == null)
+            {
+                return false;
+            }
+            await _fileService.DeleteFiles(contribution.Files.Select(f => f.FileId.ToString()).ToList());
             // Check if the id is valid
             if (id == string.Empty)
             {

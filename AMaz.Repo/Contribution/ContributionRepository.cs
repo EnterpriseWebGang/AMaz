@@ -24,7 +24,7 @@ namespace AMaz.Repo
 
         public async Task<Contribution> GetContributionByIdAsync(string id)
         {
-            return await _dbContext.Contributions.FindAsync(Guid.Parse(id));
+            return await _dbContext.Contributions.Include(c => c.Files).FirstOrDefaultAsync(c => c.ContributionId == Guid.Parse(id));
         }
 
         public async Task<bool> CreateContributionAsync(Contribution contribution)

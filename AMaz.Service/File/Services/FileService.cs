@@ -40,6 +40,25 @@ namespace AMaz.Service
             return (stream, file.Name, result, file.MIMEType);
         }
 
+        public async Task DeleteFiles(List<string> id)
+        {
+            var files = await _fileRepository.GetAllFileByIdAsync(id);
+            var tasks = new List<Task>();
+            foreach (var file in files)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    await DeleteFileFromDisk(file.Path);
+                }));
+            }
+
+            await Task.WhenAll(tasks);
+        }
+
+        public async Task DeleteFileFromDisk(string path){
+            await FileUtility.DeleteFileAsync(path);
+        }
+
         public async Task<List<FileViewModel>> GetAllFilesAsync(List<string> ids = null)
         {
             if (ids.IsNullOrEmpty())
