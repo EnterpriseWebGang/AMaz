@@ -13,8 +13,6 @@ namespace AMaz.Service
             CreateMap<AcademicYear, AcademicYearViewModel>();
             CreateMap<UpdateAcademicYearRequest, AcademicYear>()
                 .ForMember(m => m.AcademicYearId, option => option.MapFrom(src => Guid.Parse(src.AcademicYearId)));
-            CreateMap<UpdateAcademicYearViewModel, AcademicYear>()
-                .ForMember(m => m.AcademicYearId, option => option.MapFrom(src => Guid.Parse(src.AcademicYearId)));
             CreateMap<UpdateAcademicYearViewModel, UpdateAcademicYearRequest>();
             CreateMap<AcademicYearViewModel, UpdateAcademicYearViewModel>();
         }

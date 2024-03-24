@@ -16,8 +16,6 @@ namespace AMaz.Service
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<AMazDbContext>();
-                context.Database.EnsureCreated();
-
                 try
                 {
                     if (context.Database.GetPendingMigrations().Count() > 0)

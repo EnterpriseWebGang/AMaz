@@ -2,6 +2,7 @@
 using AMaz.Repo;
 using AutoMapper;
 using AMaz.Common;
+using Azure.Core;
 
 namespace AMaz.Service
 {
@@ -16,26 +17,56 @@ namespace AMaz.Service
             _mapper = mapper;
         }
 
-        public async Task<(bool succeed, string errorMsg)> CreateAcademicYearAsync(CreateAcademicYearRequest model)
+        public async Task<(bool succeed, string errorMsg)> CreateAcademicYearAsync(CreateAcademicYearRequest request)
         {
+            if (!(request.DateTimeTo > request.DateTimeFrom)) // check if the end date is greater than the start date
+            {
+                return (false, "End date must be greater than start date!");
+            }
+
+            request.DateTimeTo = request.DateTimeTo.AddHours(23).AddMinutes(59).AddSeconds(59); // set the end date to the end of the day
+
             var existingAcademicYears = await _academicYearRepository.GetAllAcademicYearsAsync();
             foreach (var existingAcademicYear in existingAcademicYears)
             {
-                if ((model.DateTimeFrom >= existingAcademicYear.DateTimeFrom && model.DateTimeFrom <= existingAcademicYear.DateTimeTo) ||
-                    (model.DateTimeTo >= existingAcademicYear.DateTimeFrom && model.DateTimeTo <= existingAcademicYear.DateTimeTo))
+                if ((request.DateTimeFrom >= existingAcademicYear.DateTimeFrom && request.DateTimeFrom <= existingAcademicYear.DateTimeTo) ||
+                    (request.DateTimeTo >= existingAcademicYear.DateTimeFrom && request.DateTimeTo <= existingAcademicYear.DateTimeTo))
                 {
-                    return (false, "No");
+                    return (false, "Cannot create because it overlaped with other academic year!");
                 }
             }
 
-            var academicYear = _mapper.Map<AcademicYear>(model);
-            var result = await _academicYearRepository.CreateAcademicYearAsync(academicYear);
+            var academicYear = _mapper.Map<AcademicYear>(request);
+            await _academicYearRepository.CreateAcademicYearAsync(academicYear);
             return (true, string.Empty);
         }
 
-        public async Task<(bool succeed, string errorMsg)> UpdateAcademicYearAsync(UpdateAcademicYearRequest model)
+        public async Task<(bool succeed, string errorMsg)> UpdateAcademicYearAsync(UpdateAcademicYearRequest request)
         {
-            var academicYear = _mapper.Map<AcademicYear>(model);
+            var academicYear = await _academicYearRepository.GetAcademicYearByIdAsync(request.AcademicYearId);
+            if (academicYear == null)
+            {
+                return (false, "Academic year not found!");
+            }
+            if (!(request.DateTimeTo > request.DateTimeFrom)) // check if the end date is greater than the start date
+            {
+                return (false, "End date must be greater than start date!");
+            }
+
+            request.DateTimeTo = request.DateTimeTo.AddHours(23).AddMinutes(59).AddSeconds(59); // set the end date to the end of the day
+
+            var allAcademicYear = await _academicYearRepository.GetAllAcademicYearsAsync();
+            var existingAcademicYears = allAcademicYear.Where(a => a.AcademicYearId.ToString() != request.AcademicYearId);
+            foreach (var existingAcademicYear in existingAcademicYears)
+            {
+                if ((request.DateTimeFrom >= existingAcademicYear.DateTimeFrom && request.DateTimeFrom <= existingAcademicYear.DateTimeTo) ||
+                    (request.DateTimeTo >= existingAcademicYear.DateTimeFrom && request.DateTimeTo <= existingAcademicYear.DateTimeTo))
+                {
+                    return (false, "Cannot update because it overlaped with other academic year!");
+                }
+            }
+            academicYear.DateTimeFrom = request.DateTimeFrom;
+            academicYear.DateTimeTo = request.DateTimeTo;
             await _academicYearRepository.UpdateAcademicYearAsync(academicYear);
             return (true, string.Empty);
         }

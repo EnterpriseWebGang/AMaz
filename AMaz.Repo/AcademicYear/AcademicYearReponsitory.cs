@@ -18,11 +18,10 @@ namespace AMaz.Repo
             _db = db;
         }
 
-        public async Task<AcademicYear> CreateAcademicYearAsync(AcademicYear model)
+        public async Task CreateAcademicYearAsync(AcademicYear model)
         {
             await _db.AcademicYears.AddAsync(model);
             await _db.SaveChangesAsync();
-            return model;
         }
 
         public async Task UpdateAcademicYearAsync(AcademicYear model)

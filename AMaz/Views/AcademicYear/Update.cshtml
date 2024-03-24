@@ -25,11 +25,7 @@
                         <h4>Create New User</h4>
                     </div>
                     <div class="card-body">
-                        <form asp-controller="AcademicYear" asp-action="Update" method="post" asp-route-id ="@(Model.AcademicYearId)">
-                            <div class="form-group">
-                                <label asp-for="AcademicYearId"></label>
-                                <input asp-for="AcademicYearId"/>
-                            </div>
+                        <form asp-controller="AcademicYear" asp-action="Update" method="post" asp-route-id ="@(ViewBag.Id)">
                             <div class="form-group">
                                 <label asp-for="DateTimeFrom"></label>
                                 <input asp-for="DateTimeFrom" class="form-control" />

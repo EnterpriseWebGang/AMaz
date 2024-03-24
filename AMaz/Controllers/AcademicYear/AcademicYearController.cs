@@ -32,6 +32,10 @@ namespace AMaz.Web.Controllers
                 // Create a new academic year
                 var request = _mapper.Map<CreateAcademicYearRequest>(model);
                 var response = await _academicYearService.CreateAcademicYearAsync(request);
+                if (!response.succeed)
+                {
+                    TempData["Error"] = response.errorMsg;
+                }
 
                 // Redirect to the list of academic years after successful creation
                 return RedirectToAction("Index");
@@ -50,7 +54,7 @@ namespace AMaz.Web.Controllers
             // Get the academic year by id
             var academicYear = await _academicYearService.GetAcademicYearByIdAsync(id);
             var model = _mapper.Map<UpdateAcademicYearViewModel>(academicYear);
-            model.AcademicYearId = id;
+            ViewBag.Id = id;
 
             // Display the academic year details for update
             return View(model);
@@ -58,23 +62,26 @@ namespace AMaz.Web.Controllers
 
         // POST: /AcademicYear/Update
         [HttpPost]
-        public async Task<IActionResult> Update(UpdateAcademicYearViewModel model)
+        public async Task<IActionResult> Update(string id, UpdateAcademicYearViewModel model)
         {
             try
             {
                 // Update the academic year
                 var request = _mapper.Map<UpdateAcademicYearRequest>(model);
-                request.AcademicYearId = model.AcademicYearId;
+                request.AcademicYearId = id;
                 var response = await _academicYearService.UpdateAcademicYearAsync(request);
-
+                if (!response.succeed)
+                {
+                    TempData["Error"] = response.errorMsg;
+                }
                 // Redirect to the list of academic years after successful update
                 return RedirectToAction("Index");
             }
             catch (AppException ex)
             {
                 // Display an error message for invalid academic year update
-                ViewBag.Error = ex.Message;
-                return View();
+                TempData["Error"]= ex.Message;
+                return RedirectToAction("Index");
             }
         }
 
@@ -93,6 +100,7 @@ namespace AMaz.Web.Controllers
         {
             // Get all academic years
             var response = await _academicYearService.GetAllAcademicYearsAsync();
+            ViewBag.Error = TempData["Error"];
 
             // Display the list of academic years
             return View(response);

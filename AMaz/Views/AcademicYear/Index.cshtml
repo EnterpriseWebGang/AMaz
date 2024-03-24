@@ -8,6 +8,22 @@
 
 <h1>All Academic Years</h1>
 
+@if (!string.IsNullOrEmpty(ViewBag.Error))
+{
+    <!-- Display validation errors in a div with red text -->
+    <div class="validation-summary-errors" asp-validation-summary="All">@ViewBag.Error</div>
+    <style>
+        .validation-summary-errors {
+            color: white; /* Text color */
+            background-color: #dc3545; /* Background color */
+            padding: 10px; /* Padding around the text */
+            border: 1px solid #dc3545; /* Border color and width */
+            margin-bottom: 10px; /* Margin at the bottom */
+            border-radius: 5px; /* Rounded corners */
+        }
+    </style>
+
+}
 <table class="table">
     <thead>
         <tr>
