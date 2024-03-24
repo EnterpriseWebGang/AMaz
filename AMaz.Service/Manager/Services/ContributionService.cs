@@ -104,8 +104,5 @@ namespace AMaz.Service
             }
             return await _contributionRepository.DeleteContributionAsync(id);
         }
-
-
-
     }
 }

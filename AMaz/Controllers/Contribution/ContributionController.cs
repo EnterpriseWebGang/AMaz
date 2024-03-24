@@ -12,13 +12,13 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AMaz.Web.Controllers
 {
-    public class ManagerController : Controller
+    public class ContributionController : Controller
     {
         private readonly IContributionService _contributionService;
         private readonly FileService _fileService;
         private readonly IMapper _mapper;
 
-        public ManagerController(IContributionService contributionService, FileService fileService ,IMapper mapper)
+        public ContributionController(IContributionService contributionService, FileService fileService ,IMapper mapper)
         {
             _contributionService = contributionService;
             _fileService = fileService;
