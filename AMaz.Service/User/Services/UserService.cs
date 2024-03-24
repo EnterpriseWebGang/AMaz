@@ -19,12 +19,19 @@ namespace AMaz.Service
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(IMapper mapper, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor, RoleManager<IdentityRole> roleManager)
+        public UserService(IMapper mapper,
+            UserManager<User> userManager,
+            IHttpContextAccessor httpContextAccessor,
+            RoleManager<IdentityRole> roleManager,
+            IEmailService emailService,
+            Microsoft.AspNetCore.Hosting.IHostingEnvironment evironment)
         {
             _mapper = mapper;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
             _roleManager = roleManager;
+            _emailService = emailService;
+            this.evironment = evironment;
         }
 
         public async Task<UserViewModel> GetUserDetailByIdAsync(string id)
