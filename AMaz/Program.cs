@@ -42,8 +42,10 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile<AdminProfile>();
     mc.AddProfile<LoginProfile>();
     mc.AddProfile<UserProfile>();
+    mc.AddProfile<ContributionProfile>();
     mc.AddProfile<AcademicYearProfile>();
     mc.AddProfile<MagazineProfile>();
+
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -55,6 +57,8 @@ builder.Services.Configure<EmailSetting>(builder.Configuration.GetSection("Email
 builder.Services.AddTransient<ILoginService, LoginService>();
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
+builder.Services.AddTransient<IContributionRepository, ContributionRepository>();
+
 builder.Services.AddTransient<FileService>();
 
 builder.Services.AddTransient<IAcademicYearReponsitory, AcademicYearReponsitory>();
@@ -64,7 +68,9 @@ builder.Services.AddTransient<IMagazineRepository, MagazineRepository>();
 builder.Services.AddTransient<IMagazineService, MagazineService>();
 
 builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<IContributionService, ContributionService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
+
 #endregion
 
 builder.Services.AddControllersWithViews();

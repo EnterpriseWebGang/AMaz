@@ -38,9 +38,6 @@ namespace AMaz.Entity
         [ForeignKey("MagazineId")]
         public virtual Magazine Magazine { get; set; }
 
-        [ForeignKey("TermAndConditionId")]
-        public virtual TermAndCondition? TermAndCondition { get; set; }
-
         [ForeignKey("UserId")]
         public virtual User? User { get; set; }
 

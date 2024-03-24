@@ -5,7 +5,7 @@ namespace AMaz.Util
 {
     public static class FileUtility
     {
-        public static FileOperationResult DeleteFileAsync(string path)
+        public static async Task<FileOperationResult> DeleteFileAsync(string path)
         {
             var result = new FileOperationResult
             {

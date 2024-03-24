@@ -1,0 +1,73 @@
+﻿@using AMaz.Common
+
+@model CreateContributionViewModel
+
+@{
+    ViewData["Title"] = "Create Contribution";
+    Layout = "_AdminLayout";
+}
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Homework Submission</h1>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Homework Submission</h2>
+            <p class="section-lead">
+                Please submit your homework using the form below.
+            </p>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Homework Submission Form</h4>
+                        </div>
+                        <div class="card-body">
+                            <form asp-controller="Contribution" asp-action="Create" method="post" enctype="multipart/form-data" id="homeworkForm">
+                                <div class="form-group">
+                                    <label for="title">Homework Title</label>
+                                    <input asp-for="Title" class="form-control" id="title" name="title" required />                                 
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <textarea asp-for="Content" class="form-control" id="content" name="content" rows="5" required></textarea>                                   
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="files">Upload Files</label>
+                                    <input type="file" asp-for="Files" id="files" name="files" multiple class="form-control" required/>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" name="agree" class="custom-control-input" id="agree">
+                                            <label for="agree" class="custom-control-label">I agree with the <a href="">Terms and Conditions</a></label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary" type="submit">Create</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <!-- JS Libraies -->
+    <script src="~/assets/modules/sweetalert/sweetalert.min.js"></script>
+    <!-- Page Specific JS File -->
+    <script src="~/assets/js/page/modules-sweetalert.js"></script>
+}
+
+

@@ -1,0 +1,93 @@
+﻿@using AMaz.Common
+@model List<ContributionViewModel>
+
+@{
+    ViewData["Title"] = "Contributions";
+    Layout = "_AdminLayout"; // Adjust layout as needed
+}
+
+<div class="main-sidebar sidebar-style-2">
+    <!-- Sidebar content -->
+</div>
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Contributions</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Functions</a></div>
+                <div class="breadcrumb-item"><a href="#">Auth</a></div>
+                <div class="breadcrumb-item">Contributions</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Content</th>
+                                        <th>Status</th>
+                                        <th>Submission Date</th>
+                                        <th>Accepted Date</th>
+                                        <th>Author Name</th>
+                                        <th>Is Accepted</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var contribution in Model)
+                                    {
+                                        <tr>
+                                            <td>@contribution.Title</td>
+                                            <td>@contribution.Content</td>
+                                            <td>@contribution.Status</td>
+                                            <td>@contribution.SubmissionDate.ToShortDateString()</td>
+                                            <td>@(contribution.AcceptedDate.HasValue ? contribution.AcceptedDate.Value.ToShortDateString() : "N/A")</td>
+                                            <td>@contribution.AuthorName</td>
+                                            <td>@(contribution.IsAccepted ? "Yes" : "No")</td>
+                                            <td>
+                                                <!-- Edit button -->
+                                                <a asp-controller="Contribution" asp-action="Update" asp-route-id="@contribution.ContributionId" class="btn btn-primary btn-sm">Update</a>
+
+                                                <!-- Delete button -->
+                                                <form asp-controller="Contribution" asp-action="Delete" asp-route-id="@contribution.ContributionId" method="post" onsubmit="return confirm('Are you sure you want to delete this contribution?');">
+                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+
+                                                <!-- Download links for files -->
+                                                <br />
+                                                @if (contribution.Files != null && contribution.Files.Length > 0)
+                                                {
+                                                    foreach (var file in contribution.Files)
+                                                    {
+                                                        var p = new Dictionary<string, string>
+                                                        {
+                                                            { "fileId", file.Id },{ "contributionId", contribution.ContributionId }
+                                                        };
+
+                                                        <a asp-action="GetContributionFile" asp-all-route-data="p">@file.Name</a>
+
+                                                        <br />
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <span>No files</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
