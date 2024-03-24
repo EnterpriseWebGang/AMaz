@@ -4,6 +4,8 @@ using AMaz.Common;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+using AMaz.Entity;
 
 namespace AMaz.Web.Controllers.Account
 {
@@ -55,7 +57,16 @@ namespace AMaz.Web.Controllers.Account
                     return RedirectToAction("Index");
                 }
 
-                ViewBag.Error = result.ToString();
+                // Check if the error description contains "Email already exists"
+                if (result.Errors.Any(e => e.Description.Contains("Email already exists")))
+                {
+                    ModelState.AddModelError("Email", "Email already exists");
+                }
+                else
+                {
+                    ViewBag.Error = result.ToString();
+                }
+
                 return View(model);
             }
 
@@ -63,6 +74,12 @@ namespace AMaz.Web.Controllers.Account
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<JsonResult> CheckEmailExists(string email)
+        {
+            var isEmailExist = await _userService.IsEmailExistAsync(email);
+            return Json(new { exists = isEmailExist });
+        }
         public async Task<ActionResult> Deactivate(string userId)
         {
             var result = await _userService.DeactivateUser(userId);
@@ -129,6 +146,42 @@ namespace AMaz.Web.Controllers.Account
             }
 
             return RedirectToAction("Index");
+        }
+
+        // GET: ChangeUserRole
+        [HttpGet]
+        public async Task<IActionResult> ChangeUserRole(string userId)
+        {
+            var model = await _userService.GetUserRoleViewModelAsync(userId);
+            ViewBag.UserId = userId;
+            ViewBag.Error = TempData["ErrorMessage"];
+            return View(model);
+        }
+
+        // POST: ChangeUserRole
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeUserRole(string userId, ChangeUserRoleViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var request = _mapper.Map<ChangeUserRoleRequest>(model);
+                request.UserId = userId;
+
+                var result = await _userService.ChangeUserRole(request);
+                if (result.result)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                else
+                {
+                    TempData["ErrorMessage"] = result.error;
+                    return RedirectToAction("ChangeUserRole", new { userId = userId }); ;
+                }
+            }
+            ViewBag.UserId = userId; 
+            return RedirectToAction("ChangeUserRole", new {userId = userId});
         }
     }
 }

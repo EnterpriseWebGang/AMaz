@@ -1,0 +1,56 @@
+﻿@using AMaz.Common
+@model ChangeUserRoleViewModel
+
+@{
+    ViewData["Title"] = "Change User Role";
+    Layout = "_AdminLayout";
+}
+
+
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Change User Role</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Change User Role</h4>
+                    </div>
+                    <div class="card-body">
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @ViewBag.Error
+                            </div>
+                        }
+                        <form asp-action="ChangeUserRole" asp-route-userId="@ViewBag.UserId" method="post" id="changeUserRoleForm">
+                            <div class="form-group">
+                                <label asp-for="Role">Select Role:</label>
+                                <select asp-for="Role" class="form-control">
+                                    <option value="@((int)Role.Manager)" selected=@(Model.Role == (int)Role.Manager)>Manager</option>
+                                    <option value="@((int)Role.Coordinator)" selected=@(Model.Role == (int)Role.Coordinator)>Coordinator</option>
+                                    <option value="@((int)Role.Student)" selected=@(Model.Role == (int)Role.Student)>Student</option>
+                                </select>
+                                <span asp-validation-for="Role" class="text-danger"></span>
+                            </div>
+                            <button type="submit" id="swal-5" class="btn btn-primary">Change</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <!-- JS Libraies -->
+    <script src="~/assets/modules/sweetalert/sweetalert.min.js"></script>
+    <!-- Page Specific JS File -->
+    <script src="~/assets/js/page/modules-sweetalert.js"></script>
+}
+

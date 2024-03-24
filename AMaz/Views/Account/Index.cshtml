@@ -152,14 +152,15 @@
                                                 <td>
                                                     @if (user.IsActive.Equals("yes", StringComparison.OrdinalIgnoreCase))
                                                     {
-                                                        <a class="btn btn-danger btn-sm" asp-action="Deactivate" asp-route-userId="@user.Id">Deactivate</a>
+                                                        <a class="btn btn-outline-warning btn-sm" asp-action="Deactivate" asp-route-userId="@user.Id">Deactivate</a>
                                                     }
                                                     else
                                                     {
-                                                        <a class="btn btn-success btn-sm" asp-action="Activate" asp-route-userId="@user.Id">Activate</a>
-                                                        <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-userId="@user.Id">Delete</a>
+                                                        <a class="btn btn-outline-success btn-sm" asp-action="Activate" asp-route-userId="@user.Id">Activate</a>
+                                                        <a class="btn btn-outline-danger btn-sm" asp-action="Delete" asp-route-userId="@user.Id">Delete</a>
                                                     }
-                                                    <a class="btn btn-success btn-sm" asp-action="ResetPassword" asp-route-userId="@user.Id">Set Password</a>
+                                                    <a class="btn btn-outline-secondary btn-sm" asp-action="ResetPassword" asp-route-userId="@user.Id">Set Password</a>
+                                                    <a class="btn btn-outline-info btn-sm" asp-action="ChangeUserRole" asp-route-userId="@user.Id">Change Role</a>
                                                 </td>
                                             </tr>
                                         }

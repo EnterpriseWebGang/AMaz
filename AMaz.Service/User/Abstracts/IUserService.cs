@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace AMaz.Service
 {
-    //public interface IUserService
-    //{
-    //    public
-    //}
+/*    public interface IUserService
+    {
+        
+    }*/
 }

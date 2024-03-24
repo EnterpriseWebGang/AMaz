@@ -43,18 +43,25 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile<AdminProfile>();
     mc.AddProfile<LoginProfile>();
     mc.AddProfile<UserProfile>();
+    mc.AddProfile<AcademicYearProfile>();
+    mc.AddProfile<MagazineProfile>();
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.Configure<LocalFileStorageConfiguration>(builder.Configuration.GetSection("LocalFileStorageConfiguration"));
 builder.Services.Configure<PowerUserConfiguration>(builder.Configuration.GetSection("PowerUserConfiguration"));
-#region Biz Services
-//builder.Services.AddScoped<IAdminService, AdminService>();
 
+#region Biz Services
 builder.Services.AddTransient<ILoginService, LoginService>();
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
 builder.Services.AddTransient<FileService>();
+
+builder.Services.AddTransient<IAcademicYearReponsitory, AcademicYearReponsitory>();
+builder.Services.AddTransient<IAcademicYearService, AcademicYearService>();
+
+builder.Services.AddTransient<IMagazineRepository, MagazineRepository>();
+builder.Services.AddTransient<IMagazineService, MagazineService>();
 
 builder.Services.AddTransient<UserService>();
 #endregion
