@@ -7,7 +7,6 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using AMaz.Common;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -44,14 +43,17 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile<LoginProfile>();
     mc.AddProfile<UserProfile>();
     mc.AddProfile<ContributionProfile>();
+    mc.AddProfile<AcademicYearProfile>();
+    mc.AddProfile<MagazineProfile>();
+
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.Configure<LocalFileStorageConfiguration>(builder.Configuration.GetSection("LocalFileStorageConfiguration"));
 builder.Services.Configure<PowerUserConfiguration>(builder.Configuration.GetSection("PowerUserConfiguration"));
-#region Biz Services
-//builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.Configure<EmailSetting>(builder.Configuration.GetSection("EmailSetting"));
 
+#region Biz Services
 builder.Services.AddTransient<ILoginService, LoginService>();
 
 builder.Services.AddTransient<IFileRepository, FileRepository>();
@@ -59,8 +61,15 @@ builder.Services.AddTransient<IContributionRepository, ContributionRepository>()
 
 builder.Services.AddTransient<FileService>();
 
+builder.Services.AddTransient<IAcademicYearReponsitory, AcademicYearReponsitory>();
+builder.Services.AddTransient<IAcademicYearService, AcademicYearService>();
+
+builder.Services.AddTransient<IMagazineRepository, MagazineRepository>();
+builder.Services.AddTransient<IMagazineService, MagazineService>();
+
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<IContributionService, ContributionService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 #endregion
 

@@ -1,0 +1,20 @@
+﻿@using AMaz.Common
+@model AcademicYearViewModel
+
+@{
+    ViewData["Title"] = "View Academic Year";
+    Layout = "_AdminLayout";
+}
+
+<h1>View Academic Year</h1>
+
+<div>
+    <h4>Id: @Model.AcademicYearId</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Date Start:</dt>
+        <dd class="col-sm-10">@Model.DateTimeFrom</dd>
+        <dt class="col-sm-2">Date End:</dt>
+        <dd class="col-sm-10">@Model.DateTimeTo</dd>
+    </dl>
+</div>

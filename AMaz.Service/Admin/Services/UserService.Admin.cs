@@ -1,6 +1,7 @@
 ﻿using AMaz.Common;
 using AMaz.Entity;
 using Azure.Core;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,8 @@ namespace AMaz.Service
 {
     public partial class UserService
     {
+        private readonly IEmailService _emailService;
+        private readonly IHostingEnvironment evironment;
         public async Task<List<UserViewModel>> GetAllUsersAsync()
         {
             var currentUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
@@ -66,15 +69,18 @@ namespace AMaz.Service
 
                 if (createUserResult.Succeeded)
                 {
+                   
                     //TODO: Send Email to User
 
                     if (addUserToRoleResult.Succeeded)
                     {
+                        await _emailService.SendCreateAccountEmail(request);
                         return addUserToRoleResult;
                     }
 
                     return IdentityResult.Failed(createUserResult.Errors.Concat(addUserToRoleResult.Errors).ToArray());
                 }
+                
 
                 return IdentityResult.Failed(createUserResult.Errors.Concat(addUserToRoleResult.Errors).ToArray());
             }
