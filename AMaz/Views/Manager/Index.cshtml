@@ -1,5 +1,7 @@
 ﻿@using AMaz.Common
-@model ContributionViewModel[]
+@model List<ContributionViewModel>
+
+
 
 @{
     ViewData["Title"] = "Contributions";
@@ -42,6 +44,7 @@
                                 <tbody>
                                     @foreach (var contribution in Model)
                                     {
+                                        
                                         <tr>
                                             <td>@contribution.Title</td>
                                             <td>@contribution.Content</td>
@@ -50,6 +53,29 @@
                                             <td>@(contribution.AcceptedDate.HasValue ? contribution.AcceptedDate.Value.ToShortDateString() : "N/A")</td>
                                             <td>@contribution.AuthorName</td>
                                             <td>@(contribution.IsAccepted ? "Yes" : "No")</td>
+                                            <td>
+                                                @if (contribution.Files != null && contribution.Files.Length > 0)
+                                                {
+                                                    foreach (var file in contribution.Files)
+                                                    {
+                                                        var p = new Dictionary<string, string>
+                                                        {
+                                                            { "fileId", file.Id },{ "contributionId", contribution.ContributionId }
+                                                        };
+
+                                                        <a asp-action="GetContributionFile" asp-all-route-data="p">@file.Name</a>
+
+                                                        <br />
+
+
+                                                        <br />
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <span>No files</span>
+                                                }
+                                            </td>
                                            
                                         </tr>
                                     }

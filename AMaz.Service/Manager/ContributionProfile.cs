@@ -8,6 +8,7 @@ public class ContributionProfile : Profile
     {
         CreateMap<CreateContributionViewModel, CreateContributionRequest>();
         CreateMap<CreateContributionRequest, Contribution>().ForMember(dest => dest.Files, opt => opt.Ignore());
+        CreateMap<Contribution, ContributionViewModel>().ReverseMap();
 
     }
 }

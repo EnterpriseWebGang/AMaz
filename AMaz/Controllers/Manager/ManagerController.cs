@@ -89,15 +89,15 @@ namespace AMaz.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetContributionFile(string id)
+        public async Task<IActionResult> GetContributionFile(string fileId, string contributionId)
         {
-            var contribution = await _contributionService.GetContributionByIdAsync(id);
+            var contribution = await _contributionService.GetContributionByIdAsync(contributionId);
             if (contribution == null)
             {
                 return NotFound();
             }
 
-            var file = await _fileService.GetFileById(id);
+            var file = await _fileService.GetFileById(fileId);
             if (file.filestream == null)
             {
                 return NotFound();
@@ -105,5 +105,6 @@ namespace AMaz.Web.Controllers
 
             return File(file.filestream, file.contentType, file.fileName);
         }
+
     }
 }

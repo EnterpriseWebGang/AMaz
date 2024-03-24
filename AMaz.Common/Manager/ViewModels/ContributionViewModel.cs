@@ -6,6 +6,9 @@ namespace AMaz.Common
 {
     public class ContributionViewModel
     {
+        [Display(Name = "Id")]
+        public string ContributionId { get; set; }
+
         [Display(Name = "Title")]
         public string Title { get; set; }
 

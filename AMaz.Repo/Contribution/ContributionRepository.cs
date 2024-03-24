@@ -19,12 +19,12 @@ namespace AMaz.Repo
 
         public async Task<IEnumerable<Contribution>> GetAllContributionsAsync()
         {
-            return await _dbContext.Contributions.ToListAsync();
+            return await _dbContext.Contributions.Include(c => c.Files).ToListAsync();
         }
 
         public async Task<Contribution> GetContributionByIdAsync(string id)
         {
-            return await _dbContext.Contributions.FindAsync(id);
+            return await _dbContext.Contributions.FindAsync(Guid.Parse(id));
         }
 
         public async Task<bool> CreateContributionAsync(Contribution contribution)
