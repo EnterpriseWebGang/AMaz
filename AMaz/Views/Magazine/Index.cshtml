@@ -1,0 +1,51 @@
+﻿@using AMaz.Common
+@model IEnumerable<MagazineViewModel>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Magazine List</title>
+</head>
+<body>
+    <h1>Magazine List</h1>
+@if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+    <!-- Display validation errors in a div with red text -->
+    <div class="validation-summary-errors" asp-validation-summary="All">@ViewBag.Error</div>
+    <style>
+        .validation-summary-errors {
+            color: white; /* Text color */
+            background-color: #dc3545; /* Background color */
+            padding: 10px; /* Padding around the text */
+            border: 1px solid #dc3545; /* Border color and width */
+            margin-bottom: 10px; /* Margin at the bottom */
+            border-radius: 5px; /* Rounded corners */
+        }
+    </style>
+
+    }
+    <table class ="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>First Closure Date</th>
+                <th>Final Closure Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var magazine in Model)
+            {
+                <tr>
+                    <td>@magazine.Name</td>
+                    <td>@magazine.FirstClosureDate.ToShortDateString()</td>
+                    <td>@magazine.FinalClosureDate.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@magazine.MagazineId">Details</a> |
+                        <a asp-action="Update" asp-route-id="@magazine.MagazineId">Update</a> |
+                        <a asp-action="Delete" asp-route-id="@magazine.MagazineId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

@@ -9,5 +9,6 @@ namespace AMaz.Repo
         Task<AcademicYear> GetAcademicYearByIdAsync(string id);
         Task<IEnumerable<AcademicYear>> GetAllAcademicYearsAsync();
         Task UpdateAcademicYearAsync(AcademicYear model);
+        Task<AcademicYear> GetLatestAcademicYearAsync();
     }
 }

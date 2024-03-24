@@ -46,5 +46,10 @@ namespace AMaz.Repo
         {
             return await _db.AcademicYears.Where(a => a.AcademicYearId == Guid.Parse(id)).FirstOrDefaultAsync();
         }
+
+        public async Task<AcademicYear> GetLatestAcademicYearAsync()
+        {
+            return await _db.AcademicYears.OrderByDescending(a => a.DateTimeFrom).FirstOrDefaultAsync();
+        }
     }
 }

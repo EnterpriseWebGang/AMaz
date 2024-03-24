@@ -1,0 +1,59 @@
+﻿@using AMaz.Common
+@model CreateMagazineViewModel
+
+@{
+    ViewData["Title"] = "View Academic Year";
+    Layout = "_AdminLayout";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Magazine</title>
+</head>
+<body>
+    <h1>Create Magazine</h1>
+    <div class="main-content">
+        <section class="section">
+            <div class="section-header">
+                <h1>Create Account</h1>
+                <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item active"><a href="#">Functions</a></div>
+                    <div class="breadcrumb-item"><a href="#">Auth</a></div>
+                    <div class="breadcrumb-item">Create Account</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Create New User</h4>
+                        </div>
+                        <div class="card-body">
+                            <form asp-action="Create" asp-controller="Magazine" method="post">
+                                <div>
+                                    <label asp-for="Name">Name:</label>
+                                    <input asp-for="Name" />
+                                    <span asp-validation-for="Name"></span>
+                                </div>
+                                <div>
+                                    <label asp-for="FirstClosureDate">First Closure Date:</label>
+                                    <input asp-for="FirstClosureDate" type="date" />
+                                    <span asp-validation-for="FirstClosureDate"></span>
+                                </div>
+                                <div>
+                                    <label asp-for="FinalClosureDate">Second Closure Date:</label>
+                                    <input asp-for="FinalClosureDate" type="date" />
+                                    <span asp-validation-for="FinalClosureDate"></span>
+                                </div>
+                                <button type="submit">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+</body>
+</html>
