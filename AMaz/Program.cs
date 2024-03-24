@@ -7,7 +7,6 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using AMaz.Common;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -50,6 +49,7 @@ IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.Configure<LocalFileStorageConfiguration>(builder.Configuration.GetSection("LocalFileStorageConfiguration"));
 builder.Services.Configure<PowerUserConfiguration>(builder.Configuration.GetSection("PowerUserConfiguration"));
+builder.Services.Configure<EmailSetting>(builder.Configuration.GetSection("EmailSetting"));
 
 #region Biz Services
 builder.Services.AddTransient<ILoginService, LoginService>();
@@ -64,6 +64,7 @@ builder.Services.AddTransient<IMagazineRepository, MagazineRepository>();
 builder.Services.AddTransient<IMagazineService, MagazineService>();
 
 builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 #endregion
 
 builder.Services.AddControllersWithViews();

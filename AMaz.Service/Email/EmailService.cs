@@ -13,13 +13,14 @@ namespace AMaz.Service
     {
         private readonly ILogger<EmailService> logger;
         private readonly IHostingEnvironment evironment;
-        private readonly AppSetting _emailSetting;
+        private readonly EmailSetting _emailSetting;
 
-        public EmailService(ILogger<EmailService> logger, IHostingEnvironment environment, IOptions<AppSetting> emailSetting)
+        public EmailService(ILogger<EmailService> logger, IHostingEnvironment environment, IOptions<EmailSetting> emailSetting)
         {
             this.logger = logger;
             this.logger.LogInformation("Create MailService");
             _emailSetting = emailSetting.Value;
+            evironment = environment;
         }
         public async Task SendCreateResetPasswordEmail(User user)
         {

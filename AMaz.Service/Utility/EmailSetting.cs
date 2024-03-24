@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AMaz.Service 
 {
-    public class AppSetting
+    public class EmailSetting
     {
         public string Mail { get; set; }
         public string DisplayName { get; set; }

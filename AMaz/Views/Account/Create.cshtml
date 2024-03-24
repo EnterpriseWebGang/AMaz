@@ -1,82 +1,11 @@
 ﻿@using AMaz.Common
+
 @model CreateAccountViewModel
 
 @{
     ViewData["Title"] = "Create Operators";
     Layout = "_AdminLayout";
 }
-
-
-@* <form asp-controller="Account" asp-action="Create" method="post">
-    <!-- Email input -->
-    <div class="form-outline mb-4">
-        <input type="text" id="firstname" name="firstname" class="form-control" required />
-        <label class="form-label" for="firstname">First Name</label>
-    </div>
-
-    <!-- Password input -->
-    <div class="form-outline mb-4">
-        <input type="text" id="lastname" name="lastname" class="form-control" required />
-        <label class="form-label" for="lastname">Last Name</label>
-    </div>
-
-    <!-- Email input -->
-    <div class="form-outline mb-4">
-        <input type="text" id="email" name="email" class="form-control" required />
-        <label class="form-label" for="email">Email address</label>
-    </div>
-
-    <!-- Password input -->
-    <div class="form-outline mb-4">
-        <input type="password" id="password" name="password" class="form-control" required />
-        <label class="form-label" for="password">Password</label>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-md-4 text-md-right text-left mt-2">Role</label>
-        <div class="col-lg-4 col-md-6">
-            <div class="selectgroup w-100">
-                <label class="selectgroup-item">
-                    <input type="radio" name="Role" value="@((int)Role.Manager)" class="selectgroup-input" required>
-                    <span class="selectgroup-button">Manager</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="Role" value="@((int)Role.Coordinator)" class="selectgroup-input" required>
-                    <span class="selectgroup-button">Coordinator</span>
-                </label>
-                <label class="selectgroup-item">
-                    <input type="radio" name="Role" value="@((int)Role.Student)" class="selectgroup-input" required>
-                    <span class="selectgroup-button">Student</span>
-                </label>
-            </div>
-            <div class="invalid-feedback" id="roleValidationMessage" style="display: none;">
-                Please select a role.
-            </div>
-        </div>
-    </div>
-
-    @if (!string.IsNullOrEmpty(ViewBag.Error))
-    {
-        <!-- Display validation errors in a div with red text -->
-        <div class="validation-summary-errors" asp-validation-summary="All">@ViewBag.Error</div>
-        <style>
-            .validation-summary-errors {
-                color: white; /* Text color */
-                background-color: #dc3545; /* Background color */
-                padding: 10px; /* Padding around the text */
-                border: 1px solid #dc3545; /* Border color and width */
-                margin-bottom: 10px; /* Margin at the bottom */
-                border-radius: 5px; /* Rounded corners */
-            }
-        </style>
-
-    }
-
-    <!-- Submit button -->
-    <div>
-        <input type="submit" class="btn btn-primary btn-block mb-4" value="Sign In" />
-    </div>
-</form> *@
 
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
@@ -111,6 +40,13 @@
                     <li><a asp-action="Index" asp-controller="Account">View Operators</a></li>
                 </ul>
             </li>
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
+                <ul class="dropdown-menu">
+                    <li><a asp-action="Create" asp-controller="Contribution">Create Contribution</a></li>
+                    <li><a asp-action="Index" asp-controller="Contribution">View Contribution</a></li>
+                </ul>
+            </li>
         </ul>
     </aside>
 </div>
@@ -133,18 +69,27 @@
                         <h4>Create New User</h4>
                     </div>
                     <div class="card-body">
-                        <form asp-controller="Account" asp-action="Create" method="post">
-                            <!-- Email input -->
-                            <div class="form-outline mb-4">
-                                <input type="text" id="firstname" name="firstname" class="form-control" required />
-                                <label class="form-label" for="firstname">First Name</label>
-                            </div>
+                        <form asp-controller="Account" asp-action="Create" method="post" class="wizard-content mt-2 need-validation" novalidate>
+                            <div class="wizard-pane">
+                                <div class="form-group row align-items-center">
+                                    <label class="col-md-4 text-md-right text-left">First Name</label>
+                                    <div class="col-lg-4 col-md-6">
+                                        <input type="text" id="firstname" name="firstname" class="form-control" required />
+                                        <div class="invalid-feedback">
+                                            Please fill in the first name.
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <!-- Password input -->
-                            <div class="form-outline mb-4">
-                                <input type="text" id="lastname" name="lastname" class="form-control" required />
-                                <label class="form-label" for="lastname">Last Name</label>
-                            </div>
+                                <div class="form-group row align-items-center">
+                                    <label class="col-md-4 text-md-right text-left">Last Name</label>
+                                    <div class="col-lg-4 col-md-6">
+                                        <input type="text" id="lastname" name="lastname" class="form-control" required />
+                                        <div class="invalid-feedback">
+                                            Please fill in the last name.
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="form-group row align-items-center">
                                     <label class="col-md-4 text-md-right text-left">Email</label>
@@ -167,33 +112,34 @@
                                         <div class="invalid-feedback">
                                             Please fill in the password.
                                         </div>
-                                        <div class ="invalid-feedback" id="passwordValidationMessage">
-                                            Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one non-alphanumeric character!                                       
+                                        <div class="invalid-feedback" id="passwordValidationMessage">
+                                            Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one non-alphanumeric character!
                                         </div>
                                     </div>
                                 </div>
 
-                            <div class="form-group row">
-                                <label class="col-md-4 text-md-right text-left mt-2">Role</label>
-                                <div class="col-lg-4 col-md-6">
-                                    <div class="selectgroup w-100">
-                                        <label class="selectgroup-item">
-                                            <input type="radio" name="Role" value="@((int)Role.Manager)" class="selectgroup-input" required>
-                                            <span class="selectgroup-button">Manager</span>
-                                        </label>
-                                        <label class="selectgroup-item">
-                                            <input type="radio" name="Role" value="@((int)Role.Coordinator)" class="selectgroup-input" required>
-                                            <span class="selectgroup-button">Coordinator</span>
-                                        </label>
-                                        <label class="selectgroup-item">
-                                            <input type="radio" name="Role" value="@((int)Role.Student)" class="selectgroup-input" required>
-                                            <span class="selectgroup-button">Student</span>
-                                        </label>
+                                <div class="form-group row">
+                                    <label class="col-md-4 text-md-right text-left mt-2">Role</label>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="selectgroup w-100">
+                                            <label class="selectgroup-item">
+                                                <input type="radio" name="Role" value="@((int)Role.Manager)" class="selectgroup-input" required>
+                                                <span class="selectgroup-button">Manager</span>
+                                            </label>
+                                            <label class="selectgroup-item">
+                                                <input type="radio" name="Role" value="@((int)Role.Coordinator)" class="selectgroup-input" required>
+                                                <span class="selectgroup-button">Coordinator</span>
+                                            </label>
+                                            <label class="selectgroup-item">
+                                                <input type="radio" name="Role" value="@((int)Role.Student)" class="selectgroup-input" required>
+                                                <span class="selectgroup-button">Student</span>
+                                            </label>
+                                        </div>
+                                        <div class="invalid-feedback" id="roleValidationMessage" style="display: none;">
+                                            Please select a role.
+                                        </div>
                                     </div>
-
-                                    <div class="invalid-feedback" id="roleValidationMessage" style="display: none;">
-                                        Please select a role.
-                                    </div>
+                                </div>
 
                                 <div class="form-group row">
                                     <div class="col-md-4"></div>
@@ -202,30 +148,9 @@
                                         <a href="#" class="btn btn-icon icon-right btn-primary">Back</a>
                                     </div>
                                 </div>
-                                
+
                             </div>
 
-                            @if (!string.IsNullOrEmpty(ViewBag.Error))
-                            {
-                                <!-- Display validation errors in a div with red text -->
-                                <div class="validation-summary-errors" asp-validation-summary="All">@ViewBag.Error</div>
-                                <style>
-                                    .validation-summary-errors {
-                                        color: white; /* Text color */
-                                        background-color: #dc3545; /* Background color */
-                                        padding: 10px; /* Padding around the text */
-                                        border: 1px solid #dc3545; /* Border color and width */
-                                        margin-bottom: 10px; /* Margin at the bottom */
-                                        border-radius: 5px; /* Rounded corners */
-                                    }
-                                </style>
-
-                            }
-
-                            <!-- Submit button -->
-                            <div>
-                                <input type="submit" class="btn btn-primary btn-block mb-4" value="Sign In" />
-                            </div>
 
                         </form>
 
