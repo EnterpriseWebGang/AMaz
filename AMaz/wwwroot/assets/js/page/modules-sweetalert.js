@@ -268,7 +268,11 @@ $(document).ready(function() {
           // Prevent the default form submission
           event.preventDefault();
           // Display SweetAlert warning
-          swal('Warning', 'You have not checked the box to agree to terms and conditions!', 'warning');
+          swal('Warning', 'You have not checked the box to agree to Terms and Conditions!', 'warning');
+      }
+      else {
+          var redirectUrl = "/Contribution";
+          window.location.href = redirectUrl;
       }
   });
 });
