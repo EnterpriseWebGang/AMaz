@@ -3,7 +3,7 @@
 @model CreateAccountViewModel
 
 @{
-    ViewData["Title"] = "Create Operators";
+    ViewData["Title"] = "Create User Account";
     Layout = "_AdminLayout";
 }
 
@@ -24,20 +24,20 @@
             <li class="dropdown active">
                 <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Auth</span></a>
                 <ul class="dropdown-menu">
-                    <li><a asp-action="ResetPassword" asp-controller="Account">Reset Password</a></li>
                     <li class=active><a class="nav-link beep beep-sidebar" asp-action="Create" asp-controller="Account">Create Account</a></li>
                 </ul>
             </li>
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-bicycle"></i> <span>Features</span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Create Academic Year</a></li>
+                    <li><a asp-action="Create" asp-controller="AcademicYear">Create Academic Year</a></li>
                 </ul>
             </li>
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
                 <ul class="dropdown-menu">
-                    <li><a asp-action="Index" asp-controller="Account">View Operators</a></li>
+                    <li><a asp-action="Index" asp-controller="Account">View User List</a></li>
+                    <li><a asp-action="Index" asp-controller="AcademicYear">View Academic Year</a></li>
                 </ul>
             </li>
             <li class="dropdown">
