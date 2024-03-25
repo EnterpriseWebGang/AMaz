@@ -11,7 +11,7 @@ namespace AMaz.Service
     public interface IEmailService
     {
         Task Send(string to, string subject, string html);
-        Task SendCreateResetPasswordEmail(User user);
+        Task SendCreateResetPasswordEmail(User user, ResetPasswordRequest request);
         Task SendCreateAccountEmail(CreateAccountRequest request);
         Task SendCreateContributionEmail(Contribution contribution);
     }

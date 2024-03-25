@@ -115,6 +115,7 @@ namespace AMaz.Service
             if (result.Succeeded)
             {
                 //TODO: Send Email to user
+                await _emailService.SendCreateResetPasswordEmail(user, request);
             }
 
             return result;

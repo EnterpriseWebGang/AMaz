@@ -5,6 +5,7 @@ using MailKit.Security;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using AMaz.Entity;
+using AMaz.Common;
 
 
 namespace AMaz.Service
@@ -22,12 +23,12 @@ namespace AMaz.Service
             _emailSetting = emailSetting.Value;
             evironment = environment;
         }
-        public async Task SendCreateResetPasswordEmail(User user)
+        public async Task SendCreateResetPasswordEmail(User user, ResetPasswordRequest request)
         {
-            string message = await System.IO.File.ReadAllTextAsync(Path.Combine(evironment.ContentRootPath, "EmailHtmls/AlreadyRegisteredEmail.html"));
+            string message = await System.IO.File.ReadAllTextAsync(Path.Combine(evironment.ContentRootPath, "EmailHtmls/ResetPassword.html"));
             message = message.Replace("[[name]]", user.FirstName);
             message = message.Replace("[[email]]", user.Email);
-            message = message.Replace("[[password]]", user.PasswordHash);
+            message = message.Replace("[[password]]", request.Password);
 
             await Send(
                 to: user.Email,
