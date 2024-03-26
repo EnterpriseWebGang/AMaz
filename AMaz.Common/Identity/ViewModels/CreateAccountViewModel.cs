@@ -26,5 +26,10 @@ namespace AMaz.Common
         [Required]
         [Display(Name = "Role")]
         public int Role { get; set; }
+
+        public List<FacultyViewModel>? Faculties { get; set; }
+
+        [Display(Name = "Faculty")]
+        public string? FacultyId { get; set; }
     }
 }

@@ -12,12 +12,14 @@ namespace AMaz.Web.Controllers.Account
     public class AccountController : Controller
     {
         private readonly UserService _userService;
+        private readonly IFacultyService _facultyService;
         private readonly IMapper _mapper;
 
-        public AccountController(UserService userService, IMapper mapper)
+        public AccountController(UserService userService, IMapper mapper, IFacultyService facultyService)
         {
             _userService = userService;
             _mapper = mapper;
+            _facultyService = facultyService;
         }
 
         // GET: AccountController
@@ -38,7 +40,12 @@ namespace AMaz.Web.Controllers.Account
         [Authorize()]
         public ActionResult Create()
         {
-            return View();
+            var faculties = _facultyService.GetAllFacultiesAsync().Result;
+            var model = new CreateAccountViewModel
+            {
+                Faculties = faculties.ToList()
+            };
+            return View(model);
         }
 
         // POST: AccountController/Create
@@ -150,9 +157,11 @@ namespace AMaz.Web.Controllers.Account
 
         // GET: ChangeUserRole
         [HttpGet]
-        public async Task<IActionResult> ChangeUserRole(string userId)
+        public async Task<IActionResult> ChangeUserRoleAndFaculty(string userId)
         {
             var model = await _userService.GetUserRoleViewModelAsync(userId);
+            var faculties = await _facultyService.GetAllFacultiesAsync();
+            model.Faculties = faculties.ToList();
             ViewBag.UserId = userId;
             ViewBag.Error = TempData["ErrorMessage"];
             return View(model);
@@ -161,11 +170,11 @@ namespace AMaz.Web.Controllers.Account
         // POST: ChangeUserRole
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeUserRole(string userId, ChangeUserRoleViewModel model)
+        public async Task<IActionResult> ChangeUserRoleAndFaculty(string userId, ChangeUserRoleAndFacultyViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var request = _mapper.Map<ChangeUserRoleRequest>(model);
+                var request = _mapper.Map<ChangeUserRoleAndFacultyRequest>(model);
                 request.UserId = userId;
 
                 var result = await _userService.ChangeUserRole(request);

@@ -46,6 +46,13 @@
                                     <input asp-for="FinalClosureDate" type="date" />
                                     <span asp-validation-for="FinalClosureDate"></span>
                                 </div>
+                                <div>
+                                    <label asp-for="FacultyId">Faculties: </label>
+                                    <select asp-for="FacultyId" asp-items="@(new SelectList(Model.Faculties.Select(f => new SelectListItem { Text = $"{f.Name}", Value = f.FacultyId }), "Value", "Text"))">
+                                        <option value="">Select Faculty</option>
+                                    </select>
+                                    <span asp-validation-for="FacultyId"></span>
+                                </div>
                                 <button type="submit">Submit</button>
                             </form>
                         </div>

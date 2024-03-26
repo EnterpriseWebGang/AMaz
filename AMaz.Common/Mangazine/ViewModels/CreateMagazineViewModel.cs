@@ -22,5 +22,11 @@ namespace AMaz.Common
         [Display(Name = "Final Closure Date")]
         [DataType(DataType.Date)]
         public DateTime FinalClosureDate { get; set; }
+
+        public List<FacultyViewModel> Faculties { get; set; }
+
+        [Required]
+        [Display(Name = "Faculty")]
+        public string FacultyId { get; set; }
     }
 }

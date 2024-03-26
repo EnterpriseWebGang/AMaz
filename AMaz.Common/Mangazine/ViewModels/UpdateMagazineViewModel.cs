@@ -27,5 +27,11 @@ namespace AMaz.Common
         [Required]
         [Display(Name = "Academic Year")]
         public string AcademicYearId { get; set; }
+
+        public List<FacultyViewModel> Faculties { get; set; }
+
+        [Required]
+        [Display(Name = "Faculty")]
+        public string FacultyId { get; set; }
     }
 }

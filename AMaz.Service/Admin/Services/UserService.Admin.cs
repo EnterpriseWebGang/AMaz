@@ -1,5 +1,6 @@
 ﻿using AMaz.Common;
 using AMaz.Entity;
+using AMaz.Repo;
 using Azure.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +11,7 @@ namespace AMaz.Service
     public partial class UserService
     {
         private readonly IEmailService _emailService;
-        private readonly IHostingEnvironment evironment;
+        private readonly IFacultyRepository _facultyRepository;
         public async Task<List<UserViewModel>> GetAllUsersAsync()
         {
             var currentUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
@@ -59,13 +60,17 @@ namespace AMaz.Service
                     UserName = request.Email,
                     Email = request.Email,
                 };
-
-                var createUserResult = await _userManager.CreateAsync(forDbCreate, request.Password);
-                var addUserToRoleResult = IdentityResult.Failed();
-                if (true)
+                if (request.FacultyId != null)
                 {
-                   addUserToRoleResult = await _userManager.AddToRoleAsync(forDbCreate, request.Role);
+                    var faculty = await _facultyRepository.GetFacultyByIdAsync(request.FacultyId);
+                    if (faculty != null)
+                    {
+                        forDbCreate.Faculty = faculty;
+                    }
                 }
+                var createUserResult = await _userManager.CreateAsync(forDbCreate, request.Password);
+                var userInDb = await _userManager.FindByEmailAsync(request.Email);
+                var addUserToRoleResult = await _userManager.AddToRoleAsync(userInDb, request.Role);
 
                 if (createUserResult.Succeeded)
                 {
@@ -174,7 +179,7 @@ namespace AMaz.Service
             return (true, "");
         }
 
-        public async Task<(bool result, string error)> ChangeUserRole(ChangeUserRoleRequest request)
+        public async Task<(bool result, string error)> ChangeUserRole(ChangeUserRoleAndFacultyRequest request)
         {
             var user = await _userManager.FindByIdAsync(request.UserId);
             if (user == null)
@@ -196,19 +201,29 @@ namespace AMaz.Service
 
             await _userManager.RemoveFromRolesAsync(user, userRoles);
             await _userManager.AddToRoleAsync(user, request.Role);
+
+            if (request.FacultyId != null)
+            {
+                var faculty = await _facultyRepository.GetFacultyByIdAsync(request.FacultyId);
+                if (faculty != null)
+                {
+                    user.Faculty = faculty;
+                }
+                await _userManager.UpdateAsync(user);
+            }
             return (true, "");
         }
 
-        public async Task<ChangeUserRoleViewModel> GetUserRoleViewModelAsync(string userId)
+        public async Task<ChangeUserRoleAndFacultyViewModel> GetUserRoleViewModelAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return new ChangeUserRoleViewModel();
+                return new ChangeUserRoleAndFacultyViewModel();
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);
-            return new ChangeUserRoleViewModel
+            return new ChangeUserRoleAndFacultyViewModel
             {
                 Role = GetRoleCode(userRoles.First())
             };

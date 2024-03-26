@@ -45,7 +45,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile<ContributionProfile>();
     mc.AddProfile<AcademicYearProfile>();
     mc.AddProfile<MagazineProfile>();
-
+    mc.AddProfile<FacultyProfile>();
 });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -71,6 +71,8 @@ builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<IContributionService, ContributionService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 
+builder.Services.AddTransient<IFacultyRepository, FacultyRepository>();
+builder.Services.AddTransient<IFacultyService, FacultyService>();
 #endregion
 
 builder.Services.AddControllersWithViews();

@@ -1,0 +1,52 @@
+﻿@using AMaz.Common
+@model IEnumerable<FacultyViewModel>
+
+@{
+    ViewData["Title"] = "All Academic Years";
+    Layout = "_AdminLayout";
+}
+
+<h1>All Academic Years</h1>
+
+@if (!string.IsNullOrEmpty(ViewBag.Error))
+{
+    <!-- Display validation errors in a div with red text -->
+    <div class="validation-summary-errors" asp-validation-summary="All">@ViewBag.Error</div>
+    <style>
+        .validation-summary-errors {
+            color: white; /* Text color */
+            background-color: #dc3545; /* Background color */
+            padding: 10px; /* Padding around the text */
+            border: 1px solid #dc3545; /* Border color and width */
+            margin-bottom: 10px; /* Margin at the bottom */
+            border-radius: 5px; /* Rounded corners */
+        }
+    </style>
+
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var faculty in Model)
+        {
+            <tr>
+                <td>@faculty.FacultyId</td>
+                <td>@faculty.Name</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@faculty.FacultyId">Details</a> |
+                    <a asp-action="Update" asp-route-id="@faculty.FacultyId">Update</a> |
+                    <a asp-action="Delete" asp-route-id="@faculty.FacultyId">Delete</a>
+                </td>
+            </tr>
+        }
+
+            <tr>
+                <td> <a class="btn btn-primary btn-sm" asp-action="Create">+</a> </td>
+            </tr>
+    </tbody>
+</table>

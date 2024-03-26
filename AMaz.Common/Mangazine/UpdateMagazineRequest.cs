@@ -7,6 +7,7 @@
         public DateTime FirstClosureDate { get; set; }
         public DateTime FinalClosureDate { get; set; }
         public string AcademicYearId { get; set; }
+        public string FacultyId { get; set; }
 
     }
 }

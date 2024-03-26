@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 namespace AMaz.Common
 {
-    public class ChangeUserRoleViewModel
+    public class CreateFacultyViewModel
     {
         [Required]
-        public int Role { get; set; }
+        public string Name { get; set; }
     }
 }

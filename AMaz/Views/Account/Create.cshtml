@@ -140,11 +140,18 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div>
+                                    <label asp-for="FacultyId">Faculties: </label>
+                                    <select asp-for="FacultyId" asp-items="@(new SelectList(Model.Faculties.Select(f => new SelectListItem { Text = $"{f.Name}", Value = f.FacultyId }), "Value", "Text"))">
+                                        <option value="">Select Faculty</option>
+                                    </select>
+                                    <span asp-validation-for="FacultyId"></span>
+                                </div>
 
                                 <div class="form-group row">
                                     <div class="col-md-4"></div>
                                     <div class="col-lg-4 col-md-6 text-right">
-                                        <button class="btn btn-primary" id="swal-2" type="submit">Create</button>
+                                        <button class="btn btn-primary" type="submit">Create</button>
                                         <a href="#" class="btn btn-icon icon-right btn-primary">Back</a>
                                     </div>
                                 </div>

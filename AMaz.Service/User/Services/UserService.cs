@@ -24,14 +24,14 @@ namespace AMaz.Service
             IHttpContextAccessor httpContextAccessor,
             RoleManager<IdentityRole> roleManager,
             IEmailService emailService,
-            Microsoft.AspNetCore.Hosting.IHostingEnvironment evironment)
+            Repo.IFacultyRepository facultyRepository)
         {
             _mapper = mapper;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
             _roleManager = roleManager;
             _emailService = emailService;
-            this.evironment = evironment;
+            _facultyRepository = facultyRepository;
         }
 
         public async Task<UserViewModel> GetUserDetailByIdAsync(string id)

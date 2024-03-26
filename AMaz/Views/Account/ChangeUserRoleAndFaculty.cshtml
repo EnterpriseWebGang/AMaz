@@ -1,5 +1,5 @@
 ﻿@using AMaz.Common
-@model ChangeUserRoleViewModel
+@model ChangeUserRoleAndFacultyViewModel
 
 @{
     ViewData["Title"] = "Change User Role";
@@ -75,7 +75,7 @@
                                 @ViewBag.Error
                             </div>
                         }
-                        <form asp-action="ChangeUserRole" asp-route-userId="@ViewBag.UserId" method="post" id="changeUserRoleForm">
+                        <form asp-action="ChangeUserRoleAndFaculty" asp-route-userId="@ViewBag.UserId" method="post">
                             <div class="form-group">
                                 <label asp-for="Role">Select Role:</label>
                                 <select asp-for="Role" class="form-control">
@@ -85,7 +85,14 @@
                                 </select>
                                 <span asp-validation-for="Role" class="text-danger"></span>
                             </div>
-                            <button type="submit" id="swal-5" class="btn btn-primary">Change</button>
+                            <div>
+                                <label asp-for="FacultyId">Faculties: </label>
+                                <select asp-for="FacultyId" asp-items="@(new SelectList(Model.Faculties?.Select(f => new SelectListItem { Text = $"{f.Name}", Value = f.FacultyId }), "Value", "Text"))">
+                                    <option value="">Select Faculty</option>
+                                </select>
+                                <span asp-validation-for="FacultyId"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Change</button>
                         </form>
 
                     </div>

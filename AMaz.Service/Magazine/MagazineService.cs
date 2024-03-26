@@ -2,6 +2,7 @@
 using AMaz.Entity;
 using AMaz.Repo;
 using AutoMapper;
+using System.Runtime.CompilerServices;
 
 namespace AMaz.Service
 {
@@ -9,12 +10,14 @@ namespace AMaz.Service
     {
         private readonly IMagazineRepository _mangazineRepository;
         private readonly IAcademicYearReponsitory _academicYearReponsitory;
+        private readonly IFacultyRepository _facultyRepository;
         private readonly IMapper _mapper;
-        public MagazineService(IMagazineRepository mangazineRepository, IMapper mapper, IAcademicYearReponsitory academicYearReponsitory)
+        public MagazineService(IMagazineRepository mangazineRepository, IMapper mapper, IAcademicYearReponsitory academicYearReponsitory, IFacultyRepository facultyRepository)
         {
             _mangazineRepository = mangazineRepository;
             _mapper = mapper;
             _academicYearReponsitory = academicYearReponsitory;
+            _facultyRepository = facultyRepository;
         }
 
         public async Task<List<MagazineViewModel>> GetAllMagazines()
@@ -48,7 +51,14 @@ namespace AMaz.Service
             {
                 return (false, "There is no academic year available!");
             }
+
+            var faculty = await _facultyRepository.GetFacultyByIdAsync(request.FacultyId);
+            if (faculty == null)
+            {
+                return (false, "Faculty not found!");
+            }
             magazine.AcademicYear = latestAcademicYear;
+            magazine.Faculty = faculty;
             await _mangazineRepository.CreateMagazineAsync(magazine);
             return (true, string.Empty);
         }

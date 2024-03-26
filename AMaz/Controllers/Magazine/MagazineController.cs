@@ -10,11 +10,13 @@ namespace AMaz.Web.Controllers
         private readonly IMapper _mapper;
         private readonly IMagazineService _magazineService;
         private readonly IAcademicYearService _academicYearService;
-        public MagazineController(IMagazineService magazineService, IMapper mapper, IAcademicYearService academicYearService)
+        private readonly IFacultyService _facultyService;
+        public MagazineController(IMagazineService magazineService, IMapper mapper, IAcademicYearService academicYearService, IFacultyService facultyService)
         {
             _academicYearService = academicYearService;
             _magazineService = magazineService;
             _mapper = mapper;
+            _facultyService = facultyService;
         }
 
         public async Task<IActionResult> Index(string facultyId = null)
@@ -29,9 +31,14 @@ namespace AMaz.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var faculties = await _facultyService.GetAllFacultiesAsync();
+            var model = new CreateMagazineViewModel
+            {
+                Faculties = faculties.ToList()
+            };
+            return View(model);
         }
 
         [HttpPost]
@@ -59,8 +66,10 @@ namespace AMaz.Web.Controllers
         {
             var magazine = await _magazineService.GetMagazineByIdAsync(id);
             var academicYears = await _academicYearService.GetAllAcademicYearsAsync();
+            var faculties = await _facultyService.GetAllFacultiesAsync();
             var model = _mapper.Map<UpdateMagazineViewModel>(magazine);
             model.AcademicYears = academicYears.ToList();
+            model.Faculties = faculties.ToList();
             ViewBag.Id = id;
 
             return View(model);
