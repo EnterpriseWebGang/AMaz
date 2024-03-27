@@ -50,7 +50,7 @@ namespace AMaz.Web.Controllers.Account
 
         // POST: AccountController/Create
         [HttpPost]
-        [Authorize()]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CreateAccountViewModel model)
         {
@@ -82,6 +82,7 @@ namespace AMaz.Web.Controllers.Account
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<JsonResult> CheckEmailExists(string email)
         {
             var isEmailExist = await _userService.IsEmailExistAsync(email);
@@ -99,6 +100,7 @@ namespace AMaz.Web.Controllers.Account
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Activate(string userId)
         {
             var result = await _userService.ActivateUser(userId);
@@ -111,6 +113,7 @@ namespace AMaz.Web.Controllers.Account
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(string userId)
         {
             var result = await _userService.DeleteUser(userId);
@@ -125,6 +128,7 @@ namespace AMaz.Web.Controllers.Account
 
         // GET: /Account/ResetPassword/{userId}
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult ResetPassword(string userId)
         {
             ViewBag.UserId = userId;
@@ -134,6 +138,7 @@ namespace AMaz.Web.Controllers.Account
 
         // POST: /Account/ResetPassword/{userId}
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(string userId, ResetPasswordViewModel model)
         {
@@ -157,6 +162,7 @@ namespace AMaz.Web.Controllers.Account
 
         // GET: ChangeUserRole
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeUserRoleAndFaculty(string userId)
         {
             var model = await _userService.GetUserRoleViewModelAsync(userId);
@@ -169,6 +175,7 @@ namespace AMaz.Web.Controllers.Account
 
         // POST: ChangeUserRole
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeUserRoleAndFaculty(string userId, ChangeUserRoleAndFacultyViewModel model)
         {

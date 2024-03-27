@@ -2,18 +2,22 @@
 using Microsoft.AspNetCore.Mvc;
 using AMaz.Common;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using AMaz.Entity;
 
 namespace AMaz.Web.Controllers
 {
     public class LoginController : Controller
     {
         private readonly ILoginService _loginService;
+        private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public LoginController(ILoginService loginService, IMapper mapper)
+        public LoginController(ILoginService loginService, IMapper mapper, UserManager<User> userManager)
         {
             _loginService = loginService;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         // GET: /Account/Login
@@ -38,7 +42,12 @@ namespace AMaz.Web.Controllers
                     {
                         return Redirect(returnUrl);
                     }
-                    return RedirectToAction("Index", "Home");
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    var roles = await _userManager.GetRolesAsync(user);
+                    return RedirectToAction(roles.Contains("Student") ? "Index" :
+                                            roles.Contains("Admin")   ? "Admin" :
+                                            roles.Contains("Manager") ? "Manager" :
+                                                                       "Coordinator", "Home");
                 }
 
                 ViewBag.Error = response.error;

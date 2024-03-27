@@ -1,6 +1,7 @@
 ﻿using AMaz.Common;
 using AMaz.Service;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AMaz.Web.Controllers
@@ -31,6 +32,7 @@ namespace AMaz.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create()
         {
             var faculties = await _facultyService.GetAllFacultiesAsync();
@@ -42,6 +44,7 @@ namespace AMaz.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create(CreateMagazineViewModel model)
         {
             try
@@ -62,6 +65,7 @@ namespace AMaz.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Update(string id)
         {
             var magazine = await _magazineService.GetMagazineByIdAsync(id);
@@ -76,6 +80,7 @@ namespace AMaz.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Update(string id, UpdateMagazineViewModel model)
         {
             try
@@ -97,6 +102,7 @@ namespace AMaz.Web.Controllers
             }
         }
 
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(string id)
         {
             var response = await _magazineService.DeleteMagazineAsync(id);
@@ -108,6 +114,7 @@ namespace AMaz.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
             var magazine = await _magazineService.GetMagazineByIdAsync(id);

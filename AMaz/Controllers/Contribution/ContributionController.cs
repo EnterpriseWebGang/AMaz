@@ -25,12 +25,14 @@ namespace AMaz.Web.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var contributions = await _contributionService.GetAllContributionsAsync();
             return View(_mapper.Map<IEnumerable<ContributionViewModel>>(contributions));
         }
 
+        [Authorize(Roles = "Student")]
         public IActionResult Create()
         {
             var model = new CreateContributionViewModel();
@@ -38,6 +40,7 @@ namespace AMaz.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Student")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateContributionViewModel model)
         {
@@ -62,7 +65,7 @@ namespace AMaz.Web.Controllers
             return View(model);
         }
 
-
+        [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
             var contribution = await _contributionService.GetContributionByIdAsync(id);
@@ -75,6 +78,7 @@ namespace AMaz.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> Delete(string id)
         {
             var result = await _contributionService.DeleteContributionAsync(id);
@@ -89,6 +93,7 @@ namespace AMaz.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Student")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(UpdateContributionViewModel model)
         {
@@ -115,6 +120,7 @@ namespace AMaz.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetContributionFile(string fileId, string contributionId)
         {
             var contribution = await _contributionService.GetContributionByIdAsync(contributionId);

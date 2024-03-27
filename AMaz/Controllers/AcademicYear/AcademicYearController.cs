@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AMaz.Common;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace AMaz.Web.Controllers
@@ -18,6 +19,7 @@ namespace AMaz.Web.Controllers
         }
 
         // GET: /AcademicYear/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -25,6 +27,7 @@ namespace AMaz.Web.Controllers
 
         // POST: /AcademicYear/Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(CreateAcademicYearViewModel model)
         {
             try
@@ -49,6 +52,7 @@ namespace AMaz.Web.Controllers
         }
 
         // GET: /AcademicYear/Udpate
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync(string id)
         {
             // Get the academic year by id
@@ -62,6 +66,7 @@ namespace AMaz.Web.Controllers
 
         // POST: /AcademicYear/Update
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(string id, UpdateAcademicYearViewModel model)
         {
             try
@@ -86,6 +91,7 @@ namespace AMaz.Web.Controllers
         }
 
         // GET: /AcademicYear/Delete
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             // Get the academic year by id

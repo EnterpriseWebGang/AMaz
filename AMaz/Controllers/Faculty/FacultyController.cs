@@ -1,6 +1,7 @@
 ﻿using AMaz.Common;
 using AMaz.Service;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AMaz.Web.Controllers
@@ -21,12 +22,15 @@ namespace AMaz.Web.Controllers
             return View(faculties);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Create(CreateFacultyViewModel model)
         {
             if (ModelState.IsValid)
@@ -41,6 +45,7 @@ namespace AMaz.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Update(string id)
         {
             var faculty = await _facultyService.GetFacultyByIdAsync(id);
@@ -54,6 +59,7 @@ namespace AMaz.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Update(string id, UpdateFacultyViewModel model)
         {
             if (ModelState.IsValid)
@@ -71,6 +77,7 @@ namespace AMaz.Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Delete(string id)
         {
             var faculty = await _facultyService.GetFacultyByIdAsync(id);
