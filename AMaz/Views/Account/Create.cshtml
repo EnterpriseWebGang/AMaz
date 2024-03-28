@@ -140,19 +140,42 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <label asp-for="FacultyId">Faculties: </label>
-                                    <select asp-for="FacultyId" asp-items="@(new SelectList(Model.Faculties.Select(f => new SelectListItem { Text = $"{f.Name}", Value = f.FacultyId }), "Value", "Text"))">
-                                        <option value="">Select Faculty</option>
-                                    </select>
-                                    <span asp-validation-for="FacultyId"></span>
+
+                                <div class="form-group row align-items-center">
+                                    <label class="col-md-4 text-md-right text-left">Faculties: </label>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary" id="selectedFacultyBtn">Select Faculty</button>
+                                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#" disabled>Select Faculty</a>
+                                            @foreach (var faculty in Model.Faculties)
+                                            {
+                                                <a class="dropdown-item" href="#" data-value="@faculty.FacultyId">@faculty.Name</a>
+                                            }
+                                        </div>
+                                        <input type="hidden" id="FacultyId" name="FacultyId" />
+                                    </div>
                                 </div>
+
+                                <script>
+                                    document.querySelectorAll('.dropdown-item').forEach(item => {
+                                        item.addEventListener('click', event => {
+                                            event.preventDefault();
+                                            const selectedFacultyId = event.target.getAttribute('data-value');
+                                            const selectedFacultyName = event.target.textContent.trim();
+                                            document.getElementById('selectedFacultyBtn').textContent = selectedFacultyName;
+                                            document.getElementById('FacultyId').value = selectedFacultyId;
+                                        });
+                                    });
+                                </script>
 
                                 <div class="form-group row">
                                     <div class="col-md-4"></div>
                                     <div class="col-lg-4 col-md-6 text-right">
                                         <button class="btn btn-primary" type="submit">Create</button>
-                                        <a href="#" class="btn btn-icon icon-right btn-primary">Back</a>
+                                        <a asp-action="Index" asp-controller="Account" class="btn btn-icon icon-right btn-primary">Back</a>
                                     </div>
                                 </div>
 
