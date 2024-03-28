@@ -45,5 +45,17 @@ namespace AMaz.Service
 
             return _mapper.Map<UserViewModel>(entity);
         }
+        public async Task<string> GetCoordinatorEmailsByFaculty(string facultyId)
+        {
+            var facultyUsers = await _userManager.Users.Include(user => user.Faculty)
+                .Where(user => user.Faculty.FacultyId.ToString() == facultyId)
+                .ToListAsync();
+            
+            var coordinators = await _userManager.GetUsersInRoleAsync(Role.Coordinator.ToString());
+            var coordinatorUsers = facultyUsers.Where(user => coordinators.Any(coordinator => coordinator.Id == user.Id));
+            var coordinatorEmails = coordinatorUsers?.Select(u => u.Email).FirstOrDefault();
+            
+            return coordinatorEmails;
+        }
     }
 }
