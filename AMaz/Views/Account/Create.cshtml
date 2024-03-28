@@ -144,12 +144,11 @@
                                 <div class="form-group row align-items-center">
                                     <label class="col-md-4 text-md-right text-left">Faculties: </label>
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-primary" id="selectedFacultyBtn">Select Faculty</button>
-                                        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+                                        <button type="button" class="btn btn-primary" id="selectedFacultyBtn" data-toggle="dropdown">Select Faculty</button>
+                                   
                                             <span class="sr-only">Toggle Dropdown</span>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#" disabled>Select Faculty</a>
                                             @foreach (var faculty in Model.Faculties)
                                             {
                                                 <a class="dropdown-item" href="#" data-value="@faculty.FacultyId">@faculty.Name</a>
@@ -160,6 +159,28 @@
                                 </div>
 
                                 <script>
+                                    // Function to enable/disable faculty selection based on the selected role
+                                    function toggleFacultySelection(enabled) {
+                                        const facultyDropdown = document.getElementById('selectedFacultyBtn');
+                                        const facultyInput = document.getElementById('FacultyId');
+
+                                        facultyDropdown.disabled = !enabled;
+                                        facultyInput.disabled = !enabled;
+                                    }
+
+                                    // Add event listeners to the radio buttons
+                                    document.querySelectorAll('input[name="Role"]').forEach(radio => {
+                                        radio.addEventListener('change', event => {
+                                            const selectedRole = event.target.value;
+                                            if (selectedRole === "@((int)Role.Manager)") {
+                                                toggleFacultySelection(false); // Disable faculty selection for Manager
+                                            } else {
+                                                toggleFacultySelection(true); // Enable faculty selection for Coordinator and Student
+                                            }
+                                        });
+                                    });
+
+                                    // Add event listener to set faculty selection when clicked
                                     document.querySelectorAll('.dropdown-item').forEach(item => {
                                         item.addEventListener('click', event => {
                                             event.preventDefault();
@@ -170,6 +191,7 @@
                                         });
                                     });
                                 </script>
+
 
                                 <div class="form-group row">
                                     <div class="col-md-4"></div>
