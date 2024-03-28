@@ -117,7 +117,8 @@
                             <div class="form-group row align-items-center">
                                 <label class="col-md-4 text-md-right text-left">Faculties: </label>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary" id="selectedFacultyBtn">
+                                    <button type="button" class="btn btn-primary" id="selectedFacultyBtn" data-toggle="dropdown">
+                                
                                         @if (Model.FacultyId != null)
                                         {
                                             var selectedFaculty = Model.Faculties.FirstOrDefault(f => f.FacultyId == Model.FacultyId);
@@ -135,11 +136,11 @@
                                             <text>Select Faculty</text>
                                         }
                                     </button>
-                                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+            
                                         <span class="sr-only">Toggle Dropdown</span>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#" disabled>Select Faculty</a>
+               
                                         @foreach (var faculty in Model.Faculties)
                                         {
                                             <a class="dropdown-item" href="#" data-value="@faculty.FacultyId">@faculty.Name</a>
@@ -150,6 +151,31 @@
                             </div>
 
                             <script>
+                                // Function to enable/disable faculty selection based on the selected role
+                                function toggleFacultySelection(enabled) {
+                                    const facultyDropdown = document.getElementById('selectedFacultyBtn');
+                                    const facultyInput = document.getElementById('FacultyId');
+
+                                    facultyDropdown.disabled = !enabled;
+                                    facultyInput.disabled = !enabled;
+                                }
+
+                                // Add event listeners to the radio buttons
+                                document.querySelectorAll('input[name="Role"]').forEach(radio => {
+                                    radio.addEventListener('change', event => {
+                                        const selectedRole = event.target.value;
+                                        if (selectedRole === "@((int)Role.Manager)") {
+                                            toggleFacultySelection(false); // Disable faculty selection for Manager
+                                            // Clear selected faculty
+                                            document.getElementById('selectedFacultyBtn').textContent = 'Select Faculty';
+                                            document.getElementById('FacultyId').value = '';
+                                        } else {
+                                            toggleFacultySelection(true); // Enable faculty selection for Coordinator and Student
+                                        }
+                                    });
+                                });
+
+                                // Add event listener to set faculty selection when clicked
                                 document.querySelectorAll('.dropdown-item').forEach(item => {
                                     item.addEventListener('click', event => {
                                         event.preventDefault();
