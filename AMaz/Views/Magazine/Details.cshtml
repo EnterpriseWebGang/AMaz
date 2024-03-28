@@ -3,10 +3,101 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "_AdminLayout";
+    Layout = "_ManagerLayout";
 }
 
-<h1>Details</h1>
+
+<div class="main-sidebar sidebar-style-2">
+    <aside id="sidebar-wrapper">
+        <div class="sidebar-brand">
+            <a asp-action="Manager" asp-controller="Home">AMaz</a>
+        </div>
+        <div class="sidebar-brand sidebar-brand-sm">
+            <a asp-action="Manager" asp-controller="Home">AMaz</a>
+        </div>
+        <ul class="sidebar-menu">
+
+            <li class="menu-header">Functions</li>
+
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-bicycle"></i> <span>Features</span></a>
+                <ul class="dropdown-menu">
+                    <li><a asp-action="Create" asp-controller="Faculty">Create Faculty</a></li>
+
+                    <li><a asp-action="Create" asp-controller="Magazine">Create Magazine</a></li>
+                </ul>
+            </li>
+            <li class="dropdown active">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
+                <ul class="dropdown-menu">
+                    <li><a asp-action="Index" asp-controller="Faculty">View Faculty List</a></li>
+                    <li class=active><a class="nav-link beep beep-sidebar" asp-action="Index" asp-controller="Magazine">View Magazine</a></li>
+
+                </ul>
+            </li>
+
+        </ul>
+    </aside>
+</div>
+
+
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Magazine</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="#">Functions</a></div>
+                <div class="breadcrumb-item"><a href="#">Components</a></div>
+                <div class="breadcrumb-item"><a href="#">View Academic Year</a></div>
+                <div class="breadcrumb-item">Magazine</div>
+            </div>
+        </div>
+
+        <div class="section-body">
+            <h2 class="section-title">Magazine</h2>
+
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Magazine</h4>
+
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                                            <th>@Html.DisplayNameFor(model => model.FirstClosureDate)</th>
+                                            <th>@Html.DisplayNameFor(model => model.FinalClosureDate)</th>
+                                            <th>@Html.DisplayNameFor(model => model.FacultyName)</th>
+                                            <th>@Html.DisplayNameFor(model => model.AcademicYear)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td>@Html.DisplayFor(model => model.Name)</td>
+                                            <td>@Html.DisplayFor(model => model.FirstClosureDate)</td>
+                                            <td>@Html.DisplayFor(model => model.FinalClosureDate)</td>
+                                            <td>@Html.DisplayFor(model => model.FacultyName)</td>
+                                            <td>@Html.DisplayFor(model => model.AcademicYear)</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@* <h1>Details</h1>
 <div>
     <h4>Magazine</h4>
     <hr />
@@ -43,3 +134,4 @@
         </dt>
     </dl>
 </div>
+ *@

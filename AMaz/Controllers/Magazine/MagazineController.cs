@@ -68,10 +68,9 @@ namespace AMaz.Web.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> Update(string id)
         {
-            var magazine = await _magazineService.GetMagazineByIdAsync(id);
+            var model = await _magazineService.GetUpdateMagazineViewModelAsync(id);
             var academicYears = await _academicYearService.GetAllAcademicYearsAsync();
             var faculties = await _facultyService.GetAllFacultiesAsync();
-            var model = _mapper.Map<UpdateMagazineViewModel>(magazine);
             model.AcademicYears = academicYears.ToList();
             model.Faculties = faculties.ToList();
             ViewBag.Id = id;

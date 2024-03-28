@@ -9,6 +9,7 @@ namespace AMaz.Service
         Task<List<MagazineViewModel>> GetAllMagazineByFacultyId(string facultyId);
         Task<List<MagazineViewModel>> GetAllMagazines();
         Task<MagazineDetailViewModel> GetMagazineByIdAsync(string magazineId);
+        Task<UpdateMagazineViewModel> GetUpdateMagazineViewModelAsync(string magazineId);
         Task<(bool succeed, string errorMsg)> UpdateMagazineAsync(UpdateMagazineRequest request);
     }
 }
