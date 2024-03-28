@@ -216,7 +216,7 @@ namespace AMaz.Service
 
         public async Task<ChangeUserRoleAndFacultyViewModel> GetUserRoleViewModelAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.Users.Include(user => user.Faculty).FirstOrDefaultAsync(user => user.Id == userId);
             if (user == null)
             {
                 return new ChangeUserRoleAndFacultyViewModel();
@@ -225,7 +225,9 @@ namespace AMaz.Service
             var userRoles = await _userManager.GetRolesAsync(user);
             return new ChangeUserRoleAndFacultyViewModel
             {
-                Role = GetRoleCode(userRoles.First())
+                Email = user.Email,
+                Role = GetRoleCode(userRoles.First()),
+                FacultyId = user.Faculty?.FacultyId.ToString()
             };
 
         }

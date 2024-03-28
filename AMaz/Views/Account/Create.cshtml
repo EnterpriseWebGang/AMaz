@@ -10,16 +10,13 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="#">AMaz</a>
+            <a asp-action="Admin" asp-controller="Home">AMaz</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="#">AMaz</a>
+            <a asp-action="Admin" asp-controller="Home">AMaz</a>
         </div>
         <ul class="sidebar-menu">
-            <li class="menu-header">Dashboard</li>
-            <li class="dropdown">
-                <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
-            </li>
+           
             <li class="menu-header">Functions</li>
             <li class="dropdown active">
                 <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Auth</span></a>
@@ -40,13 +37,7 @@
                     <li><a asp-action="Index" asp-controller="AcademicYear">View Academic Year</a></li>
                 </ul>
             </li>
-            <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
-                <ul class="dropdown-menu">
-                    <li><a asp-action="Create" asp-controller="Contribution">Create Contribution</a></li>
-                    <li><a asp-action="Index" asp-controller="Contribution">View Contribution</a></li>
-                </ul>
-            </li>
+          
         </ul>
     </aside>
 </div>
@@ -140,19 +131,67 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <label asp-for="FacultyId">Faculties: </label>
-                                    <select asp-for="FacultyId" asp-items="@(new SelectList(Model.Faculties.Select(f => new SelectListItem { Text = $"{f.Name}", Value = f.FacultyId }), "Value", "Text"))">
-                                        <option value="">Select Faculty</option>
-                                    </select>
-                                    <span asp-validation-for="FacultyId"></span>
+
+                                <div class="form-group row align-items-center">
+                                    <label class="col-md-4 text-md-right text-left">Faculties </label>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-primary" id="selectedFacultyBtn" data-toggle="dropdown">Select Faculty</button>
+                                   
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                    
+                                        <div class="dropdown-menu">
+                                            @foreach (var faculty in Model.Faculties)
+                                            {
+                                                <a class="dropdown-item" href="#" data-value="@faculty.FacultyId">@faculty.Name</a>
+                                            }
+                                        </div>
+                                        <input type="hidden" id="FacultyId" name="FacultyId" />
+                                    </div>
                                 </div>
+
+                                <script>
+                                    // Function to enable/disable faculty selection based on the selected role
+                                    function toggleFacultySelection(enabled) {
+                                        const facultyDropdown = document.getElementById('selectedFacultyBtn');
+                                        const facultyInput = document.getElementById('FacultyId');
+
+                                        facultyDropdown.disabled = !enabled;
+                                        facultyInput.disabled = !enabled;
+                                    }
+
+                                    // Add event listeners to the radio buttons
+                                    document.querySelectorAll('input[name="Role"]').forEach(radio => {
+                                        radio.addEventListener('change', event => {
+                                            const selectedRole = event.target.value;
+                                            if (selectedRole === "@((int)Role.Manager)") {
+                                                toggleFacultySelection(false); // Disable faculty selection for Manager
+                                                // Clear selected faculty
+                                                document.getElementById('selectedFacultyBtn').textContent = 'Select Faculty';
+                                                document.getElementById('FacultyId').value = '';
+                                            } else {
+                                                toggleFacultySelection(true); // Enable faculty selection for Coordinator and Student
+                                            }
+                                        });
+                                    });
+
+                                    // Add event listener to set faculty selection when clicked
+                                    document.querySelectorAll('.dropdown-item').forEach(item => {
+                                        item.addEventListener('click', event => {
+                                            event.preventDefault();
+                                            const selectedFacultyId = event.target.getAttribute('data-value');
+                                            const selectedFacultyName = event.target.textContent.trim();
+                                            document.getElementById('selectedFacultyBtn').textContent = selectedFacultyName;
+                                            document.getElementById('FacultyId').value = selectedFacultyId;
+                                        });
+                                    });
+                                </script>
+
 
                                 <div class="form-group row">
                                     <div class="col-md-4"></div>
                                     <div class="col-lg-4 col-md-6 text-right">
                                         <button class="btn btn-primary" type="submit">Create</button>
-                                        <a href="#" class="btn btn-icon icon-right btn-primary">Back</a>
+                                        <a asp-action="Admin" asp-controller="Home" class="btn btn-icon icon-right btn-primary">Back</a>
                                     </div>
                                 </div>
 

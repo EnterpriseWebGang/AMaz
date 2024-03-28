@@ -56,16 +56,13 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="#">AMaz</a>
+            <a asp-action="Admin" asp-controller="Home">AMaz</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="#">AMaz</a>
+            <a asp-action="Admin" asp-controller="Home">AMaz</a>
         </div>
         <ul class="sidebar-menu">
-            <li class="menu-header">Dashboard</li>
-            <li class="dropdown">
-                <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
-            </li>
+           
             <li class="menu-header">Functions</li>
             <li class="dropdown">
                 <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Auth</span></a>
@@ -86,13 +83,7 @@
                     <li><a asp-action="Index" asp-controller="AcademicYear">View Academic Year</a></li>
                 </ul>
             </li>
-            <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
-                <ul class="dropdown-menu">
-                    <li><a asp-action="Create" asp-controller="Contribution">Create Contribution</a></li>
-                    <li><a asp-action="Index" asp-controller="Contribution">View Contribution</a></li>
-                </ul>
-            </li>
+           
         </ul>
     </aside>
 </div>

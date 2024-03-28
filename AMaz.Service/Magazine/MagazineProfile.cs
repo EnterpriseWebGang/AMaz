@@ -16,7 +16,8 @@ namespace AMaz.Service
             CreateMap<UpdateMagazineViewModel, UpdateMagazineRequest>();
             CreateMap<MagazineViewModel, UpdateMagazineViewModel>();
             CreateMap<Magazine, UpdateMagazineViewModel>().
-                ForMember(dest => dest.AcademicYearId, option => option.MapFrom(src => src.AcademicYear.AcademicYearId.ToString() ?? ""));
+                ForMember(dest => dest.AcademicYearId, option => option.MapFrom(src => src.AcademicYear.AcademicYearId.ToString() ?? "")).
+                ForMember(dest => dest.FacultyId, option => option.MapFrom(src => src.Faculty.FacultyId.ToString() ?? ""));
             CreateMap<Magazine, MagazineDetailViewModel>()
                 .ForMember(m => m.FacultyName, option => option.MapFrom(src => src.Faculty.Name ?? ""))
                 .ForMember(m => m.AcademicYear, option => option.MapFrom(src => GetAcademicYear(src.AcademicYear)));

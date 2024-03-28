@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Admin &mdash; AMaz</title>
+    <title>Marketing Coordinator &mdash; AMaz</title>
 
     <!-- General CSS Files -->
     <link href="~/assets/modules/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -156,8 +156,8 @@
                             <a href="#" class="dropdown-item has-icon">
                                 <i class="fas fa-cog"></i> Settings
                             </a>
-                            <div class="dropdown-divider" ></div>
-                            <a  asp-action="Logout" asp-controller="Login" class="dropdown-item has-icon text-danger">
+                            <div class="dropdown-divider"></div>
+                            <a asp-action="Logout" asp-controller="Login" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
                         </div>
@@ -169,34 +169,23 @@
             <div class="main-sidebar sidebar-style-2">
                 <aside id="sidebar-wrapper">
                     <div class="sidebar-brand">
-                        <a asp-action="Admin" asp-controller="Home">AMaz</a>
+                        <a asp-action="Coordinator" asp-controller="Home">AMaz</a>
                     </div>
                     <div class="sidebar-brand sidebar-brand-sm">
-                        <a asp-action="Admin" asp-controller="Home">AMaz</a>
+                        <a asp-action="Coordinator" asp-controller="Home">AMaz</a>
                     </div>
                     <ul class="sidebar-menu">
-                       
+
                         <li class="menu-header">Functions</li>
-                        <li class="dropdown">
-                            <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Auth</span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-action="Create" asp-controller="Account">Create Account</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="nav-link has-dropdown"><i class="fas fa-bicycle"></i> <span>Features</span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-action="Create" asp-controller="AcademicYear">Create Academic Year</a></li>
-                            </ul>
-                        </li>
+
                         <li class="dropdown">
                             <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
                             <ul class="dropdown-menu">
-                                <li><a asp-action="Index" asp-controller="Account">View User List</a></li>
-                                <li><a asp-action="Index" asp-controller="AcademicYear">View Academic Year</a></li>
+                                <li><a asp-action="Index" asp-controller="Contribution">View All Contribution</a></li>
+                           
                             </ul>
                         </li>
-                     
+
                     </ul>
                 </aside>
             </div>
@@ -206,7 +195,6 @@
             <!-- Main Content -->
             @RenderBody()
             <!-- End Main Content -->
-
             <!-- Footer -->
             <footer class="main-footer">
                 <div class="footer-left">
