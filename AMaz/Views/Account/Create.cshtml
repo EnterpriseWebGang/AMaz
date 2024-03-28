@@ -174,6 +174,9 @@
                                             const selectedRole = event.target.value;
                                             if (selectedRole === "@((int)Role.Manager)") {
                                                 toggleFacultySelection(false); // Disable faculty selection for Manager
+                                                // Clear selected faculty
+                                                document.getElementById('selectedFacultyBtn').textContent = 'Select Faculty';
+                                                document.getElementById('FacultyId').value = '';
                                             } else {
                                                 toggleFacultySelection(true); // Enable faculty selection for Coordinator and Student
                                             }
