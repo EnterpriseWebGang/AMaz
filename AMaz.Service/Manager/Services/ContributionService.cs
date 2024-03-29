@@ -18,14 +18,23 @@ namespace AMaz.Service
         private readonly IContributionRepository _contributionRepository;
         private readonly FileService _fileService;
         private readonly IMapper _mapper;
+        private readonly EmailService _emailService;
+        private readonly UserService _userService;
 
-        public ContributionService(IContributionRepository contributionRepository, IMapper mapper, UserManager<User> userManager, FileService fileService, IFileRepository fileRepository)
+        public ContributionService(IContributionRepository contributionRepository, 
+            IMapper mapper, UserManager<User> userManager, 
+            FileService fileService, 
+            IFileRepository fileRepository, 
+            EmailService emailService, 
+            UserService userService)
         {
             _contributionRepository = contributionRepository;
             _mapper = mapper;
             _userManager = userManager;
             _fileService = fileService;
             _fileRepository = fileRepository;
+            _emailService = emailService;
+            _userService = userService;
         }
 
         public async Task<IEnumerable<ContributionViewModel>> GetAllContributionsAsync()
@@ -40,7 +49,7 @@ namespace AMaz.Service
             return _mapper.Map<ContributionViewModel>(contribution);
         }
 
-        public async Task<bool> CreateContributionAsync(CreateContributionRequest request)
+        public async Task<bool> CreateContributionAsync(CreateContributionRequest request, string origin)
         {
             // Check if the request is null
             if (request == null)
@@ -86,6 +95,8 @@ namespace AMaz.Service
             contribution.Files = files;
 
             await _contributionRepository.UpdateContributionAsync(contribution);
+            //await _emailService.SendCreateContributionEmail(contribution, origin, coordinatorEmail);
+
             return true;
         }
 

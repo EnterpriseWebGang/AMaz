@@ -9,7 +9,7 @@ namespace AMaz.Service
     {
         Task<IEnumerable<ContributionViewModel>> GetAllContributionsAsync();
         Task<ContributionViewModel> GetContributionByIdAsync(string id);
-        Task<bool> CreateContributionAsync(CreateContributionRequest request);
+        Task<bool> CreateContributionAsync(CreateContributionRequest request,string origin);
         Task<bool> DeleteContributionAsync(string id);
         Task<bool> UpdateContributionAsync(UpdateContributionRequest request);
 

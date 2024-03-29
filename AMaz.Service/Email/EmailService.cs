@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using AMaz.Entity;
 using AMaz.Common;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace AMaz.Service
@@ -15,14 +16,19 @@ namespace AMaz.Service
         private readonly ILogger<EmailService> logger;
         private readonly IHostingEnvironment evironment;
         private readonly EmailSetting _emailSetting;
+        private readonly UserManager<User> _userManager;
 
-        public EmailService(ILogger<EmailService> logger, IHostingEnvironment environment, IOptions<EmailSetting> emailSetting)
+
+        public EmailService(ILogger<EmailService> logger, IHostingEnvironment environment, IOptions<EmailSetting> emailSetting, UserManager<User> userManager)
         {
             this.logger = logger;
             this.logger.LogInformation("Create MailService");
             _emailSetting = emailSetting.Value;
             evironment = environment;
+            _userManager = userManager;
         }
+
+       
         public async Task SendCreateResetPasswordEmail(User user, ResetPasswordRequest request)
         {
             string message = await System.IO.File.ReadAllTextAsync(Path.Combine(evironment.ContentRootPath, "EmailHtmls/ResetPassword.html"));
@@ -50,6 +56,7 @@ namespace AMaz.Service
                 html: message
             );
         }
+
         public async Task Send(string to, string subject, string html)
         {
             var email = new MimeMessage();
@@ -80,10 +87,25 @@ namespace AMaz.Service
 
             logger.LogInformation("send mail to " + to);
         }
-
-        public Task SendCreateContributionEmail(Contribution contribution)
+   
+        public async Task SendCreateContributionEmail(Contribution contribution, string origin,string coordinatorEmail)
         {
-            throw new NotImplementedException();
+            string message = await System.IO.File.ReadAllTextAsync(Path.Combine(evironment.ContentRootPath, "EmailHtmls/CreateContribution.html"));
+            message = message.Replace("[[name]]", contribution.AuthorName);
+            if (!string.IsNullOrEmpty(origin))
+            {
+                var verifyUrl = $"{origin}/contribution/{contribution.ContributionId}";
+                message = message.Replace("[[link]]", verifyUrl);
+            }
+            else
+            {
+                message =
+                    $@"<p>Please use the below token to verify your email address with the <code>/accounts/verify-email</code> api route:</p>
+                    <p><code>{contribution.ContributionId}</code></p>";
+            }
+
+            await Send(coordinatorEmail, "Sign-up Verification API - Verify Email", message);
+           
         }
     }
 }
