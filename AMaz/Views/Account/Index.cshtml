@@ -103,7 +103,7 @@
             <h2 class="section-title">Member List</h2>
 
             <div class="row">
-                <div class="col-12 col-md-6 col-lg-6">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <h4>Member</h4>
@@ -120,11 +120,12 @@
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-striped table-md">
+                                <table class="table table-striped">
                                     <tr>
                                         <th>Full Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
 
@@ -134,9 +135,7 @@
                                         {
                                             <tr>
                                                 <td>@user.FirstName @user.LastName</td>
-
                                                 <td>@user.Email</td>
-
                                                 <td>
                                                     @if (string.IsNullOrEmpty(user.Role))
                                                     {
@@ -145,6 +144,16 @@
                                                     else
                                                     {
                                                         @user.Role
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (user.IsActive.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                                                    {
+                                                        <span class="badge badge-success">Active</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge badge-danger">Banned</span>
                                                     }
                                                 </td>
                                                 <td>
@@ -163,7 +172,7 @@
                                             </tr>
                                         }
                                     }
-             
+
                                 </table>
                             </div>
                         </div>
@@ -174,6 +183,7 @@
         </div>
     </section>
 </div>
+
 
 @section Scripts {
     <!-- JS Libraies -->

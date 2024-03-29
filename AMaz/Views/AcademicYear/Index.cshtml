@@ -7,22 +7,6 @@
 }
 
 
-@if (!string.IsNullOrEmpty(ViewBag.Error))
-{
-    <!-- Display validation errors in a div with red text -->
-    <div class="validation-summary-errors" asp-validation-summary="All">@ViewBag.Error</div>
-    <style>
-        .validation-summary-errors {
-            color: white; /* Text color */
-            background-color: #dc3545; /* Background color */
-            padding: 10px; /* Padding around the text */
-            border: 1px solid #dc3545; /* Border color and width */
-            margin-bottom: 10px; /* Margin at the bottom */
-            border-radius: 5px; /* Rounded corners */
-        }
-    </style>
-
-}
 
 
 <div class="main-sidebar sidebar-style-2">
@@ -73,9 +57,19 @@
 
         <div class="section-body">
             <h2 class="section-title">All Academic Year</h2>
-
+            @if (!string.IsNullOrEmpty(ViewBag.Error))
+            {
+                <!-- Display validation errors in a div with red text -->
+                <div class="alert alert-danger" role="alert">@ViewBag.Error</div>
+                <style>
+                    .alert {
+                        margin-bottom: 10px; /* Margin at the bottom */
+                        border-radius: 5px; /* Rounded corners */
+                    }
+                </style>
+            }
             <div class="row">
-                <div class="col-12 col-md-6 col-lg-6">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <h4>Academic Year</h4>
@@ -92,7 +86,7 @@
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Id</th>
