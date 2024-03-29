@@ -26,6 +26,7 @@
     max-width: 100%;
     min-height: 480px;
     margin: auto;
+    padding: 5vw; /* Adjust padding for responsiveness */
 }
 
     .container p {
@@ -213,4 +214,27 @@
 
 .container.active .toggle-right {
     transform: translateX(200%);
+}
+
+/* Add media query for smaller screens */
+@media only screen and (max-width: 769px) {
+    .container {
+        padding: 5vw;
+    }
+}
+
+/* Add media query for even smaller screens */
+@media only screen and (max-width: 376px) {
+    .container {
+        padding: 50vw;
+        max-width: 90%; /* Reduce maximum width for better fit on smaller screens */
+    }
+
+        .container form {
+            padding: 0 20px; /* Adjust form padding */
+        }
+
+    .toggle-panel {
+        padding: 0 10px; /* Adjust toggle panel padding */
+    }
 }
