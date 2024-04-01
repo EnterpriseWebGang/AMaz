@@ -88,14 +88,14 @@ namespace AMaz.Service
             logger.LogInformation("send mail to " + to);
         }
    
-        public async Task SendCreateContributionEmail(Contribution contribution, string origin,string coordinatorEmail)
+        public async Task SendCreateContributionEmail(Contribution contribution,UserViewModel coordinator, string contributionLink)
         {
             string message = await System.IO.File.ReadAllTextAsync(Path.Combine(evironment.ContentRootPath, "EmailHtmls/CreateContribution.html"));
-            message = message.Replace("[[name]]", contribution.AuthorName);
-            if (!string.IsNullOrEmpty(origin))
+            message = message.Replace("[[name]]", coordinator.FirstName);
+            if (!string.IsNullOrEmpty(contributionLink))
             {
-                var verifyUrl = $"{origin}/contribution/{contribution.ContributionId}";
-                message = message.Replace("[[link]]", verifyUrl);
+                var contributionUrl = contributionLink;
+                message = message.Replace("[[link]]", contributionUrl);
             }
             else
             {
@@ -104,8 +104,28 @@ namespace AMaz.Service
                     <p><code>{contribution.ContributionId}</code></p>";
             }
 
-            await Send(coordinatorEmail, "Sign-up Verification API - Verify Email", message);
+            await Send(coordinator.Email, "Please Look at this contribution", message);
            
+        }
+
+        public async Task SendUpdateContributionEmail(Contribution contribution, UserViewModel coordinator, string contributionLink)
+        {
+            string message = await System.IO.File.ReadAllTextAsync(Path.Combine(evironment.ContentRootPath, "EmailHtmls/UpdateContribution.html"));
+            message = message.Replace("[[name]]", coordinator.FirstName);
+            if (!string.IsNullOrEmpty(contributionLink))
+            {
+                var contributionUrl = contributionLink;
+                message = message.Replace("[[link]]", contributionUrl);
+            }
+            else
+            {
+                message =
+                    $@"<p>Please use the below token to verify your email address with the <code>/accounts/verify-email</code> api route:</p>
+                    <p><code>{contribution.ContributionId}</code></p>";
+            }
+
+            await Send(coordinator.Email, "Please Look at this contribution", message);
+
         }
     }
 }

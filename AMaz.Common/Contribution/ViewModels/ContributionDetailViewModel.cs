@@ -1,10 +1,9 @@
 ﻿using AMaz.Models;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace AMaz.Common
 {
-    public class ContributionViewModel
+    public class ContributionDetailViewModel
     {
         [Display(Name = "Id")]
         public string ContributionId { get; set; }
@@ -31,8 +30,8 @@ namespace AMaz.Common
 
         [Display(Name = "Is Accepted")]
         public bool IsAccepted { get; set; }
-
-        public string Magazine { get; set; }
-
+        public FileViewModel[] Files { get; set; }
+        public MagazineViewModel Magazine { get; set; }
+        public UserViewModel User { get; set; }
     }
 }

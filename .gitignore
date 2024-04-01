@@ -484,4 +484,8 @@ $RECYCLE.BIN/
 *.swp
 
 #Custom
-AMaz/AMaz/Files/wwwroot/Files
+<<<<<<< Updated upstream
+/AMaz/AMaz/Files/wwwroot/Files
+=======
+>>>>>>> Stashed changes
+/AMaz/wwwroot/Files

@@ -18,8 +18,13 @@ namespace AMaz.Common
         [Display(Name = "Content")]
         public string Content { get; set; }
 
-        [Required]
         [Display(Name = "Upload Files")]
-        public List<IFormFile> Files { get; set; }
+        public List<IFormFile>? Files { get; set; }
+
+        [Required]
+        [Display(Name = "MagazineId")]
+        public string MagazineId { get; set; }
+
+        public IEnumerable<MagazineViewModel>? Magazines { get; set; }
     }
 }

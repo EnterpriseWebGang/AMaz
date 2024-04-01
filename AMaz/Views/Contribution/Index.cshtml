@@ -68,7 +68,6 @@
                                     <th>Accepted Date</th>
                                     <th>Author Name</th>
                                     <th>Is Accepted</th>
-                                    <th>Files</th>
                                     <th>Actions</th>
                                 </tr>
                                 @foreach (var contribution in Model)
@@ -80,29 +79,7 @@
                                         <td>@contribution.SubmissionDate.ToShortDateString()</td>
                                         <td>@(contribution.AcceptedDate.HasValue ? contribution.AcceptedDate.Value.ToShortDateString() : "N/A")</td>
                                         <td>@contribution.AuthorName</td>
-                                        <td>@(contribution.IsAccepted ? "Yes" : "No")</td>
-                                        <td>
-                                            <!-- Download links for files -->
-                                            @if (contribution.Files != null && contribution.Files.Length > 0)
-                                            {
-                                                foreach (var file in contribution.Files)
-                                                {
-                                                    var p = new Dictionary<string, string>
-                                        {
-                                        { "fileId", file.Id },{ "contributionId", contribution.ContributionId }
-                                        };
-
-                                                    <a asp-action="GetContributionFile" asp-all-route-data="p">@file.Name</a>
-
-                                                    <br />
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <span>No files</span>
-                                            }
-                                        </td>
-                                       
+                                        <td>@(contribution.IsAccepted ? "Yes" : "No")</td>                                       
                                             <!-- Edit button -->
                                         <td>
                                             <div style="display:flex;">

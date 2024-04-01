@@ -9,5 +9,6 @@
         Task<List<Entity.File>> GetAllFilesByContributionId(string contributionId);
         Task<bool> SaveFile(Entity.File file);
         Task<bool> SaveMutipleFiles(List<Entity.File> files);
+        Task<bool> DeleteMultipleFiles(IEnumerable<string> ids);
     }
 }

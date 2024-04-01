@@ -6,6 +6,7 @@ using AMaz.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using AMaz.Common;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AMaz.Service
 {
@@ -43,26 +44,28 @@ namespace AMaz.Service
             //initializing custom roles 
             string[] roleNames = { "Admin", "Manager", "Student", "Coordinator" };
             IdentityResult roleResult;
-            foreach (var roleName in roleNames)
+
+            var roleExist = await RoleManager.Roles.Where(r => roleNames.Contains(r.Name)).ToListAsync();
+            var rolesNeedToCreate = roleNames.Except(roleExist.Select(r => r.Name)).ToList();
+            if (!rolesNeedToCreate.IsNullOrEmpty())
             {
-                var roleExist = await RoleManager.RoleExistsAsync(roleName);
-                if (!roleExist)
+                foreach (var roleName in rolesNeedToCreate)
                 {
                     roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
                 }
             }
 
             //Make Initial Admin User
-            var poweruser = new User
+            var _adminUser = await UserManager.FindByEmailAsync(PowerUserConfig.Value.Email);
+            if (_adminUser == null)
             {
-                UserName = PowerUserConfig.Value.Email,
-                Email = PowerUserConfig.Value.Email,
-            };
-            string userPWD = PowerUserConfig.Value.Password;
+                var poweruser = new User
+                {
+                    UserName = PowerUserConfig.Value.Email,
+                    Email = PowerUserConfig.Value.Email,
+                };
+                string userPWD = PowerUserConfig.Value.Password;
 
-            var _user = await UserManager.FindByEmailAsync(PowerUserConfig.Value.Email);
-            if (_user == null)
-            {
                 var createPowerUser = await UserManager.CreateAsync(poweruser, userPWD);
                 if (createPowerUser.Succeeded)
                 {

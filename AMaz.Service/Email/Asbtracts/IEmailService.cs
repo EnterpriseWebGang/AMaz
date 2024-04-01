@@ -13,8 +13,10 @@ namespace AMaz.Service
         Task Send(string to, string subject, string html);
         Task SendCreateResetPasswordEmail(User user, ResetPasswordRequest request);
         Task SendCreateAccountEmail(CreateAccountRequest request);
-        Task SendCreateContributionEmail(Contribution contribution,string coordinatorEmail,string origin);
+        Task SendCreateContributionEmail(Contribution contribution, UserViewModel coordinatorEmail, string contributionLink);
+        Task SendUpdateContributionEmail(Contribution contribution, UserViewModel coordinatorEmail, string contributionLink);
 
-        
+
+
     }
 }

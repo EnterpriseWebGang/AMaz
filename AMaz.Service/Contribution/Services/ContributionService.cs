@@ -4,6 +4,7 @@ using AMaz.Models;
 using AMaz.Repo;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,16 +17,17 @@ namespace AMaz.Service
         private readonly UserManager<User> _userManager;
         private readonly IFileRepository _fileRepository;
         private readonly IContributionRepository _contributionRepository;
+        private readonly IMagazineRepository _magazineRepository;
         private readonly FileService _fileService;
         private readonly IMapper _mapper;
-        private readonly EmailService _emailService;
         private readonly UserService _userService;
 
         public ContributionService(IContributionRepository contributionRepository, 
-            IMapper mapper, UserManager<User> userManager, 
+            IMapper mapper, 
+            UserManager<User> userManager, 
             FileService fileService, 
-            IFileRepository fileRepository, 
-            EmailService emailService, 
+            IFileRepository fileRepository,
+            IMagazineRepository magazineRepository,
             UserService userService)
         {
             _contributionRepository = contributionRepository;
@@ -33,7 +35,7 @@ namespace AMaz.Service
             _userManager = userManager;
             _fileService = fileService;
             _fileRepository = fileRepository;
-            _emailService = emailService;
+            _magazineRepository = magazineRepository;
             _userService = userService;
         }
 
@@ -43,13 +45,13 @@ namespace AMaz.Service
             return _mapper.Map<IEnumerable<ContributionViewModel>>(contributions);
         }
 
-        public async Task<ContributionViewModel> GetContributionByIdAsync(string id)
+        public async Task<ContributionDetailViewModel> GetContributionByIdAsync(string id)
         {
             var contribution = await _contributionRepository.GetContributionByIdAsync(id);
-            return _mapper.Map<ContributionViewModel>(contribution);
+            return _mapper.Map<ContributionDetailViewModel>(contribution);
         }
 
-        public async Task<bool> CreateContributionAsync(CreateContributionRequest request, string origin)
+        public async Task<bool> CreateContributionAsync(CreateContributionRequest request, Func<Contribution, UserViewModel, Task> sendingEmailCallBack)
         {
             // Check if the request is null
             if (request == null)
@@ -70,11 +72,18 @@ namespace AMaz.Service
                 throw new ArgumentException("Invalid user id.", nameof(request.UserId));
             }
 
+            var magazine = await _magazineRepository.GetMagazineByIdAsync(request.MagazineId);
+            if (magazine == null)
+            {
+                throw new ArgumentException("Invalid magazine id.", nameof(request.MagazineId));
+            }
+
             var contribution = _mapper.Map<Contribution>(request);
             contribution.User = user;
             contribution.Status = (int)ContributionStatus.Pending;
             contribution.AuthorName = user.UserName;
             contribution.IsAcceptedTerms = true;
+            contribution.Magazine = magazine;
             
             bool createContributionResult = await _contributionRepository.CreateContributionAsync(contribution);
 
@@ -94,9 +103,11 @@ namespace AMaz.Service
             var files = await _fileRepository.GetAllFileByIdAsync(fileIds.ToList());
             contribution.Files = files;
 
-            await _contributionRepository.UpdateContributionAsync(contribution);
-            //await _emailService.SendCreateContributionEmail(contribution, origin, coordinatorEmail);
 
+            await _contributionRepository.UpdateContributionAsync(contribution);
+            var coordinator = await _userService.GetCoordinatorEmailByFaculty(magazine.Faculty.FacultyId.ToString());
+            await sendingEmailCallBack(contribution, coordinator);
+            
             return true;
         }
 
@@ -107,7 +118,7 @@ namespace AMaz.Service
             {
                 return false;
             }
-            await _fileService.DeleteFiles(contribution.Files.Select(f => f.FileId.ToString()).ToList());
+            await _fileService.DeleteFiles(contribution.Files.Select(f => f.FileId.ToString()).ToList(), true);
             // Check if the id is valid
             if (id == string.Empty)
             {
@@ -116,12 +127,49 @@ namespace AMaz.Service
             return await _contributionRepository.DeleteContributionAsync(id);
         }
 
-        public async Task<bool> UpdateContributionAsync(UpdateContributionRequest request)
+        public async Task<bool> UpdateContributionAsync(UpdateContributionRequest request, Func<Contribution, UserViewModel, Task> sendingEmailCallBack)
         {
             try
             {
-                var contribution = _mapper.Map<Contribution>(request);
-                return await _contributionRepository.UpdateContributionAsync(contribution);
+                var contribution = await _contributionRepository.GetContributionByIdAsync(request.ContributionId);
+                if (contribution == null)
+                {
+                    throw new ArgumentException("Invalid contribution id.", nameof(request.ContributionId));
+                }
+                var magazine = await _magazineRepository.GetMagazineByIdAsync(request.MagazineId);
+                if (magazine == null)
+                {
+                    throw new ArgumentException("Invalid magazine id.", nameof(request.MagazineId));
+                }
+
+
+                //reset the status when it updates
+                contribution.Title = request.Title;
+                contribution.Content = request.Content;
+                contribution.IsSeenByOrdinator = false;
+                contribution.Status = (int)ContributionStatus.Pending;
+                contribution.AcceptedDate = null;
+                contribution.Magazine = magazine;
+
+                if (!request.Files.IsNullOrEmpty()) //update the whole file list of the contribution
+                {
+                    await _fileService.DeleteFiles(contribution.Files.Select(f => f.FileId.ToString()).ToList());
+                    var createMutipleFileRequest = new CreateMultipleFileRequest
+                    {
+                        ContributionId = contribution.ContributionId.ToString(),
+                        Files = request.Files
+                    };
+
+                    var fileIds = await _fileService.SaveMultipleFilesAsync(createMutipleFileRequest);
+                    var files = await _fileRepository.GetAllFileByIdAsync(fileIds.ToList());
+                    contribution.Files = files;
+                }
+
+                var result = await _contributionRepository.UpdateContributionAsync(contribution);
+                var coordinator = await _userService.GetCoordinatorEmailByFaculty(magazine.Faculty.FacultyId.ToString());
+                await sendingEmailCallBack(contribution, coordinator);
+
+                return result;
             }
             catch
             {

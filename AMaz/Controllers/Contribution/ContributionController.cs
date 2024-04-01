@@ -15,14 +15,22 @@ namespace AMaz.Web.Controllers
     public class ContributionController : Controller
     {
         private readonly IContributionService _contributionService;
+        private readonly IMagazineService _magazineService;
         private readonly FileService _fileService;
+        private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
-        public ContributionController(IContributionService contributionService, FileService fileService ,IMapper mapper)
+        public ContributionController(IContributionService contributionService, 
+            FileService fileService ,
+            IMapper mapper, 
+            IMagazineService magazineService,
+            IEmailService emailService)
         {
             _contributionService = contributionService;
             _fileService = fileService;
             _mapper = mapper;
+            _magazineService = magazineService;
+            _emailService = emailService;
         }
 
         [AllowAnonymous]
@@ -33,23 +41,31 @@ namespace AMaz.Web.Controllers
         }
 
         [Authorize(Roles = "Student")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var magazines = await _magazineService.GetAllMagazines();
             var model = new CreateContributionViewModel();
+            model.Magazines = magazines;
             return View(model);
         }
 
         [HttpPost]
         [Authorize(Roles = "Student")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateContributionViewModel model,string origin)
+        public async Task<IActionResult> Create(CreateContributionViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var request = _mapper.Map<CreateContributionRequest>(model);
                 request.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 request.SubmissionDate = DateTime.Now;
-                var result = await _contributionService.CreateContributionAsync(request,origin);
+                var result = await _contributionService.CreateContributionAsync(request, async (contribution, coordinator) =>
+                {
+                    if (contribution != null && coordinator != null)
+                    {
+                        await _emailService.SendCreateContributionEmail(contribution, coordinator, Url.ActionLink("Details", "Contribution", new { id = contribution.ContributionId.ToString() }) ?? "No Link To Action");
+                    }
+                });
 
                 if (result)
                 {
@@ -74,7 +90,7 @@ namespace AMaz.Web.Controllers
                 return NotFound();
             }
 
-            return View(_mapper.Map<ContributionViewModel>(contribution));
+            return View(contribution);
         }
 
         [HttpPost]
@@ -92,31 +108,45 @@ namespace AMaz.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> Update(string id)
+        {
+            var contribution = await _contributionService.GetContributionByIdAsync(id);
+            if (contribution == null)
+            {
+                return NotFound();
+            }
+
+            var model = _mapper.Map<UpdateContributionViewModel>(contribution);
+            var magazines = await _magazineService.GetAllMagazines();
+            model.Magazines = magazines;
+            ViewBag.Id = id;
+            return View(model);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Student")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(UpdateContributionViewModel model)
+        public async Task<IActionResult> Update(string id,UpdateContributionViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var request = new UpdateContributionRequest
-                {
-                    Title = model.Title,
-                    Content = model.Content,
-                    Files = model.Files
-                };
+                var request = _mapper.Map<UpdateContributionRequest>(model);
+                request.ContributionId = id;
 
-                var result = await _contributionService.UpdateContributionAsync(request);
-                if (result)
+                var result = await _contributionService.UpdateContributionAsync(request, async (contribution, coordinator) =>
                 {
-                    return RedirectToAction("Index");
-                }
-                else
+                    if (contribution != null && coordinator != null)
+                    {
+                        await _emailService.SendUpdateContributionEmail(contribution, coordinator, Url.ActionLink("Details", "Contribution", new { id = contribution.ContributionId.ToString() }) ?? "No Link To Action");
+                    }
+                });
+                if (!result)
                 {
                     ViewBag.Error = "Failed to update contribution.";
                 }
             }
-            return View(model);
+            return RedirectToAction("Details", new { id = id });
         }
 
         [HttpGet]

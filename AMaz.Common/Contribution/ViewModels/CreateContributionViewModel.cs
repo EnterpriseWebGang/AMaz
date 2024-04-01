@@ -22,5 +22,10 @@ namespace AMaz.Common
         [Display(Name = "Upload Files")]
         public List<IFormFile> Files { get; set; }
 
+        [Required]
+        [Display(Name = "MagazineId")]
+        public string MagazineId { get; set; }
+
+        public IEnumerable<MagazineViewModel>? Magazines { get; set; }
     }
 }

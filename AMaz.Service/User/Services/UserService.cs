@@ -1,5 +1,7 @@
 ﻿using AMaz.Common;
+using AMaz.DB;
 using AMaz.Entity;
+using AMaz.Repo;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -18,13 +20,15 @@ namespace AMaz.Service
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly AMazDbContext _dbContext;
 
         public UserService(IMapper mapper,
             UserManager<User> userManager,
             IHttpContextAccessor httpContextAccessor,
             RoleManager<IdentityRole> roleManager,
             IEmailService emailService,
-            Repo.IFacultyRepository facultyRepository)
+            IFacultyRepository facultyRepository,
+            AMazDbContext dbContext)
         {
             _mapper = mapper;
             _userManager = userManager;
@@ -32,6 +36,7 @@ namespace AMaz.Service
             _roleManager = roleManager;
             _emailService = emailService;
             _facultyRepository = facultyRepository;
+            _dbContext = dbContext;
         }
 
         public async Task<UserViewModel> GetUserDetailByIdAsync(string id)
@@ -45,17 +50,38 @@ namespace AMaz.Service
 
             return _mapper.Map<UserViewModel>(entity);
         }
-        public async Task<string> GetCoordinatorEmailsByFaculty(string facultyId)
+
+        public async Task<UserViewModel> GetUserDetailByEmailAsync(string email)
         {
-            var facultyUsers = await _userManager.Users.Include(user => user.Faculty)
-                .Where(user => user.Faculty.FacultyId.ToString() == facultyId)
-                .ToListAsync();
-            
-            var coordinators = await _userManager.GetUsersInRoleAsync(Role.Coordinator.ToString());
-            var coordinatorUsers = facultyUsers.Where(user => coordinators.Any(coordinator => coordinator.Id == user.Id));
-            var coordinatorEmails = coordinatorUsers?.Select(u => u.Email).FirstOrDefault();
-            
-            return coordinatorEmails;
+            var entity = await _userManager.Users.FirstOrDefaultAsync(c => c.Email == email);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<UserViewModel>(entity);
+        }
+
+        public async Task<UserViewModel>GetCoordinatorEmailByFaculty(string facultyId)
+        {
+            var coordinatorQuery =  from users in _dbContext.Users.Include(u => u.Faculty)
+                                    join faculties in _dbContext.Faculties 
+                                        on users.Faculty.FacultyId equals faculties.FacultyId
+                                    join userRoles in _dbContext.UserRoles 
+                                        on users.Id equals userRoles.UserId
+                                    join roles in _dbContext.Roles 
+                                        on userRoles.RoleId equals roles.Id
+                                    where roles.Name == "Coordinator" && faculties.FacultyId.ToString() == facultyId
+                                    select users;
+
+            var coordinators = await coordinatorQuery.FirstOrDefaultAsync();
+            if (coordinators == null)
+            {
+                return null;
+            }
+
+            var models = _mapper.Map<UserViewModel>(coordinators);
+            return models;
         }
     }
 }

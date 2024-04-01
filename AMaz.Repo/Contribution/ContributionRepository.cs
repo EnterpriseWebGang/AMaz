@@ -24,14 +24,16 @@ namespace AMaz.Repo
 
         public async Task<Contribution> GetContributionByIdAsync(string id)
         {
-            return await _dbContext.Contributions.Include(c => c.Files).FirstOrDefaultAsync(c => c.ContributionId == Guid.Parse(id));
+            return await _dbContext.Contributions.Include(c => c.Files)
+                .Include(c => c.Magazine)
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.ContributionId == Guid.Parse(id));
         }
 
         public async Task<bool> CreateContributionAsync(Contribution contribution)
         {
             try
             {
-                contribution.Magazine = _dbContext.Magazines.Find(Guid.Parse("7c266e6f-7830-4feb-bc87-35d609d06801"));
                 _dbContext.Contributions.Add(contribution);
                 await _dbContext.SaveChangesAsync();
                 return true;

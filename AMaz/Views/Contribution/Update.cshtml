@@ -23,18 +23,32 @@
                         <h4>Edit Contribution</h4>
                     </div>
                     <div class="card-body">
-                        <form asp-action="Update" asp-controller="Contribution" method="post" enctype="multipart/form-data">
+                        <form asp-action="Update" asp-controller="Contribution" asp-route-id ="@ViewBag.Id" method="post" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label for="Title">Title</label>
-                                <input type="text" class="form-control" id="Title" name="Title" asp-for="Title" required />
+                                <label for="title">Homework Title</label>
+                                <input asp-for="Title" class="form-control" id="title" name="title" required />
                             </div>
+
                             <div class="form-group">
-                                <label for="Content">Content</label>
-                                <textarea class="form-control" id="Content" name="Content" asp-for="Content" rows="5" required></textarea>
+                                <label for="description">Description</label>
+                                <textarea asp-for="Content" class="form-control" id="content" name="content" rows="5" required></textarea>
                             </div>
+
+                            @Html.DropDownListFor(m => m.MagazineId, new SelectList(Model.Magazines, "MagazineId", "Name"), "Select Magazine", new { @class = "form-control", @required = "required" })
+
                             <div class="form-group">
-                                <label for="Files">Upload Files</label>
-                                <input type="file" class="form-control" id="Files" name="Files" asp-for="Files" multiple />
+                                <label for="files">Upload Files</label>
+                                <input type="file" asp-for="Files" id="files" name="files" multiple class="form-control" required />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4"></div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" name="agree" class="custom-control-input" id="agree">
+                                        <label for="agree" class="custom-control-label">I agree with the <a href="">Terms and Conditions</a></label>
+                                    </div>
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Update</button>
                             <a asp-action="Index" class="btn btn-secondary">Cancel</a>

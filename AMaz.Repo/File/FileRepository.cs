@@ -84,5 +84,21 @@ namespace AMaz.Repo
         {
             return await _context.Files.Where(file => file.FileId.ToString() == id).FirstOrDefaultAsync();
         }
+
+        public async Task<bool> DeleteMultipleFiles(IEnumerable<string> ids)
+        {
+            try
+            {
+                var files = await _context.Files.Where(f => ids.Contains(f.FileId.ToString())).ToListAsync();
+                _context.Files.RemoveRange(files);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }           
     }
 }

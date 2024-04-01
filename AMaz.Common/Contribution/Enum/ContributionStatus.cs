@@ -1,4 +1,4 @@
-﻿namespace AMaz.Service
+﻿namespace AMaz.Common
 {
     public enum ContributionStatus
     {
