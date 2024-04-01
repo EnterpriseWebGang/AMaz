@@ -15,6 +15,5 @@ namespace AMaz.Common
         public string Content { get; set; }
         public DateTime SubmissionDate { get; set; }
         public List<IFormFile> Files { get; set; }
-        public string MagazineId { get; set; }
     }
 }

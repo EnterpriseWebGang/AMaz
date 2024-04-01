@@ -136,11 +136,6 @@ namespace AMaz.Service
                 {
                     throw new ArgumentException("Invalid contribution id.", nameof(request.ContributionId));
                 }
-                var magazine = await _magazineRepository.GetMagazineByIdAsync(request.MagazineId);
-                if (magazine == null)
-                {
-                    throw new ArgumentException("Invalid magazine id.", nameof(request.MagazineId));
-                }
 
 
                 //reset the status when it updates
@@ -149,7 +144,6 @@ namespace AMaz.Service
                 contribution.IsSeenByOrdinator = false;
                 contribution.Status = (int)ContributionStatus.Pending;
                 contribution.AcceptedDate = null;
-                contribution.Magazine = magazine;
 
                 if (!request.Files.IsNullOrEmpty()) //update the whole file list of the contribution
                 {
@@ -166,8 +160,11 @@ namespace AMaz.Service
                 }
 
                 var result = await _contributionRepository.UpdateContributionAsync(contribution);
-                var coordinator = await _userService.GetCoordinatorEmailByFaculty(magazine.Faculty.FacultyId.ToString());
-                await sendingEmailCallBack(contribution, coordinator);
+                if (contribution.Magazine.Faculty != null)
+                {
+                    var coordinator = await _userService.GetCoordinatorEmailByFaculty(contribution.Magazine.Faculty.FacultyId.ToString());
+                    await sendingEmailCallBack(contribution, coordinator);
+                }
 
                 return result;
             }

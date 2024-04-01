@@ -28,7 +28,6 @@ public class ContributionProfile : Profile
 
         // Mapping for ContributionDetailViewModel to UpdateContributionViewModel
         CreateMap<ContributionDetailViewModel, UpdateContributionViewModel>()
-            .ForMember(dest => dest.MagazineId, opt => opt.MapFrom(src => src.Magazine.MagazineId))
             .ForMember(dest => dest.Files, opt => opt.Ignore());
 
         // Mapping for UpdateContributionViewModel to UpdateContributionRequest

@@ -118,8 +118,6 @@ namespace AMaz.Web.Controllers
             }
 
             var model = _mapper.Map<UpdateContributionViewModel>(contribution);
-            var magazines = await _magazineService.GetAllMagazines();
-            model.Magazines = magazines;
             ViewBag.Id = id;
             return View(model);
         }

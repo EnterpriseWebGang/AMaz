@@ -26,6 +26,7 @@ namespace AMaz.Repo
         {
             return await _dbContext.Contributions.Include(c => c.Files)
                 .Include(c => c.Magazine)
+                .ThenInclude(c => c.Faculty)
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.ContributionId == Guid.Parse(id));
         }
