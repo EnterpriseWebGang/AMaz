@@ -4,9 +4,9 @@
 
 @{
     ViewData["Title"] = "Create Contribution";
-    Layout = "_AdminLayout";
+    Layout = "_Layout";
 }
-
+ <br><br><br>
 <div class="main-content">
     <section class="section">
         <div class="section-header">
@@ -36,8 +36,20 @@
                                     <label for="description">Description</label>
                                     <textarea asp-for="Content" class="form-control" id="content" name="content" rows="5" required></textarea>                                   
                                 </div>
-                                
-                                @Html.DropDownListFor(m => m.MagazineId, new SelectList(Model.Magazines, "MagazineId", "Name"), "Select Magazine", new { @class = "form-control", @required = "required" })
+                               
+                                <div class="form-group">
+                                    <label for="selectedMagazine">Select Magazine</label>       
+                                    @Html.DropDownListFor(m => m.MagazineId, new SelectList(Model.Magazines, "MagazineId", "Name"), "Select Magazine", new { @class = "form-control", @required = "required", id = "selectedMagazine" })
+                                </div>
+
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#selectedMagazine').on('click', function () {
+                                            $(this).find('option:first').hide();
+                                        });
+                                    });
+                                </script>
 
                                 <div class="form-group">
                                     <label for="files">Upload Files</label>
