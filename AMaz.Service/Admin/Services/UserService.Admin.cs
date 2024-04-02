@@ -43,60 +43,54 @@ namespace AMaz.Service
 
             if (user != null)
             {
-
                 return IdentityResult.Failed(new IdentityError
                 {
                     Description = "Email already exists"
                 });
-
             }
 
-            if (user == null)
+            var forDbCreate = new User
             {
-                var forDbCreate = new User
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                UserName = request.Email,
+                Email = request.Email,
+            };
+
+            if (request.FacultyId != null)
+            {
+                var faculty = await _facultyRepository.GetFacultyByIdAsync(request.FacultyId);
+                if (faculty != null)
                 {
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    UserName = request.Email,
-                    Email = request.Email,
-                };
-                if (request.FacultyId != null)
-                {
-                    var faculty = await _facultyRepository.GetFacultyByIdAsync(request.FacultyId);
-                    if (faculty != null)
-                    {
-                        forDbCreate.Faculty = faculty;
-                    }
+                    forDbCreate.Faculty = faculty;
                 }
-                var createUserResult = await _userManager.CreateAsync(forDbCreate, request.Password);
+            }
+
+            var createUserResult = await _userManager.CreateAsync(forDbCreate, request.Password);
+
+            if (createUserResult.Succeeded)
+            {
                 var userInDb = await _userManager.FindByEmailAsync(request.Email);
                 var addUserToRoleResult = await _userManager.AddToRoleAsync(userInDb, request.Role);
 
-                if (createUserResult.Succeeded)
+                if (addUserToRoleResult.Succeeded)
                 {
-                   
-                    //TODO: Send Email to User
+                    // Concurrently send email
+                    await _emailService.SendCreateAccountEmail(request);
 
-                    if (addUserToRoleResult.Succeeded)
-                    {
-                        await _emailService.SendCreateAccountEmail(request);
-                        return addUserToRoleResult;
-                    }
-
-                    return IdentityResult.Failed(createUserResult.Errors.Concat(addUserToRoleResult.Errors).ToArray());
+                    return IdentityResult.Success;
                 }
-                
-
-                return IdentityResult.Failed(createUserResult.Errors.Concat(addUserToRoleResult.Errors).ToArray());
+                else
+                {
+                    return IdentityResult.Failed(addUserToRoleResult.Errors.ToArray());
+                }
             }
             else
             {
-                return IdentityResult.Failed(new IdentityError
-                {
-                    Description = "User Already Exist"
-                });
+                return createUserResult;
             }
         }
+
 
         public async Task<bool> IsEmailExistAsync(string email)
         {

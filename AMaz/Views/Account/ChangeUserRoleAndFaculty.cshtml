@@ -147,7 +147,30 @@
                                 </div>
                             </div>
 
+                          
+
+
                             <script>
+
+                                $("#swal-5").submit(function (event) {
+                                    event.preventDefault(); // Prevent the form from submitting normally
+
+                                    // Display SweetAlert confirmation dialog
+                                    console.log("SweetAlert dialog triggered!"); // Check if this message appears in the browser console
+                                    swal({
+                                        title: "Are you sure?",
+                                        text: "Once changed, the user's role will be updated.",
+                                        icon: "warning",
+                                        buttons: true,
+                                        dangerMode: true,
+                                    }).then((willChange) => {
+                                        if (willChange) {
+                                            // If user confirms, submit the form
+                                            $(this).off("submit").submit(); // Unbind submit event to prevent infinite loop
+                                        }
+                                    });
+                                });
+
                                 // Function to enable/disable faculty selection based on the selected role
                                 function toggleFacultySelection(enabled) {
                                     const facultyDropdown = document.getElementById('selectedFacultyBtn');
@@ -184,8 +207,10 @@
                                 });
                             </script>
 
-                            <button type="submit" class="btn btn-primary">Change</button>
+                            <button type="submit" class="btn btn-primary" >Change</button>
                         </form>
+                   
+
 
                     </div>
                 </div>
@@ -197,7 +222,9 @@
 @section Scripts {
     <!-- JS Libraies -->
     <script src="~/assets/modules/sweetalert/sweetalert.min.js"></script>
+
     <!-- Page Specific JS File -->
     <script src="~/assets/js/page/modules-sweetalert.js"></script>
+
 }
 

@@ -1,8 +1,8 @@
 "use strict";
 
-$("#swal-2").click(function() {
-  // Trigger the form submission when the button is clicked
-  $(".need-validation").submit();
+$("#swal-2").click(function () {
+    // Trigger the form submission when the button is clicked
+    $(".need-validation").submit();
 });
 
 $(".need-validation").submit(function (event) {
@@ -11,16 +11,35 @@ $(".need-validation").submit(function (event) {
 
     var form = $(this); // Capture the form element for later use
 
+    // Display loading spinner
+    $('#loadingSpinner').show();
+
+    // Simulate asynchronous behavior with setTimeout
+    setTimeout(function () {
+        // Validate the form after a short delay
+        validateForm(form);
+    }, 100); // Adjust the delay as needed
+});
+
+// Function to validate the form after a short delay
+function validateForm(form) {
     // Validate the form
     if (form[0].checkValidity() === false) {
         // Add the was-validated class to trigger Bootstrap validation styles
         form.addClass("was-validated");
+
+        // Hide loading spinner
+        $('#loadingSpinner').hide();
     } else {
         // Check if a role is selected
         var selectedRole = $('input[name="Role"]:checked').val();
         if (!selectedRole) {
             // If no role is selected, show validation message and return
             $('#roleValidationMessage').show();
+
+            // Hide loading spinner
+            $('#loadingSpinner').hide();
+
             return;
         }
 
@@ -32,49 +51,42 @@ $(".need-validation").submit(function (event) {
         if (!isValidPassword(password)) {
             // Password does not meet requirements, show validation message
             $('#passwordValidationMessage').show();
+
+            // Hide loading spinner
+            $('#loadingSpinner').hide();
+
             return;
         }
 
-        // Check email existence
-        var email = $('input[name="email"]').val();
-        isEmailExist(email).then(function (exists) {
-            // Hide all email-related validation messages
-            $('.email-validation-feedback').hide();
-            
-            if (exists) {
-                // Email already exists, show validation message
-                $('#emailExistsValidationMessage').show();
-            } else {
-                // Email does not exist, submit the form data asynchronously
-                $.ajax({
-                    url: form.attr('action'),
-                    method: form.attr('method'),
-                    data: form.serialize(),
-                    success: function (response) {
-                        // Display success message
-                        swal({
-                            title: 'Account Created',
-                            text: 'Your account has been created successfully!',
-                            icon: 'success',
-                        }).then((value) => {
-                            // Redirect to the appropriate page after success message
-                            var redirectUrl = "/Account";
-                            window.location.href = redirectUrl;
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        // Handle error case
-                        console.error(error);
-                        // Display error message if needed
-                    }
+        // Submit the form data asynchronously
+        $.ajax({
+            url: form.attr('action'),
+            method: form.attr('method'),
+            data: form.serialize(),
+            success: function (response) {
+                // Display success message
+                swal({
+                    title: 'Account Created',
+                    text: 'Your account has been created successfully!',
+                    icon: 'success',
+                }).then((value) => {
+                    // Redirect to the appropriate page after success message
+                    var redirectUrl = "/Account";
+                    window.location.href = redirectUrl;
                 });
+            },
+            error: function (xhr, status, error) {
+                // Handle error case
+                console.error(error);
+                // Display error message if needed
+            },
+            complete: function () {
+                // Hide loading spinner after AJAX request is complete
+                $('#loadingSpinner').hide();
             }
-        }).catch(function (error) {
-            console.error('Error checking email existence:', error);
         });
     }
-});
-
+}
 $("#swal-2").click(function () {
     // Check if any radio button is selected
     if ($('input[name="value"]:checked').length === 0) {
@@ -96,14 +108,7 @@ $("#swal-2").click(function () {
 
             // Display sweet alert if the form is valid
             $('#roleValidationMessage').hide();
-            swal('Account Created', 'Your account has been created successfully!', 'success')
-                .then((value) => {
-                    if (value) {
-                        // If the user clicks OK on the alert, redirect to admin.html
-                        var redirectUrl = "/Account"
-                        window.location.href = redirectUrl;
-                    }
-                });
+  
         } else {
             // If the form is not valid, trigger form validation
             $('.wizard-content').addClass('was-validated');
@@ -242,23 +247,27 @@ $("#swal-6").click(function (event) {
 
 
 // Intercept form submission
-$("#swal-5").submit(function (event) {
-    event.preventDefault(); // Prevent the form from submitting normally
 
-    // Display SweetAlert confirmation dialog
-    swal({
-        title: "Are you sure?",
-        text: "Once changed, the user's role will be updated.",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    }).then((willChange) => {
-        if (willChange) {
-            // If user confirms, submit the form
-            $(this).off("submit").submit(); // Unbind submit event to prevent infinite loop
-        }
+
+$(document).ready(function () {
+    // Your JavaScript code here
+    $("#swal-5").submit(function (event) {
+        event.preventDefault();
+        console.log("SweetAlert dialog triggered!");
+        swal({
+            title: "Are you sure?",
+            text: "Once changed, the user's role will be updated.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then(() => {
+            // If the user clicks OK on the alert, redirect to admin.html
+            var redirectUrl = "/Account";
+            window.location.href = redirectUrl;
+        });
     });
 });
+
 
 
 $(document).ready(function() {

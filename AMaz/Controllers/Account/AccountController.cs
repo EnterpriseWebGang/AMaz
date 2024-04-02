@@ -9,7 +9,6 @@ using AMaz.Entity;
 
 namespace AMaz.Web.Controllers.Account
 {
-    [Authorize(Roles = "Admin")]
     public class AccountController : Controller
     {
         private readonly UserService _userService;
@@ -24,6 +23,7 @@ namespace AMaz.Web.Controllers.Account
         }
 
         // GET: AccountController
+        [Authorize()]
         public async Task<ActionResult> Index()
         {
             var models = await _userService.GetAllUsersAsync();
@@ -36,7 +36,8 @@ namespace AMaz.Web.Controllers.Account
         //    return View();
         //}
 
-        // GET: AccountController/Create  
+        // GET: AccountController/Create
+        [Authorize()]
         public ActionResult Create()
         {
             var faculties = _facultyService.GetAllFacultiesAsync().Result;
@@ -49,6 +50,7 @@ namespace AMaz.Web.Controllers.Account
 
         // POST: AccountController/Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CreateAccountViewModel model)
         {
@@ -80,12 +82,12 @@ namespace AMaz.Web.Controllers.Account
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<JsonResult> CheckEmailExists(string email)
         {
             var isEmailExist = await _userService.IsEmailExistAsync(email);
             return Json(new { exists = isEmailExist });
         }
-
         public async Task<ActionResult> Deactivate(string userId)
         {
             var result = await _userService.DeactivateUser(userId);
@@ -98,6 +100,7 @@ namespace AMaz.Web.Controllers.Account
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Activate(string userId)
         {
             var result = await _userService.ActivateUser(userId);
@@ -110,6 +113,7 @@ namespace AMaz.Web.Controllers.Account
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(string userId)
         {
             var result = await _userService.DeleteUser(userId);
@@ -124,6 +128,7 @@ namespace AMaz.Web.Controllers.Account
 
         // GET: /Account/ResetPassword/{userId}
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult ResetPassword(string userId)
         {
             ViewBag.UserId = userId;
@@ -133,6 +138,7 @@ namespace AMaz.Web.Controllers.Account
 
         // POST: /Account/ResetPassword/{userId}
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(string userId, ResetPasswordViewModel model)
         {
@@ -156,6 +162,7 @@ namespace AMaz.Web.Controllers.Account
 
         // GET: ChangeUserRole
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeUserRoleAndFaculty(string userId)
         {
             var model = await _userService.GetUserRoleViewModelAsync(userId);
@@ -168,6 +175,7 @@ namespace AMaz.Web.Controllers.Account
 
         // POST: ChangeUserRole
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeUserRoleAndFaculty(string userId, ChangeUserRoleAndFacultyViewModel model)
         {
