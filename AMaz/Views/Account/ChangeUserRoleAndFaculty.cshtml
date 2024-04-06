@@ -135,12 +135,31 @@
                                     </button>
             
                                         <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
+                                    
                                     <div class="dropdown-menu">
                
                                         @foreach (var faculty in Model.Faculties)
                                         {
-                                            <a class="dropdown-item" href="#" data-value="@faculty.FacultyId">@faculty.Name</a>
+                                            <a class="dropdown-faculty-item"
+                                               href="#"
+                                               data-value="@faculty.FacultyId"
+                                               style="
+                                                        display:block;
+                                                        width:100%;
+                                                        padding: 0.25rem 1.5rem;
+                                                        clear: both;
+                                                        font-weight: 600;
+                                                        color: #212529;
+                                                        text-align: inherit;
+                                                        text-decoration: none;
+                                                        white-space: nowrap;
+                                                        background-color: transparent;
+                                                        border: 0;
+                                                        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;"
+                                               onmouseover="this.style.color='#16181b'; this.style.backgroundColor='#f8f9fa';"
+                                               onmouseout="this.style.color='#212529'; this.style.backgroundColor='transparent';">
+                                                @faculty.Name
+                                            </a>
                                         }
                                     </div>
                                     <input type="hidden" id="FacultyId" name="FacultyId" value="@Model.FacultyId" />
@@ -173,7 +192,7 @@
                                 });
 
                                 // Add event listener to set faculty selection when clicked
-                                document.querySelectorAll('.dropdown-item').forEach(item => {
+                                document.querySelectorAll('.dropdown-faculty-item').forEach(item => {
                                     item.addEventListener('click', event => {
                                         event.preventDefault();
                                         const selectedFacultyId = event.target.getAttribute('data-value');
