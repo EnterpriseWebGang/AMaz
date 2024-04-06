@@ -10,7 +10,8 @@ namespace AMaz.Service
         {
             CreateMap<CreateMagazineRequest, Magazine>();
             CreateMap<CreateMagazineViewModel, CreateMagazineRequest>();
-            CreateMap<Magazine, MagazineViewModel>();
+            CreateMap<Magazine, MagazineViewModel>()
+                .ForMember(m => m.FacultyName, option => option.MapFrom(src => src.Faculty.Name ?? ""));
             CreateMap<UpdateMagazineRequest, Magazine>()
                 .ForMember(m => m.MagazineId, option => option.MapFrom(src => Guid.Parse(src.MagazineId)));
             CreateMap<UpdateMagazineViewModel, UpdateMagazineRequest>();

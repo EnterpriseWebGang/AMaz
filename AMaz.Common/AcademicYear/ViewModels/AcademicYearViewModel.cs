@@ -8,9 +8,9 @@ namespace AMaz.Common
         public string AcademicYearId { get; set; }
 
         [Display(Name = "Start date")]
-        public DateTime DateTimeFrom { get; set; }
+        public string DateTimeFrom { get; set; }
 
         [Display(Name = "End date")]
-        public DateTime DateTimeTo { get; set; }
+        public string DateTimeTo { get; set; }
     }
 }

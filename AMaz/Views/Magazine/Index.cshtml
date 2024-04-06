@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = "View Magazine List";
-    Layout = "_ManagerLayout";
+    Layout = User.IsInRole("Manager") ? "_ManagerLayout" : "_Layout";
 }
 @* <!DOCTYPE html>
 <html>
@@ -56,38 +56,41 @@
 </body>
 </html> *@
 
-<div class="main-sidebar sidebar-style-2">
-    <aside id="sidebar-wrapper">
-        <div class="sidebar-brand">
-            <a asp-action="Manager" asp-controller="Home">AMaz</a>
-        </div>
-        <div class="sidebar-brand sidebar-brand-sm">
-            <a asp-action="Manager" asp-controller="Home">AMaz</a>
-        </div>
-        <ul class="sidebar-menu">
+@if (User.IsInRole("Manager")) //display sidebar only for manager
+{
+    <div class="main-sidebar sidebar-style-2">
+        <aside id="sidebar-wrapper">
+            <div class="sidebar-brand">
+                <a asp-action="Manager" asp-controller="Home">AMaz</a>
+            </div>
+            <div class="sidebar-brand sidebar-brand-sm">
+                <a asp-action="Manager" asp-controller="Home">AMaz</a>
+            </div>
+            <ul class="sidebar-menu">
 
-            <li class="menu-header">Functions</li>
+                <li class="menu-header">Functions</li>
 
-            <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-bicycle"></i> <span>Features</span></a>
-                <ul class="dropdown-menu">
-                    <li><a asp-action="Create" asp-controller="Faculty">Create Faculty</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-bicycle"></i> <span>Features</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a asp-action="Create" asp-controller="Faculty">Create Faculty</a></li>
 
-                    <li><a asp-action="Create" asp-controller="Magazine">Create Magazine</a></li>
-                </ul>
-            </li>
-            <li class="dropdown active">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
-                <ul class="dropdown-menu">
-                    <li><a asp-action="Index" asp-controller="Faculty">View Faculty List</a></li>
-                    <li class=active><a class="nav-link beep beep-sidebar" asp-action="Index" asp-controller="Magazine">View Magazine</a></li>
+                        <li><a asp-action="Create" asp-controller="Magazine">Create Magazine</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown active">
+                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a asp-action="Index" asp-controller="Faculty">View Faculty List</a></li>
+                        <li class=active><a class="nav-link beep beep-sidebar" asp-action="Index" asp-controller="Magazine">View Magazine</a></li>
 
-                </ul>
-            </li>
+                    </ul>
+                </li>
 
-        </ul>
-    </aside>
-</div>
+            </ul>
+        </aside>
+    </div>
+}
 
 <div class="main-content">
     <section class="section">
@@ -117,6 +120,8 @@
                                         <th>Name</th>
                                         <th>First Closure Date</th>
                                         <th>Final Closure Date</th>
+                                        <th>Faculty</th>
+                                        <th>Academic Year</th>
                                         <th>Action</th>
                                     </tr>
 
@@ -126,6 +131,8 @@
                                             <td>@magazine.Name</td>
                                             <td>@magazine.FirstClosureDate.ToShortDateString()</td>
                                             <td>@magazine.FinalClosureDate.ToShortDateString()</td>
+                                            <td>@magazine.FacultyName</td>
+                                            <td>@magazine.AcademicYear.DateTimeFrom - @magazine.AcademicYear.DateTimeTo</td>
                                             <td>
                                                 <a class="btn btn-outline-secondary btn-sm" asp-action="Details" asp-route-id="@magazine.MagazineId">Details</a> 
                                                 <a class="btn btn-outline-info btn-sm" asp-action="Update" asp-route-id="@magazine.MagazineId">Update</a> 

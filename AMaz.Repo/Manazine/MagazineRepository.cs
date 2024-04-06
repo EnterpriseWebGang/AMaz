@@ -18,12 +18,19 @@ namespace AMaz.Repo
             {
                 return await filter(_dbContext.Magazines).ToListAsync();
             }
-            return await _dbContext.Magazines.ToListAsync();
+            return await _dbContext.Magazines
+                .Include(m => m.Faculty)
+                .Include(m => m.AcademicYear)
+                .ToListAsync();
         }
 
         public async Task<List<Magazine>> GetAllMagazineByFaculty(string facultyId)
         {
-            return await _dbContext.Magazines.Include(m => m.Faculty).Where(m => m.Faculty.FacultyId == Guid.Parse(facultyId)).ToListAsync();
+            return await _dbContext.Magazines
+                .Include(m => m.Faculty)
+                .Include(m => m.AcademicYear)
+                .Where(m => m.Faculty.FacultyId == Guid.Parse(facultyId))
+                .ToListAsync();
         }
 
         public async Task<Magazine> GetMagazineByIdAsync(string id)

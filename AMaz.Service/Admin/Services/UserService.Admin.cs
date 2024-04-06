@@ -15,7 +15,7 @@ namespace AMaz.Service
         public async Task<List<UserViewModel>> GetAllUsersAsync()
         {
             var currentUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-            var users = await _userManager.Users.Where(u => u.Id != currentUser.Id).ToListAsync();
+            var users = await _userManager.Users.Include(u => u.Faculty).Where(u => u.Id != currentUser.Id).ToListAsync();
             var result = users.Select(c =>
             {
                 var model = _mapper.Map<UserViewModel>(c);
@@ -194,13 +194,11 @@ namespace AMaz.Service
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);
-            if (userRoles.Contains(request.Role))
+            if (!userRoles.Contains(request.Role))
             {
-                return (false, "user already in this role");
+                await _userManager.RemoveFromRolesAsync(user, userRoles);
+                await _userManager.AddToRoleAsync(user, request.Role);
             }
-
-            await _userManager.RemoveFromRolesAsync(user, userRoles);
-            await _userManager.AddToRoleAsync(user, request.Role);
 
             if (request.FacultyId != null)
             {

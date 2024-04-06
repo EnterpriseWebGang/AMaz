@@ -8,7 +8,9 @@ namespace AMaz.Service
     {
         public UserProfile()
         {
-            CreateMap<User, UserViewModel>().ForMember(u => u.IsActive, opt => opt.MapFrom(src => GetIsActiveStatus(src.IsActive)));
+            CreateMap<User, UserViewModel>()
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => GetIsActiveStatus(src.IsActive)))
+                .ForMember(dest => dest.Faculty, option => option.MapFrom(src => src.Faculty.Name ?? ""));
         }
 
         private string GetUserRole(int role)

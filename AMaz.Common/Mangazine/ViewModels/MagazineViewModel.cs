@@ -12,6 +12,10 @@ namespace AMaz.Common
         public string Name { get; set; }
 
         [Required]
+        [Display(Name = "Name")]
+        public string FacultyName { get; set; }
+
+        [Required]
         [Display(Name = "First Closure Date")]
         [DataType(DataType.Date)]
         public DateTime FirstClosureDate { get; set; }
@@ -20,5 +24,7 @@ namespace AMaz.Common
         [Display(Name = "Final Closure Date")]
         [DataType(DataType.Date)]
         public DateTime FinalClosureDate { get; set; }
+
+        public AcademicYearViewModel AcademicYear { get; set; }
     }
 }

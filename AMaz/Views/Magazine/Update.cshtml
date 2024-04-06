@@ -90,7 +90,7 @@
                                                 var selectedAcademicYear = Model.AcademicYears.FirstOrDefault(a => a.AcademicYearId == Model.AcademicYearId);
                                                 if (selectedAcademicYear != null)
                                                 {
-                                                    @($"{selectedAcademicYear.DateTimeFrom.ToShortDateString()} - {selectedAcademicYear.DateTimeTo.ToShortDateString()}")
+                                                    @($"{selectedAcademicYear.DateTimeFrom} - {selectedAcademicYear.DateTimeTo}")
                                                 }
                                                 else
                                                 {
@@ -125,7 +125,7 @@
                                                             transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;"
                                                    onmouseover="this.style.color='#16181b'; this.style.backgroundColor='#f8f9fa';"
                                                    onmouseout="this.style.color='#212529'; this.style.backgroundColor='transparent';">
-                                                    @($"{academicYear.DateTimeFrom.ToShortDateString()} - {academicYear.DateTimeTo.ToShortDateString()}")
+                                                    @($"{academicYear.DateTimeFrom} - {academicYear.DateTimeTo}")
 
                                                 </a>
                                             }

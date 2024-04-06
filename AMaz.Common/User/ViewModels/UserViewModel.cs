@@ -20,5 +20,7 @@ namespace AMaz.Common
         public string? Role { get; set; }
 
         public string? IsActive { get; set; }
+
+        public string? Faculty { get; set; }
     }
 }

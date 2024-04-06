@@ -15,19 +15,35 @@ namespace AMaz.Controllers
 
         public IActionResult Index()
         {
+            if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Admin");
+            }
+            else if (User.IsInRole("Manager"))
+            {
+                return RedirectToAction("Manager");
+            }
+            else if (User.IsInRole("Coordinator"))
+            {
+                return RedirectToAction("Coordinator");
+            }
+
             return View();
         }
 
+        [HttpGet("Admin")]
         public IActionResult Admin()
         {
             return View();
         }
 
+        [HttpGet("Manager")]
         public IActionResult Manager()
         {
             return View();
         }
 
+        [HttpGet("Coordinator")]
         public IActionResult Coordinator()
         {
             return View();

@@ -23,7 +23,8 @@ namespace AMaz.Service
         public async Task<List<MagazineViewModel>> GetAllMagazines()
         {
             var data = await _mangazineRepository.GetAllMagazinesAsync();
-            return _mapper.Map<List<MagazineViewModel>>(data);
+            var model = _mapper.Map<List<MagazineViewModel>>(data);
+            return model;
         }
 
         public async Task<List<MagazineViewModel>> GetAllMagazineByFacultyId(string facultyId)
@@ -49,6 +50,11 @@ namespace AMaz.Service
         public async Task<(bool succeed, string errorMsg)> CreateMagazineAsync(CreateMagazineRequest request)
         {
             var magazine = _mapper.Map<Magazine>(request);
+            if(request.FacultyId == null)
+            {
+                return (false, "Faculty is required!");
+            }
+
             if(request.FirstClosureDate > request.FinalClosureDate)
             {
                 return (false, "Final closure date must be greater than first closure date!");
@@ -59,7 +65,7 @@ namespace AMaz.Service
             {
                 return (false, "There is no academic year available!");
             }
-
+           
             var faculty = await _facultyRepository.GetFacultyByIdAsync(request.FacultyId);
             if (faculty == null)
             {
@@ -73,6 +79,16 @@ namespace AMaz.Service
 
         public async Task<(bool succeed, string errorMsg)> UpdateMagazineAsync(UpdateMagazineRequest request)
         {
+            if (request.FacultyId == null)
+            {
+                return (false, "Faculty is required!");
+            }
+
+            if (request.AcademicYearId == null)
+            {
+                return (false, "Academic year is required!");
+            }
+
             var magazine = await _mangazineRepository.GetMagazineByIdAsync(request.MagazineId);
             if (magazine == null)
             {
@@ -85,7 +101,21 @@ namespace AMaz.Service
             magazine.FirstClosureDate = request.FirstClosureDate;
             magazine.FinalClosureDate = request.FinalClosureDate;
             magazine.Name = request.Name;
-            magazine.AcademicYear = await _academicYearReponsitory.GetAcademicYearByIdAsync(request.AcademicYearId);
+
+            var academicYear = await _academicYearReponsitory.GetAcademicYearByIdAsync(request.AcademicYearId);
+            if (academicYear == null)
+            {
+                return (false, "There is no academic year available!");
+            }
+
+            var faculty = await _facultyRepository.GetFacultyByIdAsync(request.FacultyId);
+            if (faculty == null)
+            {
+                return (false, "Faculty not found!");
+            }
+
+            magazine.AcademicYear = academicYear;
+            magazine.Faculty = faculty;
             await _mangazineRepository.UpdateMagazineAsync(magazine);
             return (true, string.Empty);
         }

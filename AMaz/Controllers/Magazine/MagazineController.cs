@@ -36,6 +36,7 @@ namespace AMaz.Web.Controllers
             {
                 var byFaculty = await _magazineService.GetAllMagazineByFacultyId(facultyId);
                 ViewBag.Error = TempData["Error"];
+                ViewBag.ActiveSection = "Magazine";
                 return View(byFaculty);
             }
      
