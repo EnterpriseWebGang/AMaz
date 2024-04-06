@@ -20,7 +20,8 @@ namespace AMaz.Service
                 ForMember(dest => dest.FacultyId, option => option.MapFrom(src => src.Faculty.FacultyId.ToString() ?? ""));
             CreateMap<Magazine, MagazineDetailViewModel>()
                 .ForMember(m => m.FacultyName, option => option.MapFrom(src => src.Faculty.Name ?? ""))
-                .ForMember(m => m.AcademicYear, option => option.MapFrom(src => GetAcademicYear(src.AcademicYear)));
+                .ForMember(m => m.AcademicYear, option => option.MapFrom(src => GetAcademicYear(src.AcademicYear)))
+                .ForMember(m => m.Contributions, option => option.Ignore());
         }
 
         private string GetAcademicYear(AcademicYear academicYear)

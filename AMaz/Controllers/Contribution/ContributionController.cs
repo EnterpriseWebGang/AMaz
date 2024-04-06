@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AMaz.Web.Controllers
 {
@@ -33,19 +34,23 @@ namespace AMaz.Web.Controllers
             _emailService = emailService;
         }
 
-        [AllowAnonymous]
-        public async Task<IActionResult> Index()
-        {
-            var contributions = await _contributionService.GetAllContributionsAsync();
-            return View(_mapper.Map<IEnumerable<ContributionViewModel>>(contributions));
-        }
+        //[AllowAnonymous]
+        //public async Task<IActionResult> Index()
+        //{
+        //    var contributions = await _contributionService.GetAllContributionsAsync();
+        //    return View(_mapper.Map<IEnumerable<ContributionViewModel>>(contributions));
+        //}
 
         [Authorize(Roles = "Student")]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(string magazineId)
         {
-            var magazines = await _magazineService.GetAllMagazines();
+            //var magazines = await _magazineService.GetAllMagazines();
+            if (magazineId.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
             var model = new CreateContributionViewModel();
-            model.Magazines = magazines;
+            model.MagazineId = magazineId;
             return View(model);
         }
 

@@ -3,6 +3,7 @@ using AMaz.Service;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AMaz.Web.Controllers
 {
@@ -12,24 +13,33 @@ namespace AMaz.Web.Controllers
         private readonly IMagazineService _magazineService;
         private readonly IAcademicYearService _academicYearService;
         private readonly IFacultyService _facultyService;
-        public MagazineController(IMagazineService magazineService, IMapper mapper, IAcademicYearService academicYearService, IFacultyService facultyService)
+        private readonly UserService _userService;
+        public MagazineController(IMagazineService magazineService, IMapper mapper, IAcademicYearService academicYearService, IFacultyService facultyService, UserService userService)
         {
             _academicYearService = academicYearService;
             _magazineService = magazineService;
             _mapper = mapper;
             _facultyService = facultyService;
+            _userService = userService;
         }
 
-        public async Task<IActionResult> Index(string facultyId = null)
+        public async Task<IActionResult> Index()
         {
-            if(facultyId != null)
+            if (User.IsInRole("Manager"))
+            {
+                var model = await _magazineService.GetAllMagazines();
+                return View(model);
+            }
+
+            string facultyId = await _userService.GetUserFacultyId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (facultyId != null)
             {
                 var byFaculty = await _magazineService.GetAllMagazineByFacultyId(facultyId);
+                ViewBag.Error = TempData["Error"];
                 return View(byFaculty);
             }
-            ViewBag.Error = TempData["Error"];
-            var model = await _magazineService.GetAllMagazines();
-            return View(model);
+     
+            return Forbid();
         }
 
         [Authorize(Roles = "Manager")]
@@ -117,6 +127,14 @@ namespace AMaz.Web.Controllers
         public async Task<IActionResult> Details(string id)
         {
             var magazine = await _magazineService.GetMagazineByIdAsync(id);
+            if (!User.IsInRole("Manager"))
+            {
+                var isAuthorized = await _userService.ValidateIfUserIsInFaculty(User.FindFirstValue(ClaimTypes.NameIdentifier), magazine.MagazineId);
+                if (!isAuthorized)
+                {
+                    return Unauthorized();
+                }
+            }    
             var model = _mapper.Map<MagazineDetailViewModel>(magazine);
             return View(model);
         }

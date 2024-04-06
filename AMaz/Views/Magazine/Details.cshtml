@@ -92,6 +92,49 @@
                     </div>
                 </div>
             </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Title</th>
+                            <th>Content</th>
+                            <th>Status</th>
+                            <th>Submission Date</th>
+                            <th>Accepted Date</th>
+                            <th>Author Name</th>
+                            <th>Is Accepted</th>
+                            <th>Actions</th>
+                        </tr>
+                        @foreach (var contribution in Model.Contributions)
+                        {
+                            <tr>
+                                <td>@contribution.Title</td>
+                                <td>@contribution.Content</td>
+                                <td>@contribution.Status</td>
+                                <td>@contribution.SubmissionDate.ToShortDateString()</td>
+                                <td>@(contribution.AcceptedDate.HasValue ? contribution.AcceptedDate.Value.ToShortDateString() : "N/A")</td>
+                                <td>@contribution.AuthorName</td>
+                                <td>@(contribution.IsAccepted ? "Yes" : "No")</td>
+                                <!-- Edit button -->
+                                <td>
+                                    <div style="display:flex;">
+                                        <a style="margin-right:10px;" asp-controller="Contribution" asp-action="Update" asp-route-id="@contribution.ContributionId" class="btn btn-outline-primary btn-sm">Update</a>
+                                        <form asp-controller="Contribution" asp-action="Delete" asp-route-id="@contribution.ContributionId" method="post" onsubmit="return confirm('Are you sure you want to delete this contribution?');">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                                        </form>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        }
+                        <tr>
+                            <td>
+                                <a asp-controller="Contribution" asp-action="Create" asp-route-magazineId="@Model.MagazineId">Create</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </section>
 </div>

@@ -26,6 +26,6 @@ namespace AMaz.Common
         [Display(Name = "MagazineId")]
         public string MagazineId { get; set; }
 
-        public IEnumerable<MagazineViewModel>? Magazines { get; set; }
+        //public IEnumerable<MagazineViewModel>? Magazines { get; set; }
     }
 }

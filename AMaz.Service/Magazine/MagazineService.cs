@@ -35,7 +35,9 @@ namespace AMaz.Service
         public async Task<MagazineDetailViewModel> GetMagazineByIdAsync(string magazineId)
         {
             var data = await _mangazineRepository.GetMagazineByIdAsync(magazineId);
-            return _mapper.Map<MagazineDetailViewModel>(data);
+            var model = _mapper.Map<MagazineDetailViewModel>(data);
+            model.Contributions = _mapper.Map<List<ContributionViewModel>>(data.Contributions);
+            return model;
         }
 
         public async Task<UpdateMagazineViewModel> GetUpdateMagazineViewModelAsync(string magazineId)

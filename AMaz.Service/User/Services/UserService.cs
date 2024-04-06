@@ -62,6 +62,17 @@ namespace AMaz.Service
             return _mapper.Map<UserViewModel>(entity);
         }
 
+        public async Task<string> GetUserFacultyId(string userId)
+        {
+            var user = await _userManager.Users.Include(u => u.Faculty).FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                return null;
+            }
+
+            return user.Faculty.FacultyId.ToString();
+        }
+
         public async Task<UserViewModel>GetCoordinatorEmailByFaculty(string facultyId)
         {
             var coordinatorQuery =  from users in _dbContext.Users.Include(u => u.Faculty)
@@ -82,6 +93,26 @@ namespace AMaz.Service
 
             var models = _mapper.Map<UserViewModel>(coordinators);
             return models;
+        }
+
+        public async Task<bool> ValidateIfUserIsInFaculty(string userId, string magazineId)
+        {
+            var magazine = await _dbContext.Magazines.Include(m => m.Faculty).FirstOrDefaultAsync(m => m.MagazineId.ToString() == magazineId);
+            var query = from users in _dbContext.Users.Include(u => u.Faculty)
+                        join faculties in _dbContext.Faculties
+                            on users.Faculty.FacultyId equals faculties.FacultyId
+                        join Magazine in _dbContext.Magazines
+                            on faculties.FacultyId equals Magazine.Faculty.FacultyId
+                        where users.Id == userId && faculties.FacultyId.ToString() == magazine.Faculty.FacultyId.ToString()
+                        select users;
+
+            var user = await query.CountAsync();
+            if (user == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
