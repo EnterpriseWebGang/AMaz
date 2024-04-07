@@ -65,7 +65,7 @@ namespace AMaz.DB
             #endregion
 
             #region Table relationships
-            // If Delete Mangazine ==> set null all the contribution
+            // If Delete Mangazine ==> Cascade all the contribution
             modelBuilder.
                 Entity<Magazine>().
                 HasMany( m => m.Contributions).
