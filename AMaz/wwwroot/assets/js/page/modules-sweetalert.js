@@ -1,9 +1,5 @@
 "use strict";
 
-$("#swal-2").click(function() {
-  // Trigger the form submission when the button is clicked
-  $(".need-validation").submit();
-});
 
 $(".need-validation").submit(function (event) {
     event.preventDefault();
@@ -75,41 +71,8 @@ $(".need-validation").submit(function (event) {
     }
 });
 
-$("#swal-2").click(function () {
-    // Check if any radio button is selected
-    if ($('input[name="value"]:checked').length === 0) {
-        // If no radio button is selected, show the validation message
-        $('#roleValidationMessage').show();
-    } else {
-        // If a radio button is selected, check if the form is valid
-        if ($('.wizard-content')[0].checkValidity()) {
-            // Check password validity
-            var password = $('input[name="password"]').val();
-            if (!isValidPassword(password)) {
-                // Password does not meet requirements, show validation message
-                $('#passwordValidationMessage').show();
-                return;
-            } else {
-                // Hide password validation message if password is valid
-                $('#passwordValidationMessage').hide();
-            }
 
-            // Display sweet alert if the form is valid
-            $('#roleValidationMessage').hide();
-            swal('Account Created', 'Your account has been created successfully!', 'success')
-                .then((value) => {
-                    if (value) {
-                        // If the user clicks OK on the alert, redirect to admin.html
-                        var redirectUrl = "/Account"
-                        window.location.href = redirectUrl;
-                    }
-                });
-        } else {
-            // If the form is not valid, trigger form validation
-            $('.wizard-content').addClass('was-validated');
-        }
-    }
-});
+
 
 // Function to validate the password format
 function isValidPassword(password) {

@@ -18,20 +18,9 @@
         <ul class="sidebar-menu">
            
             <li class="menu-header">Functions</li>
-            <li class="dropdown active">
-                <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Auth</span></a>
-                <ul class="dropdown-menu">
-                    <li class=active><a class="nav-link beep beep-sidebar" asp-action="Create" asp-controller="Account">Create Account</a></li>
-                </ul>
-            </li>
+          
             <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-bicycle"></i> <span>Features</span></a>
-                <ul class="dropdown-menu">
-                    <li><a asp-action="Create" asp-controller="AcademicYear">Create Academic Year</a></li>
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Actions</span></a>
                 <ul class="dropdown-menu">
                     <li><a asp-action="Index" asp-controller="Account">View User List</a></li>
                     <li><a asp-action="Index" asp-controller="AcademicYear">View Academic Year</a></li>
@@ -48,7 +37,8 @@
             <h1>Create Account</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Functions</a></div>
-                <div class="breadcrumb-item"><a href="#">Auth</a></div>
+                <div class="breadcrumb-item"><a href="#">Actions</a></div>
+                <div class="breadcrumb-item"><a href="#">View User List</a></div>
                 <div class="breadcrumb-item">Create Account</div>
             </div>
         </div>
@@ -60,7 +50,7 @@
                         <h4>Create New User</h4>
                     </div>
                     <div class="card-body">
-                        <form asp-controller="Account" asp-action="Create" method="post" class="wizard-content mt-2 need-validation" novalidate>
+                        <form asp-controller="Account" asp-action="Create" method="post" id="facultyForm" class="wizard-content mt-2 need-validation" novalidate>
                             <div class="wizard-pane">
                                 <div class="form-group row align-items-center">
                                     <label class="col-md-4 text-md-right text-left">First Name</label>
@@ -132,9 +122,24 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row align-items-center">
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#facultyForm').submit(function (event) {
+                                            // Check if the dropdown menu is open
+                                            if (!$('.dropdown-menu').hasClass('show')) {
+                                                // If the dropdown menu is not open, show the validation message
+                                                $('#facultyValidationMessage').show();
+                                                event.preventDefault(); // Prevent form submission
+                                            }
+                                        });
+                                    });
+                                </script>
+
+                                <div class="form-group row">
                                     <label class="col-md-4 text-md-right text-left">Faculties</label>
-                                    <div class="btn-group">
+                                    <div class="col-lg-4 col-md-6">
                                         <button type="button" class="btn btn-primary" id="selectedFacultyBtn" data-toggle="dropdown">Select Faculty</button>
                                         <div class="dropdown-menu">
                                             @foreach (var faculty in Model.Faculties)
@@ -143,31 +148,35 @@
                                                    href="#"
                                                    data-value="@faculty.FacultyId"
                                                    style="
-                                                        display:block;
-                                                        width:100%;
-                                                        padding: 0.25rem 1.5rem;
-                                                        clear: both;
-                                                        font-weight: 600;
-                                                        color: #212529;
-                                                        text-align: inherit;
-                                                        text-decoration: none;
-                                                        white-space: nowrap;
-                                                        background-color: transparent;
-                                                        border: 0;
-                                                        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;"
+                                                       display:block;
+                                                       width:100%;
+                                                       padding: 0.25rem 1.5rem;
+                                                       clear: both;
+                                                       font-weight: 600;
+                                                       color: #212529;
+                                                       text-align: inherit;
+                                                       text-decoration: none;
+                                                       white-space: nowrap;
+                                                       background-color: transparent;
+                                                       border: 0;
+                                                       transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;"
                                                    onmouseover="this.style.color='#16181b'; this.style.backgroundColor='#f8f9fa';"
-                                                   onmouseout="this.style.color='#212529'; this.style.backgroundColor='transparent';"
-                                                >
+                                                   onmouseout="this.style.color='#212529'; this.style.backgroundColor='transparent';">
                                                     @faculty.Name
                                                 </a>
-
                                             }
                                         </div>
                                         <input type="hidden" id="FacultyId" name="FacultyId" />
+                                        <div class="invalid-feedback" id="facultyValidationMessage" style="display: none">Please select a faculty.</div>
                                     </div>
+                                   
                                 </div>
 
+
+                               
+
                                 <script>
+                                   
                                     // Function to enable/disable faculty selection based on the selected role
                                     function toggleFacultySelection(enabled) {
                                         const facultyDropdown = document.getElementById('selectedFacultyBtn');
@@ -200,15 +209,29 @@
                                             const selectedFacultyName = event.target.textContent.trim();
                                             document.getElementById('selectedFacultyBtn').textContent = selectedFacultyName;
                                             document.getElementById('FacultyId').value = selectedFacultyId;
+
+                                            // Hide the faculty validation message when a faculty is selected
+                                            $('#facultyValidationMessage').hide();
                                         });
                                     });
+
+                                    // Add event listener to check if any faculty item is clicked
+                                    document.getElementById('selectedFacultyBtn').addEventListener('click', event => {
+                                        // Check if any faculty item has been clicked
+                                        const isFacultyItemClicked = document.querySelectorAll('.dropdown-faculty-item:checked').length > 0;
+                                        if (!isFacultyItemClicked) {
+                                            // If no faculty item is clicked, show the validation message
+                                            $('#facultyValidationMessage').show();
+                                        }
+                                    });
+
                                 </script>
 
 
                                 <div class="form-group row">
                                     <div class="col-md-4"></div>
                                     <div class="col-lg-4 col-md-6 text-right">
-                                        <button class="btn btn-primary" type="submit">Create</button>
+                                        <button class="btn btn-primary" type="submit" id="swal-2">Create</button>
                                         <a asp-action="Admin" asp-controller="Home" class="btn btn-icon icon-right btn-primary">Back</a>
                                     </div>
                                 </div>
