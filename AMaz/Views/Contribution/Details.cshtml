@@ -49,7 +49,10 @@
                                     <th>Files</th>
                                     @if (User.IsInRole("Student"))
                                     {
-                                        <th>Actions</th>
+                                        @if (DateTime.Now < Model.Magazine.FinalClosureDate)
+                                        {
+                                            <th>Actions</th>
+                                        }
                                     }
                                 </tr>
 
@@ -88,10 +91,13 @@
                                     {
                                         <td>
                                             <div style="display:flex;">
-                                                <a style="margin-right:10px;" asp-controller="Contribution" asp-action="Update" asp-route-id="@Model.ContributionId" class="btn btn-outline-primary btn-sm">Update</a>
-                                                <form asp-controller="Contribution" asp-action="Delete" asp-route-id="@Model.ContributionId" asp-route-magazineId="@Model.Magazine.MagazineId" method="post" onsubmit="return confirm('Are you sure you want to delete this contribution?');">
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                                                </form>
+                                                @if (DateTime.Now < Model.Magazine.FinalClosureDate)
+                                                {
+                                                    <a style="margin-right:10px;" asp-controller="Contribution" asp-action="Update" asp-route-id="@Model.ContributionId" class="btn btn-outline-primary btn-sm">Update</a>
+                                                    <form asp-controller="Contribution" asp-action="Delete" asp-route-id="@Model.ContributionId" asp-route-magazineId="@Model.Magazine.MagazineId" method="post" onsubmit="return confirm('Are you sure you want to delete this contribution?');">
+                                                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                                                    </form>
+                                                }
                                             </div>
 
                                         </td>
