@@ -181,7 +181,7 @@ namespace AMaz.Service
 
         public async Task<(bool result, string error)> ChangeUserRole(ChangeUserRoleAndFacultyRequest request)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId);
+            var user = await _userManager.Users.Include(u => u.Faculty).FirstOrDefaultAsync( u => u.Id == request.UserId);
             if (user == null)
             {
                 return (false, "user does not exist");
@@ -200,6 +200,14 @@ namespace AMaz.Service
                 await _userManager.AddToRoleAsync(user, request.Role);
             }
 
+            if (request.Role == "Manager")
+            {
+                user.Faculty = null;
+                await _userManager.UpdateAsync(user);
+                return (true, "");
+            }
+
+
             if (request.FacultyId != null)
             {
                 var faculty = await _facultyRepository.GetFacultyByIdAsync(request.FacultyId);
@@ -208,8 +216,11 @@ namespace AMaz.Service
                     user.Faculty = faculty;
                 }
                 await _userManager.UpdateAsync(user);
+                return (true, "");
             }
-            return (true, "");
+
+            //if (request.FacultyId == null)
+            return (false, "User must have a faculty!");
         }
 
         public async Task<ChangeUserRoleAndFacultyViewModel> GetUserRoleViewModelAsync(string userId)

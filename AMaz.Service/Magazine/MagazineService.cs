@@ -65,6 +65,12 @@ namespace AMaz.Service
             {
                 return (false, "There is no academic year available!");
             }
+
+            // Check if the closure date is within the academic year
+            if (request.FirstClosureDate < latestAcademicYear.DateTimeFrom || request.FinalClosureDate > latestAcademicYear.DateTimeTo)
+            {
+                return (false, "Closure date must be within the academic year!");
+            }
            
             var faculty = await _facultyRepository.GetFacultyByIdAsync(request.FacultyId);
             if (faculty == null)
@@ -94,6 +100,8 @@ namespace AMaz.Service
             {
                 return (false, "Magazine not found!");
             }
+
+            // Check if the first closure date is greater than the final closure date
             if (request.FirstClosureDate > request.FinalClosureDate)
             {
                 return (false, "Final closure date must be greater than first closure date!");
@@ -106,6 +114,12 @@ namespace AMaz.Service
             if (academicYear == null)
             {
                 return (false, "There is no academic year available!");
+            }
+
+            // Check if the closure date is within the academic year
+            if (request.FirstClosureDate < academicYear.DateTimeFrom || request.FinalClosureDate > academicYear.DateTimeTo)
+            {
+                return (false, "Closure date must be within the academic year!");
             }
 
             var faculty = await _facultyRepository.GetFacultyByIdAsync(request.FacultyId);

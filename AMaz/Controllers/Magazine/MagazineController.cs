@@ -23,6 +23,7 @@ namespace AMaz.Web.Controllers
             _userService = userService;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             if (User.IsInRole("Manager") || !User.Identity.IsAuthenticated)

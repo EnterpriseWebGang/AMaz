@@ -78,6 +78,11 @@ namespace AMaz.Service
                 throw new ArgumentException("Invalid magazine id.", nameof(request.MagazineId));
             }
 
+            if (magazine.FirstClosureDate < DateTime.Now)
+            {
+                throw new ArgumentException("First closure date of magazine have expired", nameof(request.MagazineId));
+            }
+
             var contribution = _mapper.Map<Contribution>(request);
             contribution.User = user;
             contribution.Status = (int)ContributionStatus.Pending;
@@ -135,6 +140,11 @@ namespace AMaz.Service
                 if (contribution == null)
                 {
                     throw new ArgumentException("Invalid contribution id.", nameof(request.ContributionId));
+                }
+
+                if (contribution.Magazine.FinalClosureDate < DateTime.Now)
+                {
+                    throw new ArgumentException("Final closure date of magazine have expired", nameof(request.ContributionId));
                 }
 
 
