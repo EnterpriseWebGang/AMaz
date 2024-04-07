@@ -31,6 +31,15 @@ namespace AMaz.Repo
                 .FirstOrDefaultAsync(c => c.ContributionId == Guid.Parse(id));
         }
 
+        public async Task<IEnumerable<Contribution>> GetContributionsByMagazineId(string magazineId)
+        {
+            return await _dbContext.Contributions
+                                    .Include(c => c.Files)
+                                    .Include(c => c.Magazine)
+                                    .Where(c => c.Magazine.MagazineId.ToString() == magazineId)
+                                    .ToListAsync();
+        }
+
         public async Task<bool> CreateContributionAsync(Contribution contribution)
         {
             try

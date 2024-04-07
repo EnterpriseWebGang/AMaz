@@ -34,7 +34,7 @@ namespace AMaz.Web.Controllers
             _emailService = emailService;
         }
 
-        //[AllowAnonymous]
+        //[Authorize(Roles = "Manager")]
         //public async Task<IActionResult> Index()
         //{
         //    var contributions = await _contributionService.GetAllContributionsAsync();
@@ -61,26 +61,35 @@ namespace AMaz.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var request = _mapper.Map<CreateContributionRequest>(model);
-                request.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                request.SubmissionDate = DateTime.Now;
-                request.MagazineId = magazineId;
-                var result = await _contributionService.CreateContributionAsync(request, async (contribution, coordinator) =>
+                try
                 {
-                    if (contribution != null && coordinator != null)
+                    var request = _mapper.Map<CreateContributionRequest>(model);
+                    request.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    request.SubmissionDate = DateTime.Now;
+                    request.MagazineId = magazineId;
+                    var result = await _contributionService.CreateContributionAsync(request, async (contribution, coordinator) =>
                     {
-                        await _emailService.SendCreateContributionEmail(contribution, coordinator, Url.ActionLink("Details", "Contribution", new { id = contribution.ContributionId.ToString() }) ?? "No Link To Action");
-                    }
-                });
+                        if (contribution != null && coordinator != null)
+                        {
+                            await _emailService.SendCreateContributionEmail(contribution, coordinator, Url.ActionLink("Details", "Contribution", new { id = contribution.ContributionId.ToString() }) ?? "No Link To Action");
+                        }
+                    });
 
-                if (result)
-                {
-                    return RedirectToAction("Index");
+                    if (result)
+                    {
+                        return RedirectToAction("Details", "Magazine", new { id = magazineId });
+                    }
+                    else
+                    {
+                        ViewBag.Error = "Failed to create contribution.";
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    ViewBag.Error = "Failed to create contribution.";
+
+                    ViewBag.Error = $"Failed to create contribution. Error: {e}"; ;
                 }
+                
             }
 
             // If the model state is not valid or creation failed, return the same view with the model
@@ -101,17 +110,17 @@ namespace AMaz.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Student")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string id, string magazineId)
         {
             var result = await _contributionService.DeleteContributionAsync(id);
 
             if (result)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", new { id });
             }
 
             ViewBag.Error = "Failed to delete contribution.";
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Magazine", new { id = magazineId });
         }
 
         [Authorize(Roles = "Student")]

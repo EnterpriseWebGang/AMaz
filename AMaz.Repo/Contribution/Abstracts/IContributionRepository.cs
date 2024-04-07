@@ -9,6 +9,9 @@ namespace AMaz.Repo
     {
         Task<IEnumerable<Contribution>> GetAllContributionsAsync();
         Task<Contribution> GetContributionByIdAsync(string id);
+
+        Task<IEnumerable<Contribution>> GetContributionsByMagazineId(string magazineId);
+
         Task<bool> CreateContributionAsync(Contribution contribution);
         Task<bool> DeleteContributionAsync(string id);
         Task<bool> UpdateContributionAsync(Contribution contribution);

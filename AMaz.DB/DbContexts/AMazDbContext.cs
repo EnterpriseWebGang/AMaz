@@ -65,12 +65,12 @@ namespace AMaz.DB
             #endregion
 
             #region Table relationships
-            // If Delete Mangazine ==> Cascade all the contribution
+            // If Delete Mangazine ==> set null all the contribution
             modelBuilder.
                 Entity<Magazine>().
                 HasMany( m => m.Contributions).
                 WithOne( c => c.Magazine).
-                OnDelete(DeleteBehavior.Cascade);
+                OnDelete(DeleteBehavior.SetNull);
 
             // If Delete AcademicYear ==> Just set the AcademicYear in magazine to null
             modelBuilder.

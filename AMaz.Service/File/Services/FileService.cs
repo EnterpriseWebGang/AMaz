@@ -13,6 +13,7 @@ namespace AMaz.Service
     public class FileService
     {
         private readonly IFileRepository _fileRepository;
+        private readonly IContributionRepository _contributionRepository;
         private readonly IOptions<LocalFileStorageConfiguration> _fileStorageConfiguration;
         private readonly IHostingEnvironment _environment;
         private readonly IMapper _mapper;
@@ -23,12 +24,14 @@ namespace AMaz.Service
             IFileRepository fileRepository,
             IOptions<LocalFileStorageConfiguration> fileStorageConfiguration,
             IMapper mapper,
-            IHostingEnvironment environment)
+            IHostingEnvironment environment,
+            IContributionRepository contributionRepository)
         {
             _fileRepository = fileRepository;
             _fileStorageConfiguration = fileStorageConfiguration;
             _mapper = mapper;
             _environment = environment;
+            _contributionRepository = contributionRepository;
         }
 
         // public async Task GetFiles()
@@ -83,6 +86,21 @@ namespace AMaz.Service
             var files = await _fileRepository.GetAllFilesByContributionId(contributionId);
             var result = _mapper.Map<List<FileViewModel>>(files);
             return result;
+        }
+
+        public async Task<Byte[]> GetMagazineZipFile(string magazineId)
+        {
+            var contributions = await _contributionRepository.GetContributionsByMagazineId(magazineId);
+            var createZipFileDict = new Dictionary<string, List<string>>();
+
+            foreach (var contribution in contributions)
+            {
+                var files = contribution.Files;
+                createZipFileDict.Add(contribution.Title.Replace(" ", "-"), files.Select(f => f.Path).ToList());
+            }
+
+            var zipFile = ZipUtility.CreateZipFileWithMultipleFolders(createZipFileDict);
+            return zipFile;
         }
 
         public async Task SaveFileToDiskAsync(SaveFileRequest request)

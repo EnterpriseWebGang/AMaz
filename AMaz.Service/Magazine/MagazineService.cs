@@ -11,13 +11,25 @@ namespace AMaz.Service
         private readonly IMagazineRepository _mangazineRepository;
         private readonly IAcademicYearReponsitory _academicYearReponsitory;
         private readonly IFacultyRepository _facultyRepository;
+        private readonly IContributionRepository _contributionRepository;
+        private readonly IContributionService _contributionService;
+        private readonly FileService _fileService;
         private readonly IMapper _mapper;
-        public MagazineService(IMagazineRepository mangazineRepository, IMapper mapper, IAcademicYearReponsitory academicYearReponsitory, IFacultyRepository facultyRepository)
+        public MagazineService(IMagazineRepository mangazineRepository, 
+            IMapper mapper, 
+            IAcademicYearReponsitory academicYearReponsitory, 
+            IFacultyRepository facultyRepository,
+            FileService fileService,
+            IContributionRepository contributionRepository,
+            IContributionService contributionService)
         {
             _mangazineRepository = mangazineRepository;
             _mapper = mapper;
             _academicYearReponsitory = academicYearReponsitory;
             _facultyRepository = facultyRepository;
+            _fileService = fileService;
+            _contributionRepository = contributionRepository;
+            _contributionService = contributionService;
         }
 
         public async Task<List<MagazineViewModel>> GetAllMagazines()
@@ -141,8 +153,26 @@ namespace AMaz.Service
             {
                 return (false, "Magazine not found!");
             }
+
+            //Manually delete all contribution in this magazine to remove the file
+            var contributions = await _contributionRepository.GetContributionsByMagazineId(magazineId);
+            foreach (var contribution in contributions)
+            {
+                await _contributionService.DeleteContributionAsync(contribution.ContributionId.ToString());
+            }
+            
             await _mangazineRepository.DeleteMagazineAsync(magazine);
             return (true, string.Empty);
+        }
+
+        public async Task<(bool succeed, byte[] fileBytes)> GetMagazineReport(string magazineId)
+        {
+            var bytes = await _fileService.GetMagazineZipFile(magazineId);
+            if (bytes == null)
+            {
+                return (false, null);
+            }
+            return (true, bytes);
         }
     }
 }

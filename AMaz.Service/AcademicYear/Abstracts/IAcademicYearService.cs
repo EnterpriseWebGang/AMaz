@@ -8,5 +8,6 @@ namespace AMaz.Service
         Task<AcademicYearViewModel> GetAcademicYearByIdAsync(string id);
         Task<IEnumerable<AcademicYearViewModel>> GetAllAcademicYearsAsync();
         Task<(bool succeed, string errorMsg)> UpdateAcademicYearAsync(UpdateAcademicYearRequest request);
+        Task<AcademicYearViewModel> GetLatestAcademicYear();
     }
 }

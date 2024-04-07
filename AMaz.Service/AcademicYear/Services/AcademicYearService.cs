@@ -88,5 +88,11 @@ namespace AMaz.Service
             var result = await _academicYearRepository.GetAcademicYearByIdAsync(id);
             return _mapper.Map<AcademicYearViewModel>(result);
         }
+
+        public async Task<AcademicYearViewModel> GetLatestAcademicYear()
+        {
+            var result = await _academicYearRepository.GetLatestAcademicYearAsync();
+            return _mapper.Map<AcademicYearViewModel>(result);
+        }
     }
 }

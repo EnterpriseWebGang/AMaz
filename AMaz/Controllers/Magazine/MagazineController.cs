@@ -48,9 +48,11 @@ namespace AMaz.Web.Controllers
         public async Task<IActionResult> Create()
         {
             var faculties = await _facultyService.GetAllFacultiesAsync();
+            var academicYear = await _academicYearService.GetLatestAcademicYear();
             var model = new CreateMagazineViewModel
             {
-                Faculties = faculties.ToList()
+                Faculties = faculties.ToList(),
+                AcademicYear = academicYear.DateTimeFrom + " - " + academicYear.DateTimeTo,
             };
             return View(model);
         }
@@ -129,6 +131,10 @@ namespace AMaz.Web.Controllers
         public async Task<IActionResult> Details(string id)
         {
             var magazine = await _magazineService.GetMagazineByIdAsync(id);
+            if (magazine == null)
+            {
+                return NotFound();
+            }
             if (!User.IsInRole("Manager") && User.Identity.IsAuthenticated)
             {
                 var isAuthorized = await _userService.ValidateIfUserIsInFaculty(User.FindFirstValue(ClaimTypes.NameIdentifier), magazine.MagazineId);
@@ -139,6 +145,26 @@ namespace AMaz.Web.Controllers
             }    
             var model = _mapper.Map<MagazineDetailViewModel>(magazine);
             return View(model);
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> GetMagazineReport(string id)
+        {
+            var magazine = await _magazineService.GetMagazineByIdAsync(id);
+            if (magazine == null)
+            {
+                TempData["Error"] = "Magazine not found!";
+                return RedirectToAction("Index");
+            }
+
+            var response = await _magazineService.GetMagazineReport(id);
+            if (!response.succeed)
+            {
+                TempData["Error"] = "There's some unexpected error when getting magazine report";
+                return RedirectToAction("Index");
+            }
+            
+            return File(response.fileBytes, "application/zip", DateTime.Now.ToString("yyyy/MM/dd") + "_" + magazine.Name.Replace(" ", "-") + ".zip");
         }
     }
 }

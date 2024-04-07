@@ -76,6 +76,10 @@
                                             <th>@Html.DisplayNameFor(model => model.FinalClosureDate)</th>
                                             <th>@Html.DisplayNameFor(model => model.FacultyName)</th>
                                             <th>@Html.DisplayNameFor(model => model.AcademicYear)</th>
+                                            @if (User.IsInRole("Manager"))
+                                            {
+                                                <th>Action</th>
+                                            }
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -86,6 +90,16 @@
                                             <td>@Html.DisplayFor(model => model.FinalClosureDate)</td>
                                             <td>@Html.DisplayFor(model => model.FacultyName)</td>
                                             <td>@Html.DisplayFor(model => model.AcademicYear)</td>
+                                            @if (User.IsInRole("Manager"))
+                                            {
+                                                <td>
+                                                    <a asp-action="Update" asp-controller="Magazine" asp-route-id="@Model.MagazineId" class="btn btn-outline-primary btn-sm">Update</a>
+                                                    <form asp-action="Delete" asp-controller="Magazine" asp-route-id="@Model.MagazineId" method="post" onsubmit="return confirm('Are you sure you want to delete this magazine?');">
+                                                        <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                                                    </form>
+                                                    <a asp-action="GetMagazineReport" asp-controller="Magazine" asp-route-id="@Model.MagazineId">Export</a>
+                                                </td>
+                                            }
                                         </tr>
 
                                     </tbody>

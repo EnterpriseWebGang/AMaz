@@ -89,7 +89,7 @@
                                         <td>
                                             <div style="display:flex;">
                                                 <a style="margin-right:10px;" asp-controller="Contribution" asp-action="Update" asp-route-id="@Model.ContributionId" class="btn btn-outline-primary btn-sm">Update</a>
-                                                <form asp-controller="Contribution" asp-action="Delete" asp-route-id="@Model.ContributionId" method="post" onsubmit="return confirm('Are you sure you want to delete this contribution?');">
+                                                <form asp-controller="Contribution" asp-action="Delete" asp-route-id="@Model.ContributionId" asp-route-magazineId="@Model.Magazine.MagazineId" method="post" onsubmit="return confirm('Are you sure you want to delete this contribution?');">
                                                     <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
                                                 </form>
                                             </div>

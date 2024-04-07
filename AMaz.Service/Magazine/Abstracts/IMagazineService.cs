@@ -11,5 +11,6 @@ namespace AMaz.Service
         Task<MagazineDetailViewModel> GetMagazineByIdAsync(string magazineId);
         Task<UpdateMagazineViewModel> GetUpdateMagazineViewModelAsync(string magazineId);
         Task<(bool succeed, string errorMsg)> UpdateMagazineAsync(UpdateMagazineRequest request);
+        Task<(bool succeed, byte[] fileBytes)> GetMagazineReport(string magazineId);
     }
 }

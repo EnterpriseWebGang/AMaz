@@ -25,6 +25,9 @@ namespace AMaz.Common
 
         public List<FacultyViewModel> Faculties { get; set; }
 
+        [Display(Name = "Academic Year")]
+        public string AcademicYear { get; set; }
+
         [Required]
         [Display(Name = "Faculty")]
         public string FacultyId { get; set; }
