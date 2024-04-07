@@ -75,7 +75,7 @@ namespace AMaz.Web.Controllers
 
                 if (result)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details", "Magazine", new {id = magazineId});
                 }
                 else
                 {

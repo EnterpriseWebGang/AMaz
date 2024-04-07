@@ -122,10 +122,13 @@
                                         <a style="margin-right:10px;" asp-controller="Contribution" asp-action="Details" asp-route-id="@contribution.ContributionId" class="btn btn-outline-info btn-sm">Details</a>
                                         @if(User.IsInRole("Student"))
                                         {
-                                            <a style="margin-right:10px;" asp-controller="Contribution" asp-action="Update" asp-route-id="@contribution.ContributionId" class="btn btn-outline-primary btn-sm">Update</a>
-                                            <form asp-controller="Contribution" asp-action="Delete" asp-route-id="@contribution.ContributionId" method="post" onsubmit="return confirm('Are you sure you want to delete this contribution?');">
-                                                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                                            </form>
+                                            @if(DateTime.Now < Model.FinalClosureDate)
+                                            {
+                                                <a style="margin-right:10px;" asp-controller="Contribution" asp-action="Update" asp-route-id="@contribution.ContributionId" class="btn btn-outline-primary btn-sm">Update</a>
+                                                <form asp-controller="Contribution" asp-action="Delete" asp-route-id="@contribution.ContributionId" method="post" onsubmit="return confirm('Are you sure you want to delete this contribution?');">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                                                </form>
+                                            }
                                         }
                                     </div>
                                 </td>
@@ -133,11 +136,14 @@
                         }
                         @if (User.IsInRole("Student"))
                         {
-                            <tr>
-                                <td>
-                                    <a asp-controller="Contribution" asp-action="Create" asp-route-magazineId="@Model.MagazineId">Create</a>
-                                </td>
-                            </tr>
+                            @if(DateTime.Now < Model.FirstClosureDate)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-controller="Contribution" asp-action="Create" asp-route-magazineId="@Model.MagazineId">Create</a>
+                                    </td>
+                                </tr>
+                            }
                         }
                     </table>
                 </div>
