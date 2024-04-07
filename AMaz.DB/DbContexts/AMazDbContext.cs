@@ -70,7 +70,7 @@ namespace AMaz.DB
                 Entity<Magazine>().
                 HasMany( m => m.Contributions).
                 WithOne( c => c.Magazine).
-                OnDelete(DeleteBehavior.SetNull);
+                OnDelete(DeleteBehavior.Cascade);
 
             // If Delete AcademicYear ==> Just set the AcademicYear in magazine to null
             modelBuilder.
