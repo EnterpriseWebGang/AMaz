@@ -57,13 +57,14 @@ namespace AMaz.Web.Controllers
         [HttpPost]
         [Authorize(Roles = "Student")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateContributionViewModel model)
+        public async Task<IActionResult> Create(CreateContributionViewModel model, string magazineId)
         {
             if (ModelState.IsValid)
             {
                 var request = _mapper.Map<CreateContributionRequest>(model);
                 request.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 request.SubmissionDate = DateTime.Now;
+                request.MagazineId = magazineId;
                 var result = await _contributionService.CreateContributionAsync(request, async (contribution, coordinator) =>
                 {
                     if (contribution != null && coordinator != null)

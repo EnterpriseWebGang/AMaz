@@ -25,7 +25,7 @@ namespace AMaz.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            if (User.IsInRole("Manager"))
+            if (User.IsInRole("Manager") || !User.Identity.IsAuthenticated)
             {
                 var model = await _magazineService.GetAllMagazines();
                 return View(model);
@@ -128,7 +128,7 @@ namespace AMaz.Web.Controllers
         public async Task<IActionResult> Details(string id)
         {
             var magazine = await _magazineService.GetMagazineByIdAsync(id);
-            if (!User.IsInRole("Manager"))
+            if (!User.IsInRole("Manager") && User.Identity.IsAuthenticated)
             {
                 var isAuthorized = await _userService.ValidateIfUserIsInFaculty(User.FindFirstValue(ClaimTypes.NameIdentifier), magazine.MagazineId);
                 if (!isAuthorized)

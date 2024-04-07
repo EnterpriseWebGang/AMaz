@@ -26,7 +26,7 @@
                             <h4>Homework Submission Form</h4>
                         </div>
                         <div class="card-body">
-                            <form asp-controller="Contribution" asp-action="Create" method="post" enctype="multipart/form-data" id="homeworkForm">
+                            <form asp-controller="Contribution" asp-action="Create" asp-route-magazineId="@Model.MagazineId" method="post" enctype="multipart/form-data" id="homeworkForm">
                                 <div class="form-group">
                                     <label for="title">Homework Title</label>
                                     <input asp-for="Title" class="form-control" id="title" name="title" required />                                 

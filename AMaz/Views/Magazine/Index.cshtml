@@ -144,7 +144,9 @@
                             </div>
                         </div>
                     </div>
-                    <a class="btn btn-primary btn-lg" asp-action="Create">Create</a>
+                    @if (User.IsInRole("Manager")){
+                        <a class="btn btn-primary btn-lg" asp-action="Create">Create</a>
+                    }
                 </div>
             </div>
         </div>
