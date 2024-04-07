@@ -17,21 +17,9 @@
         </div>
         <ul class="sidebar-menu">
 
-            <li class="menu-header">Functions</li>
-            <li class="dropdown active">
-                <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Auth</span></a>
-                <ul class="dropdown-menu">
-                    <li class=active><a class="nav-link beep beep-sidebar" asp-action="Create" asp-controller="Account">Create Account</a></li>
-                </ul>
-            </li>
+           
             <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-bicycle"></i> <span>Features</span></a>
-                <ul class="dropdown-menu">
-                    <li><a asp-action="Create" asp-controller="AcademicYear">Create Academic Year</a></li>
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Actions</span></a>
                 <ul class="dropdown-menu">
                     <li><a asp-action="Index" asp-controller="Account">View User List</a></li>
                     <li><a asp-action="Index" asp-controller="AcademicYear">View Academic Year</a></li>
@@ -135,13 +123,58 @@
                                 <div class="form-group row align-items-center">
                                     <label class="col-md-4 text-md-right text-left" for="selectedFaculty">Select Faculty</label>
                                     <div class="col-lg-4 col-md-6">
-                                        @Html.DropDownListFor(m => m.FacultyId, new SelectList(Model.Faculties, "FacultyId", "Name"), "Select Faculty", new { @class = "form-control", @required = "required", id = "selectedFaculty" })
-                                        <div class="invalid-feedback" id="facultyValidationMessage" style="display: none;">Please select a faculty.</div>
+                                        @Html.DropDownListFor(m => m.FacultyId, new SelectList(Model.Faculties, "FacultyId", "Name"), "Select Faculty", new { @class = "form-control",@required = "required" ,id = "selectedFaculty" })
+                                    
                                     </div>
                                 </div>
 
+                                
                                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                 <script>
+
+                                    $(document).ready(function () {
+                                        // Function to enable/disable faculty selection based on the selected role
+                                        function toggleFacultySelection(enabled) {
+                                            $('#selectedFaculty').prop('disabled', !enabled);
+                                            if (!enabled) {
+                                                $('#facultyValidationMessage').hide(); // Hide faculty validation message if selection is disabled
+                                            }
+                                        }
+
+                                        // Add event listener to the radio buttons
+                                        $('input[name="Role"]').on('change', function () {
+                                            const selectedRole = parseInt($('input[name="Role"]:checked').val());
+                                            console.log('Selected Role:', selectedRole); // Debugging
+
+                                            if (selectedRole === 4) { // Assuming 4 represents the Manager role
+                                                toggleFacultySelection(false); // Disable faculty selection for Manager
+                                                $('#facultyValidationMessage').hide(); // Hide faculty validation message for Manager
+                                            } else {
+                                                toggleFacultySelection(true); // Enable faculty selection for Coordinator and Student
+                                            }
+                                        });
+
+                                        // Initial check for default selected role
+                                        if (parseInt($('input[name="Role"]:checked').val()) === 4) { // Assuming 4 represents the Manager role
+                                            toggleFacultySelection(false); // Disable faculty selection for Manager initially
+                                            $('#facultyValidationMessage').hide(); // Hide faculty validation message for Manager initially
+                                        }
+                                    });
+
+                                    // Function to validate faculty selection when form is submitted
+                                    $('#facultyForm').on('submit', function (event) {
+                                        const selectedRole = parseInt($('input[name="Role"]:checked').val());
+                                        if (selectedRole !== 4 && $('#selectedFaculty').val() === '') { // Assuming 4 represents the Manager role
+                                            $('#facultyValidationMessage').show(); // Show faculty validation message if selection is required and empty
+                                            event.preventDefault(); // Prevent form submission
+                                        }
+                                    });
+
+
+
+
+
+
                                     $(document).ready(function () {
                                         $('#selectedFaculty').on('change', function () {
                                             $(this).removeClass('is-invalid');
