@@ -175,6 +175,11 @@
                         <a asp-action="Manager" asp-controller="Home">AMaz</a>
                     </div>
                     <ul class="sidebar-menu">
+                        <li class="menu-header">Dashboard</li>
+                        <li class="dropdown">
+                            <a asp-controller="Dashboard" asp-action="Index" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+                        </li>
+
 
                         <li class="menu-header">Functions</li>
                      
@@ -222,6 +227,13 @@
     <script src="~/assets/modules/nicescroll/jquery.nicescroll.min.js"></script>
     <script src="~/assets/modules/moment.min.js"></script>
     <script src="~/assets/js/stisla.js"></script>
+
+    <!-- JS Libraies -->
+    <script src="~/assets/modules/chart.min.js"></script>
+
+    <!-- Page Specific JS File -->
+
+    <script src="~/assets/js/page/modules-chartjs.js"></script>
 
     <!-- Template JS File -->
     <script src="~/assets/js/scripts.js"></script>

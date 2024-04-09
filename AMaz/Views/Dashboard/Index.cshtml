@@ -1,0 +1,168 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_ManagerLayout";
+}
+
+
+<div class="main-sidebar sidebar-style-2">
+    <aside id="sidebar-wrapper">
+        <div class="sidebar-brand">
+            <a asp-action="Manager" asp-controller="Home">AMaz</a>
+        </div>
+        <div class="sidebar-brand sidebar-brand-sm">
+            <a asp-action="Manager" asp-controller="Home">AMaz</a>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="menu-header">Dashboard</li>
+            <li class="dropdown active">
+                <a asp-controller="Dashboard" asp-action="Index" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+            </li>
+
+            <li class="menu-header">Functions</li>
+
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-bicycle"></i> <span>Features</span></a>
+                <ul class="dropdown-menu">
+                    <li><a asp-action="Create" asp-controller="Faculty">Create Faculty</a></li>
+
+                    <li><a asp-action="Create" asp-controller="Magazine">Create Magazine</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
+                <ul class="dropdown-menu">
+                    <li><a asp-action="Index" asp-controller="Faculty">View Faculty List</a></li>
+                    <li><a asp-action="Index" asp-controller="Magazine">View Magazine</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </aside>
+</div>
+
+
+<!-- Main Content -->
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>Dashboard</h1>
+        </div>
+
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Number of Contributions within Each Faculty for Each Academic Year (Bar Chart)</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="contributionsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Percentage of Contributions by Each Faculty for Any Academic Year (Pie Chart)</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="percentageChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Number of Contributors within Each Faculty for Each Academic Year (Bar Chart)</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="contributorsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    // Function to render bar chart
+    function renderBarChart(chartId, labels, data) {
+        // Get the canvas element by ID
+        var ctx = document.getElementById(chartId).getContext('2d');
+
+        // Create a new bar chart using Chart.js library
+        new Chart(ctx, {
+            type: 'bar', // Set chart type to bar
+            data: {
+                labels: labels, // Set labels for the chart
+                datasets: [{
+                    label: 'Number of Contributions', // Set label for dataset
+                    data: data, // Set data for the dataset
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)', // Set background color for bars
+                    borderColor: 'rgba(54, 162, 235, 1)', // Set border color for bars
+                    borderWidth: 1 // Set border width for bars
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true // Start y-axis at 0
+                        }
+                    }]
+                }
+            }
+        });
+    }
+
+    // Function to render pie chart
+    function renderPieChart(chartId, labels, data) {
+        // Get the canvas element by ID
+        var ctx = document.getElementById(chartId).getContext('2d');
+
+        // Create a new pie chart using Chart.js library
+        new Chart(ctx, {
+            type: 'pie', // Set chart type to pie
+            data: {
+                labels: labels, // Set labels for the chart
+                datasets: [{
+                    data: data, // Set data for the dataset
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ] // Set background colors for segments
+                }]
+            }
+        });
+    }
+
+    // Function to fetch data and render charts
+    function fetchDataAndRenderCharts() {
+        // You need to fetch data from the server here
+        // Example data (replace with actual fetched data)
+        var facultyNames = ["Faculty A", "Faculty B", "Faculty C"];
+        var contributionsData = [100, 200, 150];
+        var contributorsData = [20, 30, 25];
+        var academicYearLabels = ["2022", "2023", "2024"];
+        var percentageData = [50, 30, 20]; // Example percentage data
+
+        // Render charts
+        renderBarChart("contributionsChart", facultyNames, contributionsData);
+        renderBarChart("contributorsChart", facultyNames, contributorsData);
+        renderPieChart("percentageChart", academicYearLabels, percentageData);
+    }
+
+    // Call the function to fetch data and render charts when the page loads
+    document.addEventListener('DOMContentLoaded', function () {
+        fetchDataAndRenderCharts();
+    });
+</script>
