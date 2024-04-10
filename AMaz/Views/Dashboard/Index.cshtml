@@ -81,8 +81,9 @@
                             <h4>Number of Contributors within Each Faculty for Each Academic Year (Bar Chart)</h4>
                         </div>
                         <div class="card-body">
-                            <canvas id="contributorsChart"></canvas>
+                            <canvas id="contributorsChart" style="height: 50%; width: 50%;"></canvas>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -91,29 +92,25 @@
 </div>
 
 <script>
-    // Function to render bar chart
     function renderBarChart(chartId, labels, data) {
-        // Get the canvas element by ID
         var ctx = document.getElementById(chartId).getContext('2d');
-
-        // Create a new bar chart using Chart.js library
         new Chart(ctx, {
-            type: 'bar', // Set chart type to bar
+            type: 'bar',
             data: {
-                labels: labels, // Set labels for the chart
+                labels: labels, // Labels containing both faculty names and academic years
                 datasets: [{
-                    label: 'Number of Contributions', // Set label for dataset
-                    data: data, // Set data for the dataset
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)', // Set background color for bars
-                    borderColor: 'rgba(54, 162, 235, 1)', // Set border color for bars
-                    borderWidth: 1 // Set border width for bars
+                    label: 'Number of Contributions',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
                 }]
             },
             options: {
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true // Start y-axis at 0
+                            beginAtZero: true
                         }
                     }]
                 }
@@ -121,48 +118,101 @@
         });
     }
 
-    // Function to render pie chart
-    function renderPieChart(chartId, labels, data) {
-        // Get the canvas element by ID
+    function renderContributorBarChart(chartId, labels, data) {
         var ctx = document.getElementById(chartId).getContext('2d');
-
-        // Create a new pie chart using Chart.js library
         new Chart(ctx, {
-            type: 'pie', // Set chart type to pie
+            type: 'bar',
             data: {
-                labels: labels, // Set labels for the chart
+                labels: labels,
                 datasets: [{
-                    data: data, // Set data for the dataset
+                    label: 'Number of Contributors',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                layout: {
+                    padding: {
+                        left: 100,   // Adjust left padding to move the chart to the right
+                        right: 100,  // Adjust right padding to move the chart to the left
+                        top: 0,
+                        bottom: 35
+                    }
+                }
+            }
+        });
+    }
+
+
+
+    function renderPieChart(chartId, labels, data) {
+        var ctx = document.getElementById(chartId).getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.6)',
                         'rgba(54, 162, 235, 0.6)',
                         'rgba(255, 206, 86, 0.6)',
                         'rgba(75, 192, 192, 0.6)',
                         'rgba(153, 102, 255, 0.6)'
-                    ] // Set background colors for segments
+                    ]
                 }]
             }
         });
     }
-
-    // Function to fetch data and render charts
     function fetchDataAndRenderCharts() {
-        // You need to fetch data from the server here
-        // Example data (replace with actual fetched data)
+        // This function should fetch actual data from the server
+        // Replace the example data with actual fetched data
         var facultyNames = ["Faculty A", "Faculty B", "Faculty C"];
-        var contributionsData = [100, 200, 150];
-        var contributorsData = [20, 30, 25];
-        var academicYearLabels = ["2022", "2023", "2024"];
-        var percentageData = [50, 30, 20]; // Example percentage data
+        var academicYears = ['2019-2020', '2020-2021', '2021-2022', '2022-2023']; // Add your academic year labels here
+        var contributionsData = [
+            [100, 150, 200], // Example contributions data for Faculty A
+            [120, 180, 220], // Example contributions data for Faculty B
+            [90, 160, 210]   // Example contributions data for Faculty C
+        ];
+        var contributorsData = contributionsData; // Set contributorsData same as contributionsData
+        var percentageData = [
+            [50, 30, 20],     // Example percentage data for Faculty A
+            [40, 35, 25],     // Example percentage data for Faculty B
+            [30, 25, 15]      // Example percentage data for Faculty C
+        ];
 
-        // Render charts
-        renderBarChart("contributionsChart", facultyNames, contributionsData);
-        renderBarChart("contributorsChart", facultyNames, contributorsData);
-        renderPieChart("percentageChart", academicYearLabels, percentageData);
+        // Combine faculty names with academic years for labels
+        var labels = [];
+        for (var i = 0; i < facultyNames.length; i++) {
+            for (var j = 0; j < academicYears.length; j++) {
+                labels.push(facultyNames[i] + ' - ' + academicYears[j]);
+            }
+        }
+
+        // Render the bar chart for contributions
+        renderBarChart("contributionsChart", labels, contributionsData.flat());
+
+        // Render the bar chart for contributors
+        renderContributorBarChart("contributorsChart", labels, contributorsData.flat());
+
+        // Render the pie chart for percentage
+        renderPieChart("percentageChart", facultyNames, percentageData.flat());
     }
 
-    // Call the function to fetch data and render charts when the page loads
+
+
+
     document.addEventListener('DOMContentLoaded', function () {
         fetchDataAndRenderCharts();
     });
 </script>
+
