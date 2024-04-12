@@ -51,5 +51,7 @@ namespace AMaz.Repo
         {
             return await _db.AcademicYears.OrderByDescending(a => a.DateTimeFrom).FirstOrDefaultAsync();
         }
+
+        
     }
 }

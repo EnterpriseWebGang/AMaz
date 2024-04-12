@@ -18,5 +18,10 @@ namespace AMaz.Entity
 
         [ForeignKey("MagazineId")]
         public ICollection<Magazine> Magazines { get; set; }
+
+        public override string ToString()
+        {
+            return DateTimeFrom.ToString("MM/dd/yyyy") + " - " + DateTimeTo.ToString("MM/dd/yyyy");
+        }
     }
 }

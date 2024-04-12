@@ -173,43 +173,65 @@
             }
         });
     }
-    function fetchDataAndRenderCharts() {
-        // This function should fetch actual data from the server
-        // Replace the example data with actual fetched data
-        var facultyNames = ["Faculty A", "Faculty B", "Faculty C"];
-        var academicYears = ['2019-2020', '2020-2021', '2021-2022', '2022-2023']; // Add your academic year labels here
-        var contributionsData = [
-            [100, 150, 200], // Example contributions data for Faculty A
-            [120, 180, 220], // Example contributions data for Faculty B
-            [90, 160, 210]   // Example contributions data for Faculty C
-        ];
-        var contributorsData = contributionsData; // Set contributorsData same as contributionsData
-        var percentageData = [
-            [50, 30, 20],     // Example percentage data for Faculty A
-            [40, 35, 25],     // Example percentage data for Faculty B
-            [30, 25, 15]      // Example percentage data for Faculty C
-        ];
 
-        // Combine faculty names with academic years for labels
+
+    function fetchDataAndRenderCharts() {
+        // Replace the example data with actual fetched data or fallback to example data
+        $.ajax({
+            url: 'your_server_endpoint', // Replace 'your_server_endpoint' with the actual endpoint URL
+            method: 'GET',
+            success: function (response) {
+                // If server returns data, use it
+                var facultyNames = response.facultyNames || ["Faculty A", "Faculty B", "Faculty C"];
+                var academicYears = response.academicYears || ['2019-2020', '2020-2021', '2021-2022', '2022-2023'];
+                var contributionsData = response.contributionsData || [
+                    [100, 150, 200],
+                    [120, 180, 220],
+                    [90, 160, 210]
+                ];
+                var contributorsData = response.contributorsData || contributionsData;
+                var percentageData = response.percentageData || [
+                    [50, 30, 20],
+                    [40, 35, 25],
+                    [30, 25, 15]
+                ];
+                renderCharts(facultyNames, academicYears, contributionsData, contributorsData, percentageData);
+            },
+            error: function () {
+                // If no data is available from the server, use example data
+                var facultyNames = ["Faculty A", "Faculty B", "Faculty C"];
+                var academicYears = ['2019-2020', '2020-2021', '2021-2022', '2022-2023'];
+                var contributionsData = [
+                    [100, 150, 200],
+                    [120, 180, 220],
+                    [90, 160, 210]
+                ];
+                var contributorsData = contributionsData;
+                var percentageData = [
+                    [50, 30, 20],
+                    [40, 35, 25],
+                    [30, 25, 15]
+                ];
+                renderCharts(facultyNames, academicYears, contributionsData, contributorsData, percentageData);
+            }
+        });
+    }
+
+    // Rendering function for all charts
+    function renderCharts(facultyNames, academicYears, contributionsData, contributorsData, percentageData) {
         var labels = [];
-        for (var i = 0; i < facultyNames.length; i++) {
-            for (var j = 0; j < academicYears.length; j++) {
-                labels.push(facultyNames[i] + ' - ' + academicYears[j]);
+        for (var i = 0; i < academicYears.length; i++) {
+            for (var j = 0; j < facultyNames.length; j++) {
+                labels.push(academicYears[i] + ' - ' + facultyNames[j]);
             }
         }
-
-        // Render the bar chart for contributions
         renderBarChart("contributionsChart", labels, contributionsData.flat());
-
-        // Render the bar chart for contributors
         renderContributorBarChart("contributorsChart", labels, contributorsData.flat());
-
-        // Render the pie chart for percentage
         renderPieChart("percentageChart", facultyNames, percentageData.flat());
     }
 
-
-
+    // Example rendering functions for individual charts
+    // Assume renderBarChart, renderContributorBarChart, and renderPieChart functions are defined as before
 
     document.addEventListener('DOMContentLoaded', function () {
         fetchDataAndRenderCharts();
