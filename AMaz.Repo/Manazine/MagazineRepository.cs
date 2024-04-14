@@ -33,8 +33,10 @@ namespace AMaz.Repo
                 .ToListAsync();
         }
 
-        public async Task<Magazine> GetMagazineByIdAsync(string id)
+        public async Task<Magazine> GetMagazineByIdAsync(string id, bool isAuthenticated = true)
         {
+            //TODO: Check if the user is not authenticated ==> return only accepted contributions
+
             return await _dbContext.Magazines.Include(m => m.Faculty).
                 Include(m => m.AcademicYear).
                 Include(m => m.Contributions).

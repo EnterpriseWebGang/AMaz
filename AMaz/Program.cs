@@ -73,6 +73,8 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 
 builder.Services.AddTransient<IFacultyRepository, FacultyRepository>();
 builder.Services.AddTransient<IFacultyService, FacultyService>();
+
+builder.Services.AddTransient<DashBoardService>();
 #endregion
 
 builder.Services.AddControllersWithViews();

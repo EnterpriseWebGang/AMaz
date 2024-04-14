@@ -12,6 +12,6 @@ namespace AMaz.Common
 
         public string[]? SecondLabels;
 
-        public int[ , ]? Data; //data is a 2 dimensional array
+        public int[,]? Data; //data is a 2 dimensional array
     }
 }
