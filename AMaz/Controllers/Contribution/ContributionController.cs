@@ -112,6 +112,16 @@ namespace AMaz.Web.Controllers
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> Delete(string id, string magazineId)
         {
+            var contribution = await _contributionService.GetContributionByIdAsync(id);
+            if (contribution == null)
+            {
+                return NotFound();
+            }
+            if (User.FindFirstValue(ClaimTypes.NameIdentifier) != contribution.User.Id)
+            {
+                return Forbid();
+            }
+
             var result = await _contributionService.DeleteContributionAsync(id);
 
             if (result)
@@ -131,7 +141,10 @@ namespace AMaz.Web.Controllers
             {
                 return NotFound();
             }
-
+            if(User.FindFirstValue(ClaimTypes.NameIdentifier) != contribution.User.Id)
+            {
+                return Forbid();
+            }
             var model = _mapper.Map<UpdateContributionViewModel>(contribution);
             ViewBag.Id = id;
             return View(model);
@@ -146,6 +159,15 @@ namespace AMaz.Web.Controllers
             {
                 var request = _mapper.Map<UpdateContributionRequest>(model);
                 request.ContributionId = id;
+                var contribution = await _contributionService.GetContributionByIdAsync(id);
+                if (contribution == null)
+                {
+                    return NotFound();
+                }
+                if (User.FindFirstValue(ClaimTypes.NameIdentifier) != contribution.User.Id)
+                {
+                    return Forbid();
+                }
 
                 var result = await _contributionService.UpdateContributionAsync(request, async (contribution, coordinator) =>
                 {
