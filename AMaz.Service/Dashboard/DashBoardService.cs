@@ -13,7 +13,7 @@ namespace AMaz.Service
 {
     public class DashBoardService
     {
-        private readonly AMazDbContext _db;
+       /* private readonly AMazDbContext _db;
 
         public DashBoardService(AMazDbContext db)
         {
@@ -72,6 +72,6 @@ namespace AMaz.Service
                 Data = dashBoardData,
             };
 
-        }
+        }*/
     }
 }

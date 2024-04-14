@@ -14,9 +14,9 @@ namespace AMaz.Web.Controllers
 
         
 
-        public IActionResult GetFacultyContributionCountByAcademicYear()
+      /*  public IActionResult GetFacultyContributionCountByAcademicYear()
         {
 
-        }
+        }*/
     }
 }
