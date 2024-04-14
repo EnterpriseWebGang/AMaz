@@ -37,27 +37,27 @@ namespace AMaz.Service
                                 Magazine = mf,
                                 Contribution = cf
                             };
-            
+
             var leftData = await leftQuery.ToListAsync();
 
             var rightQuery = from academicYear in _db.AcademicYears
-                        join magazine in _db.Magazines.Include(m => m.AcademicYear).Include(m => m.Faculty) on academicYear.AcademicYearId equals magazine.AcademicYear.AcademicYearId into magazineAcademicYear
-                            from ma in magazineAcademicYear.DefaultIfEmpty() //left join
-                        join contribution in _db.Contributions on ma.MagazineId equals contribution.Magazine.MagazineId into facultyContribution
-                        join Faculty in _db.Faculties on ma.Faculty.FacultyId equals Faculty.FacultyId into magazineFaculty
-                            from mf in magazineFaculty.DefaultIfEmpty() //left join
-                            from cf in facultyContribution.DefaultIfEmpty() //left join
-                        orderby academicYear.DateTimeFrom
-                        select new
-                        {
-                            Faculty = mf,
-                            AcademicYear = academicYear,
-                            Magazine = ma,
-                            Contribution = cf
-                        };
+                             join magazine in _db.Magazines.Include(m => m.AcademicYear).Include(m => m.Faculty) on academicYear.AcademicYearId equals magazine.AcademicYear.AcademicYearId into magazineAcademicYear
+                             from ma in magazineAcademicYear.DefaultIfEmpty() //left join
+                             join contribution in _db.Contributions on ma.MagazineId equals contribution.Magazine.MagazineId into facultyContribution
+                             join Faculty in _db.Faculties on ma.Faculty.FacultyId equals Faculty.FacultyId into magazineFaculty
+                             from mf in magazineFaculty.DefaultIfEmpty() //left join
+                             from cf in facultyContribution.DefaultIfEmpty() //left join
+                             orderby academicYear.DateTimeFrom
+                             select new
+                             {
+                                 Faculty = mf,
+                                 AcademicYear = academicYear,
+                                 Magazine = ma,
+                                 Contribution = cf
+                             };
             var rightData = await rightQuery.ToListAsync();
 
-            var dbData = leftData.Union(rightData).ToList();    
+            var dbData = leftData.Union(rightData).ToList();
             var actualData = dbData.GroupBy(d => new { d.Faculty, d.AcademicYear }).Select(d => new
             {
                 Faculty = d.Key.Faculty?.Name,
@@ -76,7 +76,7 @@ namespace AMaz.Service
             }
 
             var faculties = actualData.DistinctBy(d => d.Faculty).Where(d => d.Faculty != null).OrderBy(d => d.Faculty).Select(d => d.Faculty).ToList();
-             
+
             for (int i = 0; i < faculties.Count(); i++)
             {
                 facultyPositionMap.Add(faculties[i], i);
@@ -84,8 +84,8 @@ namespace AMaz.Service
 
             var xCount = academicYears.Count();
             var yCount = faculties.Count();
-            
-            var dashBoardData = new int[yCount,xCount];
+
+            var dashBoardData = new int[yCount, xCount];
 
             var lastAcademicYearPosition = 0;
             var lastFacultyPosition = 0;
@@ -113,20 +113,21 @@ namespace AMaz.Service
 
         public async Task<DashBoardViewModel> GetContributorPercentageByFacultyForAnAcademicYear(string academicYearId)
         {
-            var query = from faculty in _db.Faculties join u in
-                            (from user in _db.Users.Include(u => u.Faculty) 
-                            join contribution in _db.Contributions.Include(c => c.User) on user.Id equals contribution.User.Id into uc //get users with contributions
-                            from c in uc
-                            join magazine in _db.Magazines.Include(m => m.AcademicYear) on c.Magazine.MagazineId equals magazine.MagazineId into mc
-                            from m in mc.DefaultIfEmpty() //left join
-                            join AcademicYear in _db.AcademicYears on m.AcademicYear.AcademicYearId equals AcademicYear.AcademicYearId into ma
-                            from a in ma.DefaultIfEmpty()//left join
-                            where a.AcademicYearId.ToString() == academicYearId
-                            select new
-                            {
-                                FacultyId = user.Faculty.FacultyId,
-                                User = user,
-                            }) 
+            var query = from faculty in _db.Faculties
+                        join u in
+                            (from user in _db.Users.Include(u => u.Faculty)
+                             join contribution in _db.Contributions.Include(c => c.User) on user.Id equals contribution.User.Id into uc //get users with contributions
+                             from c in uc
+                             join magazine in _db.Magazines.Include(m => m.AcademicYear) on c.Magazine.MagazineId equals magazine.MagazineId into mc
+                             from m in mc.DefaultIfEmpty() //left join
+                             join AcademicYear in _db.AcademicYears on m.AcademicYear.AcademicYearId equals AcademicYear.AcademicYearId into ma
+                             from a in ma.DefaultIfEmpty()//left join
+                             where a.AcademicYearId.ToString() == academicYearId
+                             select new
+                             {
+                                 FacultyId = user.Faculty.FacultyId,
+                                 User = user,
+                             })
                         on faculty.FacultyId equals u.FacultyId into fu
                         from f in fu.DefaultIfEmpty() //left join
                         select new
@@ -194,33 +195,33 @@ namespace AMaz.Service
                                 };
             var leftJoinData = await leftJoinQuery.ToListAsync();
 
-            var rightJoinQuery = from faculty in _db.Faculties 
-                                 join au in 
+            var rightJoinQuery = from faculty in _db.Faculties
+                                 join au in
                                      (from user in _db.Users.Include(u => u.Faculty)
-                                     join contribution in _db.Contributions.Include(c => c.User) on user.Id equals contribution.User.Id into uc //get users with contributions
-                                     from c in uc.DefaultIfEmpty() //left join
-                                     join magazine in _db.Magazines.Include(m => m.AcademicYear) on c.Magazine.MagazineId equals magazine.MagazineId into mc
-                                     from m in mc.DefaultIfEmpty() //left join
-                                     join academicYear in _db.AcademicYears on m.AcademicYear equals academicYear into ma
-                                     from a in ma
-                                     select new
-                                     {
-                                         AcademicYear = a,
-                                         Magazine = m,
-                                         Faculty = user.Faculty,
-                                         User = user,
-                                     })
+                                      join contribution in _db.Contributions.Include(c => c.User) on user.Id equals contribution.User.Id into uc //get users with contributions
+                                      from c in uc.DefaultIfEmpty() //left join
+                                      join magazine in _db.Magazines.Include(m => m.AcademicYear) on c.Magazine.MagazineId equals magazine.MagazineId into mc
+                                      from m in mc.DefaultIfEmpty() //left join
+                                      join academicYear in _db.AcademicYears on m.AcademicYear equals academicYear into ma
+                                      from a in ma
+                                      select new
+                                      {
+                                          AcademicYear = a,
+                                          Magazine = m,
+                                          Faculty = user.Faculty,
+                                          User = user,
+                                      })
                             on faculty equals au.Faculty into fu
-                            from u in fu.DefaultIfEmpty() //left join
-                            orderby u.AcademicYear.DateTimeTo
-                            select new
-                            {
-                                Faculty = faculty,
-                                User = u.User,
-                                AcademicYear = u.AcademicYear,
-                            };
+                                 from u in fu.DefaultIfEmpty() //left join
+                                 orderby u.AcademicYear.DateTimeTo
+                                 select new
+                                 {
+                                     Faculty = faculty,
+                                     User = u.User,
+                                     AcademicYear = u.AcademicYear,
+                                 };
 
-            
+
             var rightJoinData = await rightJoinQuery.ToListAsync();
             var fullJoinData = leftJoinData.Union(rightJoinData).ToList();
             var actualData = fullJoinData.GroupBy(d => new { d.Faculty, d.AcademicYear }).Select(d => new
@@ -265,7 +266,7 @@ namespace AMaz.Service
                         }
                         dashBoardData[facultyPositionMap[item.Key], academicYearPositionMap[academicYearAndCount.AcademicYear.ToString()]] = academicYearAndCount.UserCount;
                         currentX++;
-                    } 
+                    }
                 }
                 currentY++;
                 currentX = 0;
@@ -278,5 +279,6 @@ namespace AMaz.Service
                 Data = dashBoardData,
             };
 
+        }
     }
 }
