@@ -28,6 +28,8 @@ namespace AMaz.Common
         [Display(Name = "Author Name")]
         public string AuthorName { get; set; }
 
+        public string CoordinatorComment { get; set; }
+
         [Display(Name = "Is Accepted")]
         public bool IsAccepted { get; set; }
         public FileViewModel[] Files { get; set; }

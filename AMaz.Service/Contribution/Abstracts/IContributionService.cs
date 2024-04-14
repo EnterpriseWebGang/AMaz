@@ -13,6 +13,10 @@ namespace AMaz.Service
         Task<bool> CreateContributionAsync(CreateContributionRequest request, Func<Contribution, UserViewModel, Task> sendingEmailCallBack);
         Task<bool> DeleteContributionAsync(string id);
         Task<bool> UpdateContributionAsync(UpdateContributionRequest request, Func<Contribution, UserViewModel, Task> sendingEmailCallBack);
+        Task<bool> RejectContributionAsync(string contributionId);
+
+        Task<bool> AddCommentAsync(ContributionCommentDtos comment);
+        Task<bool> ApproveContributionAsync(string contributionId);
 
     }
 }

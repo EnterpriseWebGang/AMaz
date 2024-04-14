@@ -153,7 +153,7 @@ namespace AMaz.Service
                 contribution.Content = request.Content;
                 contribution.IsSeenByOrdinator = false;
                 contribution.Status = (int)ContributionStatus.Pending;
-                contribution.AcceptedDate = null;
+                contribution.ApprovedDate = null;
 
                 if (!request.Files.IsNullOrEmpty()) //update the whole file list of the contribution
                 {
@@ -183,5 +183,89 @@ namespace AMaz.Service
                 return false;
             }
         }
+
+        public async Task<bool> AddCommentAsync(ContributionCommentDtos comment)
+        {
+            try
+            {
+                // Get the contribution by its ID
+                var contribution = await _contributionRepository.GetContributionByIdAsync(comment.ContributionId);
+
+                // Check if the contribution exists
+                if (contribution == null)
+                {
+                    // If not, throw an exception
+                    throw new ArgumentException("Invalid contribution id.", nameof(comment.ContributionId));
+                }
+
+                // Add the coordinator comment to the contribution
+                contribution.CoordinatorComment = comment.CoordinatorComment;
+
+                // Update the contribution in the repository
+                var updateResult = await _contributionRepository.UpdateContributionAsync(contribution);
+
+                // Return the result of the update operation
+                return updateResult;
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine($"Error occurred while adding coordinator comment: {ex.Message}");
+                return false;
+            }
+        }
+        public async Task<bool> RejectContributionAsync(string contributionId)
+        {
+            try
+            {
+                var contribution = await _contributionRepository.GetContributionByIdAsync(contributionId);
+                if (contribution == null)
+                {
+                    throw new ArgumentException("Invalid contribution id.", nameof(contributionId));
+                }
+
+                // Update the status of the contribution to rejected
+                contribution.Status = (int)ContributionStatus.Rejected;
+                contribution.IsApproved = false; // Reset IsApproved to false if needed
+                contribution.ApprovedDate = DateTime.Now; // Set the rejected date if needed
+
+                // Update the contribution in the repository and return the result
+                return await _contributionRepository.UpdateContributionAsync(contribution);
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine($"Error occurred while rejecting contribution: {ex.Message}");
+                return false;
+            }
+        }
+
+        public async Task<bool> ApproveContributionAsync(string contributionId)
+        {
+            try
+            {
+                var contribution = await _contributionRepository.GetContributionByIdAsync(contributionId);
+                if (contribution == null)
+                {
+                    throw new ArgumentException("Invalid contribution id.", nameof(contributionId));
+                }
+
+                // Update the status of the contribution to approved
+                contribution.Status = (int)ContributionStatus.Approved;
+                contribution.IsApproved = true;
+                contribution.ApprovedDate = DateTime.Now;
+
+                // Update the contribution in the repository
+                return await _contributionRepository.UpdateContributionAsync(contribution);
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions
+                Console.WriteLine($"Error occurred while approving contribution: {ex.Message}");
+                return false;
+            }
+        }
+
     }
+
 }
