@@ -132,7 +132,7 @@ namespace AMaz.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
-            var magazine = await _magazineService.GetMagazineByIdAsync(id);
+            var magazine = await _magazineService.GetMagazineByIdAsync(id, User.Identity.IsAuthenticated);
             if (magazine == null)
             {
                 return NotFound();

@@ -9,7 +9,7 @@ namespace AMaz.Repo
         Task<bool> DeleteMagazineAsync(Magazine magazine);
         Task<List<Magazine>> GetAllMagazineByFaculty(string facultyId);
         Task<List<Magazine>> GetAllMagazinesAsync(Func<DbSet<Magazine>, IQueryable<Magazine>> filter = null);
-        Task<Magazine> GetMagazineByIdAsync(string id);
+        Task<Magazine> GetMagazineByIdAsync(string id, bool isAuthenticated = true);
         Task<bool> UpdateMagazineAsync(Magazine magazine);
     }
 }
