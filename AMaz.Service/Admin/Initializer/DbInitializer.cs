@@ -26,9 +26,9 @@ namespace AMaz.Service
 
                     await CreateRolesWithAdmin(serviceScope.ServiceProvider);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-
+                    return;
                 }
 
             }

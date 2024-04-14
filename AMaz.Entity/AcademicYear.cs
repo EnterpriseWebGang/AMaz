@@ -21,7 +21,7 @@ namespace AMaz.Entity
 
         public override string ToString()
         {
-            return DateTimeFrom.ToString("MM/dd/yyyy") + " - " + DateTimeTo.ToString("MM/dd/yyyy");
+            return DateTimeFrom.ToString("yyyy/MM/dd") + " - " + DateTimeTo.ToString("yyyy/MM/dd");
         }
     }
 }

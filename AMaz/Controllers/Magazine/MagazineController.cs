@@ -53,6 +53,8 @@ namespace AMaz.Web.Controllers
             {
                 Faculties = faculties.ToList(),
                 AcademicYear = academicYear.DateTimeFrom + " - " + academicYear.DateTimeTo,
+                FirstClosureDate = DateTime.Parse(academicYear.DateTimeFrom),
+                FinalClosureDate = DateTime.Parse(academicYear.DateTimeTo)
             };
             return View(model);
         }
