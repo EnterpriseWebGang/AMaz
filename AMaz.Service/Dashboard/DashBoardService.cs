@@ -277,6 +277,6 @@ namespace AMaz.Service
                 SecondLabels = faculties.ToArray(),
                 Data = dashBoardData,
             };
-        }
+
     }
 }

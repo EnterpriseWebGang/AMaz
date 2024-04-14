@@ -36,9 +36,9 @@
             <div class="navigation">
                 <ul>
                     <i id="menu-close" class="fas fa-times"></i>
-                    <li><a class="active" href="#">Home</a></li>
-                    <li><a href="CoursesUI/course.html">Courses</a></li>
-
+                    <li><a class="@((string)ViewData["ActivePage"] == "Home" ? "active" : "")" asp-action="Index" asp-controller="Home">Home</a></li>
+                    <li><a class="@((string)ViewData["ActivePage"] == "Courses" ? "active" : "")" asp-action="Index" asp-controller="Magazine">Magazine</a></li>
+           
                     @await Html.PartialAsync("_LoginPartial")
                 </ul>
 
@@ -48,6 +48,18 @@
 
         </nav>
     </header>
+
+    <!-- JavaScript to handle click event and apply active class -->
+    <script>
+        $(document).ready(function () {
+            $("#courses-link").click(function () {
+                // Remove active class from all links
+                $("nav .navigation ul li a").removeClass("active");
+                // Add active class to the clicked link
+                $(this).addClass("active");
+            });
+        });
+    </script>
 
     <!-- End Navigation -->
 

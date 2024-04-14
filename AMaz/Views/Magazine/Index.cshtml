@@ -6,55 +6,6 @@
     ViewData["Title"] = "View Magazine List";
     Layout = User.IsInRole("Manager") ? "_ManagerLayout" : "_Layout";
 }
-@* <!DOCTYPE html>
-<html>
-<head>
-    <title>Magazine List</title>
-</head>
-<body>
-    <h1>Magazine List</h1>
-@if (!string.IsNullOrEmpty(ViewBag.Error))
-    {
-    <!-- Display validation errors in a div with red text -->
-    <div class="validation-summary-errors" asp-validation-summary="All">@ViewBag.Error</div>
-    <style>
-        .validation-summary-errors {
-            color: white; /* Text color */
-            background-color: #dc3545; /* Background color */
-            padding: 10px; /* Padding around the text */
-            border: 1px solid #dc3545; /* Border color and width */
-            margin-bottom: 10px; /* Margin at the bottom */
-            border-radius: 5px; /* Rounded corners */
-        }
-    </style>
-
-    }
-    <table class ="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>First Closure Date</th>
-                <th>Final Closure Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var magazine in Model)
-            {
-                <tr>
-                    <td>@magazine.Name</td>
-                    <td>@magazine.FirstClosureDate.ToShortDateString()</td>
-                    <td>@magazine.FinalClosureDate.ToShortDateString()</td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@magazine.MagazineId">Details</a> |
-                        <a asp-action="Update" asp-route-id="@magazine.MagazineId">Update</a> |
-                        <a asp-action="Delete" asp-route-id="@magazine.MagazineId">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</body>
-</html> *@
 
 @if (User.IsInRole("Manager")) //display sidebar only for manager
 {
@@ -72,18 +23,9 @@
                     <a asp-controller="Dashboard" asp-action="Index" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
                 </li>
 
-                <li class="menu-header">Functions</li>
-
-                <li class="dropdown">
-                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-bicycle"></i> <span>Features</span></a>
-                    <ul class="dropdown-menu">
-                        <li><a asp-action="Create" asp-controller="Faculty">Create Faculty</a></li>
-
-                        <li><a asp-action="Create" asp-controller="Magazine">Create Magazine</a></li>
-                    </ul>
-                </li>
+            
                 <li class="dropdown active">
-                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Components</span></a>
+                    <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i> <span>Functions</span></a>
                     <ul class="dropdown-menu">
                         <li><a asp-action="Index" asp-controller="Faculty">View Faculty List</a></li>
                         <li class=active><a class="nav-link beep beep-sidebar" asp-action="Index" asp-controller="Magazine">View Magazine</a></li>
@@ -94,70 +36,110 @@
             </ul>
         </aside>
     </div>
+
+    <div class="main-content">
+        <section class="section">
+            <div class="section-header">
+                <h1>View Magazine List</h1>
+                <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item active"><a href="#">Functions</a></div>
+                    <div class="breadcrumb-item">View Magazine</div>
+                </div>
+            </div>
+
+            <div class="section-body">
+                <h2 class="section-title">Magazine List</h2>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Magazine</h4>
+
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>First Closure Date</th>
+                                            <th>Final Closure Date</th>
+                                            <th>Faculty</th>
+                                            <th>Academic Year</th>
+                                            <th>Action</th>
+                                        </tr>
+
+                                        @foreach (var magazine in Model)
+                                        {
+                                            <tr>
+                                                <td>@magazine.Name</td>
+                                                <td>@magazine.FirstClosureDate.ToShortDateString()</td>
+                                                <td>@magazine.FinalClosureDate.ToShortDateString()</td>
+                                                <td>@magazine.FacultyName</td>
+                                                <td>@magazine.AcademicYear.DateTimeFrom - @magazine.AcademicYear.DateTimeTo</td>
+                                                <td>
+                                                    <a class="btn btn-outline-secondary btn-sm" asp-action="Details" asp-route-id="@magazine.MagazineId">Details</a>
+                                                    @if (User.IsInRole("Manager"))
+                                                    {
+                                                        <a class="btn btn-outline-info btn-sm" asp-action="Update" asp-route-id="@magazine.MagazineId">Update</a>
+                                                        <a class="btn btn-outline-warning btn-sm" asp-action="Delete" asp-route-id="@magazine.MagazineId">Delete</a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <a class="btn btn-primary btn-lg" asp-action="Create">Create</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
 }
+
+
+<br><br><br>
 
 <div class="main-content">
     <section class="section">
-        <div class="section-header">
-            <h1>View Magazine List</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Functions</a></div>
-                <div class="breadcrumb-item"><a href="#">Components</a></div>
-                <div class="breadcrumb-item">View Magazine</div>
-            </div>
-        </div>
-
         <div class="section-body">
-            <h2 class="section-title">Magazine List</h2>
-
+            <h2 class="section-title">Magazine</h2>
             <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Magazine</h4>
-                           
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>First Closure Date</th>
-                                        <th>Final Closure Date</th>
-                                        <th>Faculty</th>
-                                        <th>Academic Year</th>
-                                        <th>Action</th>
-                                    </tr>
-
-                                    @foreach (var magazine in Model)
-                                    {
-                                        <tr>
-                                            <td>@magazine.Name</td>
-                                            <td>@magazine.FirstClosureDate.ToShortDateString()</td>
-                                            <td>@magazine.FinalClosureDate.ToShortDateString()</td>
-                                            <td>@magazine.FacultyName</td>
-                                            <td>@magazine.AcademicYear.DateTimeFrom - @magazine.AcademicYear.DateTimeTo</td>
-                                            <td>
-                                                <a class="btn btn-outline-secondary btn-sm" asp-action="Details" asp-route-id="@magazine.MagazineId">Details</a>
-                                                @if(User.IsInRole("Manager")){
-                                                    <a class="btn btn-outline-info btn-sm" asp-action="Update" asp-route-id="@magazine.MagazineId">Update</a>
-                                                    <a class="btn btn-outline-warning btn-sm" asp-action="Delete" asp-route-id="@magazine.MagazineId">Delete</a>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </table>
+                @foreach (var magazine in Model)
+                {
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                        <article class="article">
+                            <div class="article-header">
+                                <div class="article-image" data-background="../assets/img/news/img08.jpg">
+                                </div>
+                                <div class="article-title">
+                                    <h2><a href="#">Magazine Name: @magazine.Name</a></h2>
+                                </div>
                             </div>
-                        </div>
+                            <div class="article-details">
+                                <p>Faculty: @magazine.FacultyName</p>
+                                <p><strong>First Closure Date:</strong> @magazine.FirstClosureDate.ToShortDateString()</p>
+                                <p><strong>Final Closure Date:</strong> @magazine.FinalClosureDate.ToShortDateString()</p>
+                                <p><strong>Academic Year:</strong> @magazine.AcademicYear.DateTimeFrom - @magazine.AcademicYear.DateTimeTo</p>
+                                <div class="article-cta">
+                                    <a asp-action="Details" asp-route-id="@magazine.MagazineId" class="btn btn-primary">Details</a>
+                                </div>
+                            </div>
+                        </article>
                     </div>
-                    @if (User.IsInRole("Manager")){
-                        <a class="btn btn-primary btn-lg" asp-action="Create">Create</a>
-                    }
-                </div>
+                }
             </div>
         </div>
     </section>
 </div>
+
+
+
+
 
 @section Scripts {
     <!-- JS Libraies -->

@@ -41,6 +41,7 @@ namespace AMaz.Web.Controllers
             return Ok(json);
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetContributorCount()
         {
