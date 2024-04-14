@@ -37,7 +37,7 @@
                 <ul>
                     <i id="menu-close" class="fas fa-times"></i>
                     <li><a class="@((string)ViewData["ActivePage"] == "Home" ? "active" : "")" asp-action="Index" asp-controller="Home">Home</a></li>
-                    <li><a class="@((string)ViewData["ActivePage"] == "Courses" ? "active" : "")" asp-action="Index" asp-controller="Magazine">Courses</a></li>
+                    <li><a class="@((string)ViewData["ActivePage"] == "Courses" ? "active" : "")" asp-action="Index" asp-controller="Magazine">Magazine</a></li>
            
                     @await Html.PartialAsync("_LoginPartial")
                 </ul>

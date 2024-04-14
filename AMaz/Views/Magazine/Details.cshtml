@@ -48,6 +48,8 @@
 }
 
 
+
+<br /><br /><br />
 <div class="main-content">
     <section class="section">
 
@@ -110,9 +112,12 @@
                         <tr>
                             <th>Title</th>
                             <th>Content</th>
-                            <th>Status</th>
-                            <th>Submission Date</th>
-                            <th>Accepted Date</th>
+                            @if (User.Identity.IsAuthenticated)
+                            {                              
+                                <th>Status</th>
+                                <th>Submission Date</th>
+                                <th>Accepted Date</th>
+                            }
                             <th>Author Name</th>
                             <th>Actions</th>
                         </tr>
@@ -121,9 +126,12 @@
                             <tr>
                                 <td>@contribution.Title</td>
                                 <td>@contribution.Content</td>
-                                <td>@contribution.Status</td>
-                                <td>@contribution.SubmissionDate.ToShortDateString()</td>
-                                <td>@(contribution.AcceptedDate.HasValue ? contribution.AcceptedDate.Value.ToShortDateString() : "N/A")</td>
+                                @if (User.Identity.IsAuthenticated)
+                                {                                  
+                                    <td>@contribution.Status</td>
+                                    <td>@contribution.SubmissionDate.ToShortDateString()</td>
+                                    <td>@(contribution.AcceptedDate.HasValue ? contribution.AcceptedDate.Value.ToShortDateString() : "N/A")</td>
+                                }
                                 <td>@contribution.AuthorName</td>
                                 <!-- Edit button -->
                                 <td>
@@ -149,7 +157,7 @@
                             {
                                 <tr>
                                     <td>
-                                        <a asp-controller="Contribution" asp-action="Create" asp-route-magazineId="@Model.MagazineId">Create</a>
+                                        <a asp-controller="Contribution" asp-action="Create" asp-route-magazineId="@Model.MagazineId" class="btn btn-primary btn-lg">Create</a>
                                     </td>
                                 </tr>
                             }
