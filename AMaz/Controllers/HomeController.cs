@@ -27,7 +27,7 @@ namespace AMaz.Controllers
             {
                 return RedirectToAction("Coordinator");
             }
-
+            ViewData["ActivePage"] = "Home";
             return View();
         }
 
