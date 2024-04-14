@@ -21,6 +21,12 @@
                 <input type="password" id="password" name="password" placeholder="Password" required />
                 <button type="submit">Sign In</button>
             </form>
+            @if (!string.IsNullOrEmpty(ViewBag.Error)) // Check if ViewBag.Error is not empty
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewBag.Error 
+                </div>
+            }
         </div>
         <div class="toggle-container">
             <div class="toggle">
@@ -46,4 +52,3 @@
 @section Scripts {
     <script src="~/assets/js/loginscript.js"></script>
 }
-

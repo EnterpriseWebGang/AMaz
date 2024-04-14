@@ -45,18 +45,21 @@ namespace AMaz.Web.Controllers
                     var user = await _userManager.FindByEmailAsync(model.Email);
                     var roles = await _userManager.GetRolesAsync(user);
                     return RedirectToAction(roles.Contains("Student") ? "Index" :
-                                            roles.Contains("Admin")   ? "Admin" :
+                                            roles.Contains("Admin") ? "Admin" :
                                             roles.Contains("Manager") ? "Manager" :
                                                                        "Coordinator", "Home");
                 }
 
-                ViewBag.Error = response.error;
-                return View();
+                ViewBag.Error = response.error; // Set error message in ViewBag
+                return View(); // Return the view with the error message
             }
 
             ViewBag.Error = "Invalid Input!";
             return View();
         }
+
+
+
 
         // GET: /Logout
         [Route("Logout")]
