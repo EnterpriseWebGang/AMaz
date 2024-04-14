@@ -29,9 +29,12 @@ namespace AMaz.Entity
         [Required]
         public bool IsAcceptedTerms {  get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime? AcceptedDate { get; set; }
+       [Required]
+        public bool IsApproved { get; set; }
 
+        [DataType(DataType.Date)]
+        public DateTime? ApprovedDate { get; set; }
+        public string? CoordinatorComment { get; set; }
         public string AuthorName {  get; set; }
 
         [Required]

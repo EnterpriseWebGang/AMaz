@@ -202,6 +202,111 @@ namespace AMaz.Web.Controllers
 
             return File(file.filestream, file.contentType, file.fileName);
         }
+        [Authorize(Roles = "Coordinator")]
+        [HttpPost("add")]
+        public async Task<IActionResult> AddCoordinatorComment(ContributionCommentDtos commentDto)
+        {
+            try
+            {
+                // Check if the comment DTO is valid
+                if (!ModelState.IsValid)
+                {
+                    // If not, return a bad request response with the model state errors
+                    return BadRequest(ModelState);
+                }
+
+                // Attempt to add the coordinator comment using the service
+                var success = await _contributionService.AddCommentAsync(commentDto);
+
+                // Check if adding the comment was successful
+                if (success)
+                {
+                    // If successful, return a 200 OK response
+                   
+                    return RedirectToAction("Details", new { id = commentDto.ContributionId });
+                }
+                else
+                {
+                    // If not successful, return a 500 internal server error response
+                    return StatusCode(500, "Failed to add coordinator comment.");
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                // Handle the case where an invalid argument exception is thrown (e.g., invalid contribution ID)
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Handle any other exceptions
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Coordinator")] // Ensure only coordinators can approve contributions
+        public async Task<IActionResult> ApproveContribution(string contributionId)
+        {
+            try
+            {
+                // Call the service method to approve the contribution
+                var result = await _contributionService.ApproveContributionAsync(contributionId);
+
+                if (result)
+                {
+                    // Return a success message if the contribution is approved
+                    return RedirectToAction("Details", new {id= contributionId });
+                }
+                else
+                {
+                    // Handle the case where the contribution cannot be approved (e.g., not found)
+                    return NotFound("Contribution not found or failed to approve.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions that may occur during the approval process
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Coordinator")] // Ensure only coordinators can reject contributions
+        public async Task<IActionResult> RejectContribution(string contributionId)
+        {
+            try
+            {
+                // Call the service method to reject the contribution
+                var result = await _contributionService.RejectContributionAsync(contributionId);
+
+                if (result)
+                {
+                    // Redirect to a success page or show a success message
+                    TempData["SuccessMessage"] = "Contribution rejected successfully.";
+                    RedirectToAction("Details", new { id = contributionId });
+                }
+                else
+                {
+                    // If the rejection fails, redirect back with an error message
+                    TempData["ErrorMessage"] = "Failed to reject contribution.";
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                // Handle the case where an invalid argument exception is thrown
+                TempData["ErrorMessage"] = ex.Message;
+            }
+            catch (Exception ex)
+            {
+                // Handle any other exceptions
+                TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
+            }
+
+            // Redirect back to the details page or any other appropriate page
+            return RedirectToAction("Details", new { id = contributionId });
+        }
+
 
     }
 }

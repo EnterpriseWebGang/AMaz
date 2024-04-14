@@ -10,6 +10,8 @@ namespace AMaz.Common
     {
         public string FacultyName { get; set; }
         public string AcademicYear { get; set; }
+
+
         public IEnumerable<ContributionViewModel> Contributions { get; set; }
     }
 }

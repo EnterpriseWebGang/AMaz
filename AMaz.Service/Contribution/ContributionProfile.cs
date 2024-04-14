@@ -40,5 +40,7 @@ public class ContributionProfile : Profile
         // Mapping for Contribution to UpdateContributionViewModel
         CreateMap<Contribution, UpdateContributionViewModel>()
             .ForMember(dest => dest.Files, opt => opt.Ignore());
+        CreateMap<ContributionCommentDtos, Contribution>();
+        
     }
 }

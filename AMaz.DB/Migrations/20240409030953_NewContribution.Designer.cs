@@ -4,6 +4,7 @@ using AMaz.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AMaz.DB.Migrations
 {
     [DbContext(typeof(AMazDbContext))]
-    partial class AMazDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240409030953_NewContribution")]
+    partial class NewContribution
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,9 +62,6 @@ namespace AMaz.DB.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAcceptedTerms")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsSeenByOrdinator")
