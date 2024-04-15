@@ -51,6 +51,9 @@
     }
 }
 
+
+
+
 // Function to get random color
 function getRandomColor() {
     const letters = '0123456789ABCDEF';

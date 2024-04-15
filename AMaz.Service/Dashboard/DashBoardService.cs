@@ -223,7 +223,7 @@ namespace AMaz.Service
 
 
             var rightJoinData = await rightJoinQuery.ToListAsync();
-            var fullJoinData = leftJoinData.Union(rightJoinData).ToList();
+            var fullJoinData = leftJoinData.Union(rightJoinData).ToList();     // Count = 5
             var actualData = fullJoinData.GroupBy(d => new { d.Faculty, d.AcademicYear }).Select(d => new
             {
                 Faculty = d.Key.Faculty?.Name,
