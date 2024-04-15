@@ -4,8 +4,130 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "_Layout";
+    string layout = "_Layout"; // Default layout
+
+    if (User.IsInRole("Coordinator"))
+    {
+        layout = "_CoordinatorLayout";
+    }
+    else if (User.IsInRole("Student"))
+    {
+        layout = "_Layout";
+    }
+
+    Layout = layout;
 }
+
+
+@if (User.IsInRole("Student"))
+{
+    <div class="main-content" style="margin-top: 30px">
+        <section class="section">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Submission Detail</h4>
+                            <div class="card-header-form">
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th>Title</th>
+                                        <td>@Model.Title</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Content</th>
+                                        <td>@Model.Content</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Magazine</th>
+                                        <td>@Model.Magazine.Name</td>
+                                    </tr>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <tr>
+                                            <th>Status</th>
+                                            <td>@Model.Status</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Submission Date</th>
+                                            <td>@Model.SubmissionDate.ToShortDateString()</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Accepted Date</th>
+                                            <td>@(Model.AcceptedDate.HasValue ? Model.AcceptedDate.Value.ToShortDateString() : "N/A")</td>
+                                        </tr>
+
+                                    }
+                                    <tr>
+                                        <th>Author Email</th>
+                                        <td>@Model.AuthorName</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Files</th>
+                                        <td>
+                                            <!-- Download links for files -->
+                                            @if (Model.Files != null && Model.Files.Length > 0)
+                                            {
+                                                foreach (var file in Model.Files)
+                                                {
+                                                    var p = new Dictionary<string, string>
+                                        {
+                                        { "fileId", file.Id },{ "contributionId", Model.ContributionId }
+                                        };
+
+                                                    <a asp-action="GetContributionFile" asp-all-route-data="p">@file.Name</a>
+
+                                                    <br />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span>No files</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    @if (User.Identity.IsAuthenticated && !User.IsInRole("Coordinator"))
+                                    {
+                                        <tr>
+                                            <th>Coordinator Comment</th>
+                                            <td>@Model.CoordinatorComment</td>
+                                        </tr>
+                                    }
+                                    <!-- Edit button -->
+                                    @if (User.IsInRole("Student") && User.Identity.Name == Model.AuthorName)
+                                    {
+                                        <tr>
+                                            <th>Actions</th>
+                                            <td>
+                                                <div style="display:flex;">
+                                                    @if (DateTime.Now < Model.Magazine.FinalClosureDate)
+                                                    {
+                                                        <a style="margin-right:10px;" asp-controller="Contribution" asp-action="Update" asp-route-id="@Model.ContributionId" class="btn btn-outline-primary btn-sm">Update</a>
+                                                        <form asp-controller="Contribution" asp-action="Delete" asp-route-id="@Model.ContributionId" asp-route-magazineId="@Model.Magazine.MagazineId" method="post" onsubmit="return confirm('Are you sure you want to delete this contribution?');">
+                                                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                                                        </form>
+                                                    }
+                                                </div>
+                                            </td>s
+
+                                        </tr>
+                                    }
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+}
+
 
 
 <br /><br /><br />
@@ -63,9 +185,9 @@
                                             foreach (var file in Model.Files)
                                             {
                                                 var p = new Dictionary<string, string>
-                                        {
-                                        { "fileId", file.Id },{ "contributionId", Model.ContributionId }
-                                        };
+                                                {
+                                                     { "fileId", file.Id },{ "contributionId", Model.ContributionId }
+                                                };
 
                                                 <a asp-action="GetContributionFile" asp-all-route-data="p">@file.Name</a>
 
@@ -140,9 +262,8 @@
                                                     </form>
                                                 }
                                             </div>
-                                        </td>
-                                    }
-                                    
+                                        </td>                                 
+                                 
                                     </tr>
                                 }
                         
