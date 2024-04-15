@@ -1,10 +1,9 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     ViewData["Title"] = "Dashboard";
-    Layout = "_ManagerLayout";
+    Layout = "~/Views/Shared/_ManagerLayout.cshtml";
 }
+
+<h2>@ViewData["Title"]</h2>
 
 
 <div class="main-sidebar sidebar-style-2">
@@ -43,7 +42,6 @@
     </aside>
 </div>
 
-
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
@@ -59,20 +57,11 @@
                             <h4>Number of Contributions within Each Faculty for Each Academic Year (Bar Chart)</h4>
                         </div>
                         <div class="card-body">
-                            <canvas id="contributionsChart"></canvas>
+                            <canvas id="contributionChart" ></canvas>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-6 col-lg-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Percentage of Contributions by Each Faculty for Any Academic Year (Pie Chart)</h4>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="percentageChart"></canvas>
-                        </div>
-                    </div>
-                </div>
+              
             </div>
             <div class="row">
                 <div class="col-12">
@@ -81,7 +70,7 @@
                             <h4>Number of Contributors within Each Faculty for Each Academic Year (Bar Chart)</h4>
                         </div>
                         <div class="card-body">
-                            <canvas id="contributorsChart" style="height: 50%; width: 50%;"></canvas>
+                            <canvas id="contributorCountChart" style="height: 50%; width: 50%;"></canvas>
                         </div>
 
                     </div>
@@ -91,150 +80,10 @@
     </section>
 </div>
 
-<script>
-    function renderBarChart(chartId, labels, data) {
-        var ctx = document.getElementById(chartId).getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels, // Labels containing both faculty names and academic years
-                datasets: [{
-                    label: 'Number of Contributions',
-                    data: data,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    }
-
-    function renderContributorBarChart(chartId, labels, data) {
-        var ctx = document.getElementById(chartId).getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Number of Contributors',
-                    data: data,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                },
-                layout: {
-                    padding: {
-                        left: 100,   // Adjust left padding to move the chart to the right
-                        right: 100,  // Adjust right padding to move the chart to the left
-                        top: 0,
-                        bottom: 35
-                    }
-                }
-            }
-        });
-    }
 
 
 
-    function renderPieChart(chartId, labels, data) {
-        var ctx = document.getElementById(chartId).getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)',
-                        'rgba(54, 162, 235, 0.6)',
-                        'rgba(255, 206, 86, 0.6)',
-                        'rgba(75, 192, 192, 0.6)',
-                        'rgba(153, 102, 255, 0.6)'
-                    ]
-                }]
-            }
-        });
-    }
-
-
-    function fetchDataAndRenderCharts() {
-        // Replace the example data with actual fetched data or fallback to example data
-        $.ajax({
-            url: '/GetFacultyContributionCountByAcademicYear', // Replace 'your_server_endpoint' with the actual endpoint URL
-            method: 'GET',
-            success: function (response) {
-                // If server returns data, use it
-                var facultyNames = response.facultyNames || ["Faculty A", "Faculty B", "Faculty C"];
-                var academicYears = response.academicYears || ['2019-2020', '2020-2021', '2021-2022', '2022-2023'];
-                var contributionsData = response.contributionsData || [
-                    [100, 150, 200],
-                    [120, 180, 220],
-                    [90, 160, 210]
-                ];
-                var contributorsData = response.contributorsData || contributionsData;
-                var percentageData = response.percentageData || [
-                    [50, 30, 20],
-                    [40, 35, 25],
-                    [30, 25, 15]
-                ];
-                renderCharts(facultyNames, academicYears, contributionsData, contributorsData, percentageData);
-            },
-            error: function () {
-                // If no data is available from the server, use example data
-                var facultyNames = ["Faculty A", "Faculty B", "Faculty C"];
-                var academicYears = ['2019-2020', '2020-2021', '2021-2022', '2022-2023'];
-                var contributionsData = [
-                    [100, 150, 200],
-                    [120, 180, 220],
-                    [90, 160, 210]
-                ];
-                var contributorsData = contributionsData;
-                var percentageData = [
-                    [50, 30, 20],
-                    [40, 35, 25],
-                    [30, 25, 15]
-                ];
-                renderCharts(facultyNames, academicYears, contributionsData, contributorsData, percentageData);
-            }
-        });
-    }
-
-    // Rendering function for all charts
-    function renderCharts(facultyNames, academicYears, contributionsData, contributorsData, percentageData) {
-        var labels = [];
-        for (var i = 0; i < academicYears.length; i++) {
-            for (var j = 0; j < facultyNames.length; j++) {
-                labels.push(academicYears[i] + ' - ' + facultyNames[j]);
-            }
-        }
-        renderBarChart("contributionsChart", labels, contributionsData.flat());
-        renderContributorBarChart("contributorsChart", labels, contributorsData.flat());
-        renderPieChart("percentageChart", facultyNames, percentageData.flat());
-    }
-
-    // Example rendering functions for individual charts
-    // Assume renderBarChart, renderContributorBarChart, and renderPieChart functions are defined as before
-
-    document.addEventListener('DOMContentLoaded', function () {
-        fetchDataAndRenderCharts();
-    });
-</script>
-
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/assets/js/dashboard.js"></script>
+}

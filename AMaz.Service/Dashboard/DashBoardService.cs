@@ -61,7 +61,7 @@ namespace AMaz.Service
             var actualData = dbData.GroupBy(d => new { d.Faculty, d.AcademicYear }).Select(d => new
             {
                 Faculty = d.Key.Faculty?.Name,
-                AcademicYear = d.Key.AcademicYear.ToString(),
+                AcademicYear = d.Key.AcademicYear?.ToString(),
                 ContributionCount = d.Where(c => c.Contribution != null)?.Count() ?? 0
             }).OrderBy(d => d.AcademicYear).ToList();
 
