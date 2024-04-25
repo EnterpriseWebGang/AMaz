@@ -20,7 +20,7 @@
 
         const ctx = document.getElementById('percentageChart').getContext('2d');
         new Chart(ctx, {
-            type: 'pie',
+            type: 'bar',
             data: {
                 labels: academicYears,
                 datasets: datasets

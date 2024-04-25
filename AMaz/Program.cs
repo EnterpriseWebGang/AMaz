@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<AMazDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("HieuStrings"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AMazContext"));
 });
 
 builder.Services.AddDefaultIdentity<User>(option =>

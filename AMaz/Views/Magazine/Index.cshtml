@@ -151,7 +151,11 @@
     </div>
 }
 
-<br><br><br>
+@if (User.IsInRole("Student") || !User.Identity.IsAuthenticated)
+{
+<br>
+<br>
+<br>
 
 <div class="main-content">
     <section class="section">
@@ -159,32 +163,38 @@
             <h2 class="section-title">Magazine</h2>
             <div class="row">
                 @foreach (var magazine in Model)
-                {
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-3">
-                        <article class="article">
-                            <div class="article-header">
-                                <div class="article-image" data-background="../assets/img/news/img08.jpg">
+                    {
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                            <article class="article">
+                                <div class="article-header">
+                                    <div class="article-image" data-background="../assets/img/news/img08.jpg">
+                                    </div>
+                                    <div class="article-title">
+                                        <h2><a href="#">Magazine Name: @magazine.Name</a></h2>
+                                    </div>
                                 </div>
-                                <div class="article-title">
-                                    <h2><a href="#">Magazine Name: @magazine.Name</a></h2>
+                                <div class="article-details">
+                                    <p>Faculty: @magazine.FacultyName</p>
+                                    <p><strong>First Closure Date:</strong> @magazine.FirstClosureDate.ToShortDateString()</p>
+                                    <p><strong>Final Closure Date:</strong> @magazine.FinalClosureDate.ToShortDateString()</p>
+                                    <p><strong>Academic Year:</strong> @magazine.AcademicYear.DateTimeFrom - @magazine.AcademicYear.DateTimeTo</p>
+                                    <div class="article-cta">
+                                        <a asp-action="Details" asp-route-id="@magazine.MagazineId" class="btn btn-primary">Details</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="article-details">
-                                <p>Faculty: @magazine.FacultyName</p>
-                                <p><strong>First Closure Date:</strong> @magazine.FirstClosureDate.ToShortDateString()</p>
-                                <p><strong>Final Closure Date:</strong> @magazine.FinalClosureDate.ToShortDateString()</p>
-                                <p><strong>Academic Year:</strong> @magazine.AcademicYear.DateTimeFrom - @magazine.AcademicYear.DateTimeTo</p>
-                                <div class="article-cta">
-                                    <a asp-action="Details" asp-route-id="@magazine.MagazineId" class="btn btn-primary">Details</a>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                }
+                            </article>
+                        </div>
+                    }
             </div>
         </div>
     </section>
 </div>
+}
+
+
+
+
+
 
 
 

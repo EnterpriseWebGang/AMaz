@@ -10,25 +10,25 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Homework Submission</h1>
+            <h1>Contribution Submission</h1>
         </div>
 
         <div class="section-body">
-            <h2 class="section-title">Homework Submission</h2>
+            <h2 class="section-title">Contribution Submission</h2>
             <p class="section-lead">
-                Please submit your homework using the form below.
+                Please submit your contribution using the form below.
             </p>
 
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Homework Submission Form</h4>
+                            <h4>Contribution Submission Form</h4>
                         </div>
                         <div class="card-body">
                             <form asp-controller="Contribution" asp-action="Create" asp-route-magazineId="@Model.MagazineId" method="post" enctype="multipart/form-data" id="homeworkForm">
                                 <div class="form-group">
-                                    <label for="title">Homework Title</label>
+                                    <label for="title">Contribution Title</label>
                                     <input asp-for="Title" class="form-control" id="title" name="title" required />                                 
                                 </div>
 
