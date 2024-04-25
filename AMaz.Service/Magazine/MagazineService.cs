@@ -49,7 +49,16 @@ namespace AMaz.Service
         {
             var data = await _mangazineRepository.GetMagazineByIdAsync(magazineId, isAuthenticated);
             var model = _mapper.Map<MagazineDetailViewModel>(data);
-            model.Contributions = _mapper.Map<List<ContributionViewModel>>(data.Contributions.Where(c => c.IsApproved));
+            if (isAuthenticated)
+            {
+                model.Contributions = _mapper.Map<List<ContributionViewModel>>(data.Contributions);
+            }
+
+            else
+            {
+                model.Contributions = _mapper.Map<List<ContributionViewModel>>(data.Contributions.Where(c => c.IsApproved));
+            }
+            
             return model;
         }
 
